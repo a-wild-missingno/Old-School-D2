@@ -141,3 +141,22 @@ def test_answers_authenticated_register_relay_client_with_empty_response_303() -
     payload = response[6:]
     plaintext = AESGCM(key).decrypt(server_nonce, payload[16:] + payload[:16], None)
     assert struct.unpack(">HIH", plaintext) == (303, 3, 200)
+
+
+def test_rewraps_certificate_field_for_authenticated_sign_certificate_response() -> None:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+    key = bytes(range(16))
+    server_nonce = bytes(range(12))
+    request_body = b"\x1a\x03abc"  # protobuf: field 3, length-delimited certificate wrapper
+    state = BapConnectionState.from_server_hello(session_key=key, server_nonce=server_nonce)
+    request = state.open_encrypted_request(_encrypted_frame(key, state.receive_nonce, 304, 4, request_body))
+    assert request is not None
+
+    response = state.build_sign_certificate_response(request)
+
+    assert response is not None
+    payload = response[6:]
+    plaintext = AESGCM(key).decrypt(server_nonce, payload[16:] + payload[:16], None)
+    assert plaintext[:8] == struct.pack(">HIH", 305, 4, 200)
+    assert plaintext[8:] == b"\x08\x00\x1a\x03abc"

@@ -59,3 +59,7 @@ The prepared observation run authenticated and decrypted the first type-1 reques
 ## Second authenticated encrypted request
 
 After the service-122 acknowledgement, the same client connection sent authenticated encrypted service 302, task id 3, with a 94-byte body. Sunrise maps request 302 (register relay client) to response 303 with an empty status-200 body. The listener now returns only that documented encrypted acknowledgement. A fresh run is required because the observed connection has already timed out; later encrypted services remain capture-only.
+
+## Third authenticated encrypted request
+
+After the service-303 acknowledgement, the client sent authenticated encrypted service 304, task id 4, with a 98-byte protobuf body. Sunrise maps it to service 305. Its documented body codec copies only the first valid length-delimited protobuf field 3 into a response containing field 1 = 0 and that field-3 wrapper. The listener now performs this transformation only in connection memory, never logs certificate bytes, and returns the encrypted service-305 response. A fresh run is required to observe the next boundary.

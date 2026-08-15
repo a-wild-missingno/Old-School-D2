@@ -21,7 +21,7 @@ Initial components:
 
 ## SignOn boundary
 
-The next observed client dependency is an HTTPS `POST /SignOn` request after UDP discovery. The service now has a minimal protobuf success-response encoder that issues per-response random session material, returns the configured relay address and BAP port, and does not persist session secrets. It also has a ContentConfig encoder that accepts only the exact version-2 local Sunrise manifest-cache layout, emits public package descriptors and the configured fetch GUID, and keeps that cache outside the repository. It intentionally stops after this evidenced HTTP boundary: BAP frames remain capture-only until a fresh client run demonstrates their required sequence.
+The observed client sequence now includes HTTPS `POST /SignOn`, HTTPS `GET /config/`, BAP plaintext channel start (service 30), and BAP plaintext ServerHello (service 25). The service has a minimal protobuf SignOn success-response encoder that issues ephemeral session material, a ContentConfig encoder that accepts only the exact version-2 local Sunrise manifest-cache layout and keeps that cache outside the repository, and narrow BAP helpers for the documented service-31 nonce echo and service-26 authenticated envelope. The first post-hello AES-GCM BAP request has been captured as sanitized metadata only. It remains intentionally unhandled until connection-scoped BAP nonce/key state is retained and the request is independently decoded.
 
 ## Database decision
 

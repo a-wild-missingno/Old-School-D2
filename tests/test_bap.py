@@ -124,3 +124,20 @@ def test_refuses_to_reply_to_a_different_encrypted_service() -> None:
     request = state.open_encrypted_request(_encrypted_frame(b"K" * 16, state.receive_nonce, 250, 2))
     assert request is not None
     assert state.build_register_subscriber_response(request) is None
+
+
+def test_answers_authenticated_register_relay_client_with_empty_response_303() -> None:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+    key = bytes(range(16))
+    server_nonce = bytes(range(12))
+    state = BapConnectionState.from_server_hello(session_key=key, server_nonce=server_nonce)
+    request = state.open_encrypted_request(_encrypted_frame(key, state.receive_nonce, 302, 3, b"R" * 94))
+    assert request is not None
+
+    response = state.build_register_relay_client_response(request)
+
+    assert response is not None
+    payload = response[6:]
+    plaintext = AESGCM(key).decrypt(server_nonce, payload[16:] + payload[:16], None)
+    assert struct.unpack(">HIH", plaintext) == (303, 3, 200)

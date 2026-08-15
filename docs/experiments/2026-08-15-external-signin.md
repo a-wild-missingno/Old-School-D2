@@ -55,3 +55,7 @@ Before the next run, the lab listener was changed to retain the generated BAP se
 ## First authenticated encrypted request
 
 The prepared observation run authenticated and decrypted the first type-1 request without recording its plaintext: service 121, task id 2, empty body. Sunrise's public routing table maps request service 121 (register subscriber) to response service 122 with an empty status-200 body. The listener now sends only that AES-GCM encrypted acknowledgement and advances its send nonce. The next client run will establish whether a later encrypted request follows; no later service is pre-implemented.
+
+## Second authenticated encrypted request
+
+After the service-122 acknowledgement, the same client connection sent authenticated encrypted service 302, task id 3, with a 94-byte body. Sunrise maps request 302 (register relay client) to response 303 with an empty status-200 body. The listener now returns only that documented encrypted acknowledgement. A fresh run is required because the observed connection has already timed out; later encrypted services remain capture-only.

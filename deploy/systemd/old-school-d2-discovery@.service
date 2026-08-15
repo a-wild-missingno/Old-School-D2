@@ -1,0 +1,20 @@
+[Unit]
+Description=Old-School-D2 UDP discovery service on port %i
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=syzygy
+Group=syzygy
+WorkingDirectory=/home/syzygy/dev/old-school-d2-service
+EnvironmentFile=/etc/old-school-d2/discovery.env
+ExecStart=/home/syzygy/dev/old-school-d2-service/.venv/bin/python -m old_school_d2_service --host ${OLD_SCHOOL_D2_BIND_HOST} --port %i --label sunrise-discovery-%i
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target

@@ -8,4 +8,6 @@ def test_initial_postgres_migration_defines_research_event_schema() -> None:
     assert "create table events" in migration
     assert "payload_sha256" in migration
     assert "create index events_experiment_id" in migration
+    assert "transport in ('udp', 'tcp', 'https')" in migration
+    assert "direction in ('inbound', 'outbound')" in migration
     assert "sqlite" not in migration

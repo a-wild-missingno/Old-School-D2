@@ -160,3 +160,15 @@ def test_rewraps_certificate_field_for_authenticated_sign_certificate_response()
     plaintext = AESGCM(key).decrypt(server_nonce, payload[16:] + payload[:16], None)
     assert plaintext[:8] == struct.pack(">HIH", 305, 4, 200)
     assert plaintext[8:] == b"\x08\x00\x1a\x03abc"
+
+
+def test_answers_authenticated_echo_with_empty_response_251() -> None:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    key = bytes(range(16)); nonce = bytes(range(12))
+    state = BapConnectionState.from_server_hello(session_key=key, server_nonce=nonce)
+    request = state.open_encrypted_request(_encrypted_frame(key, state.receive_nonce, 250, 6))
+    assert request is not None
+    response = state.build_echo_response(request)
+    assert response is not None
+    payload = response[6:]
+    assert AESGCM(key).decrypt(nonce, payload[16:] + payload[:16], None) == struct.pack(">HIH", 251, 6, 200)

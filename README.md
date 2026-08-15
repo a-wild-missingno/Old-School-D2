@@ -2,7 +2,7 @@
 
 Old-School-D2 is an experimental research project to understand how historical Destiny 2 clients interacted with their online service infrastructure, with the long-term hope of documenting and eventually building clean-room replacement services for offline or preservation-focused PvE experiences.
 
-The immediate goal is not to make the game work. The first milestone is a safe, reproducible network-isolation and observation environment.
+The immediate goal is not to make the game work. The first milestone is a safe, reproducible network-isolation and observation environment. The current client-side research baseline is [Sunrise](https://github.com/a-wild-missingno/Sunrise), a fork of the [upstream Sunrise project](https://github.com/stanuwu/Sunrise).
 
 ## Current milestone: isolated network discovery
 
@@ -72,7 +72,7 @@ Raw captures may contain sensitive local-network information and should be revie
 
 ### Phase 1: Network discovery
 
-Launch the historical client only after isolation has been experimentally verified. Capture a complete startup attempt and build an endpoint inventory including:
+Launch the historical client only after isolation has been experimentally verified. When Sunrise is the client baseline, record whether it is operating in its default offline mode or its external-server mode before interpreting a capture; these modes have materially different egress behavior. Capture a complete startup attempt and build an endpoint inventory including:
 
 - hostname, if DNS-based
 - resolved IP, if applicable
@@ -199,6 +199,22 @@ server/
   world/                World/activity experiments
 ```
 
+## Sunrise baseline
+
+Sunrise is used as a research starting point because it makes an old Destiny 2 build usable for offline exploration and contains a documented external-server switch. It is not a replacement service, and this project does not treat it as evidence of the original Bungie service behavior.
+
+- Default Sunrise behavior is intentionally offline: it redirects or handles relevant egress locally. A gateway capture may therefore show no game-originated LAN traffic in this mode.
+- External-server mode is a separate, supported experiment path. It redirects selected client egress to one researcher-controlled host before packets leave Windows. This permits transport and protocol observation, but it does not preserve the original remote IP destination in the packet capture.
+- Enable external-server mode only for a documented experiment, after stopping the client, and only with an isolated lab listener. Do not use it to contact production infrastructure.
+
+See [Sunrise integration notes](docs/client-analysis/sunrise.md) and the [external-server experiment template](docs/experiments/sunrise-external-server.md).
+
+## Acknowledgements
+
+This project builds on the publicly available [Sunrise](https://github.com/stanuwu/Sunrise) project by `stanuwu`, which is described by its authors as a Destiny 2 offline exploration mod. The working fork is [a-wild-missingno/Sunrise](https://github.com/a-wild-missingno/Sunrise).
+
+Sunrise retains its own license, notices, authorship, and project rules. Old-School-D2 does not copy Sunrise source, Destiny binaries, game assets, keys, or proprietary data into this repository.
+
 ## Status
 
-Preparation is in progress. The current work is limited to network-isolation planning, DNS logging, packet-capture tooling, and reproducible documentation. Destiny client startup capture should not begin until isolation tests have passed.
+Preparation is in progress. The current work is limited to network-isolation planning, DNS logging, packet-capture tooling, Sunrise source/configuration analysis, and reproducible documentation. Client experiments should not begin until isolation checks have passed and a specific experiment record exists.

@@ -30,6 +30,68 @@ class BapEncryptedRequest:
     service: int
     task_id: int
     body_size: int
+    # Retained only by the live connection while a documented body codec needs it; never logged.
+    body: bytes
+
+
+def _encode_varint(value: int) -> bytes:
+    if value < 0:
+        raise ValueError("protobuf varint must be unsigned")
+    encoded = bytearray()
+    while value > 127:
+        encoded.append((value & 127) | 128)
+        value >>= 7
+    encoded.append(value)
+    return bytes(encoded)
+
+
+def _read_varint(data: bytes, offset: int) -> tuple[int, int] | None:
+    value = 0
+    for shift in range(0, 70, 7):
+        if offset >= len(data):
+            return None
+        byte = data[offset]
+        offset += 1
+        value |= (byte & 127) << shift
+        if byte < 128:
+            return value, offset
+    return None
+
+
+def _first_length_delimited_field(data: bytes, *, wanted_field: int) -> bytes | None:
+    """Return the first valid protobuf length-delimited field without retaining other fields."""
+    offset = 0
+    while offset < len(data):
+        key = _read_varint(data, offset)
+        if key is None:
+            return None
+        key_value, offset = key
+        field_number, wire_type = key_value >> 3, key_value & 7
+        if wire_type == 0:
+            value = _read_varint(data, offset)
+            if value is None:
+                return None
+            _, offset = value
+        elif wire_type == 1:
+            offset += 8
+        elif wire_type == 2:
+            length = _read_varint(data, offset)
+            if length is None:
+                return None
+            length_value, offset = length
+            end = offset + length_value
+            if end > len(data):
+                return None
+            if field_number == wanted_field:
+                return bytes(data[offset:end])
+            offset = end
+        elif wire_type == 5:
+            offset += 4
+        else:
+            return None
+        if offset > len(data):
+            return None
+    return None
 
 
 class BapConnectionState:
@@ -73,7 +135,7 @@ class BapConnectionState:
             return None
         service, task_id = _REQUEST_HEADER.unpack_from(plaintext)
         self._advance_receive_nonce()
-        return BapEncryptedRequest(service=service, task_id=task_id, body_size=len(plaintext) - _REQUEST_HEADER.size)
+        return BapEncryptedRequest(service=service, task_id=task_id, body_size=len(plaintext) - _REQUEST_HEADER.size, body=bytes(plaintext[_REQUEST_HEADER.size:]))
 
     def build_register_subscriber_response(self, request: BapEncryptedRequest) -> bytes | None:
         """Return only the documented encrypted service-122 acknowledgement for service 121."""
@@ -83,10 +145,23 @@ class BapConnectionState:
         """Return only the documented encrypted service-303 acknowledgement for service 302."""
         return self._build_empty_response(request, request_service=302, response_service=303)
 
+    def build_sign_certificate_response(self, request: BapEncryptedRequest) -> bytes | None:
+        """Rewrap only service-304 protobuf certificate field 3 in the documented service-305 body."""
+        if request.service != 304:
+            return None
+        certificate = _first_length_delimited_field(request.body, wanted_field=3)
+        if certificate is None:
+            return None
+        body = b"\x08\x00" + _encode_varint(26) + _encode_varint(len(certificate)) + certificate
+        return self._seal_response(response_service=305, task_id=request.task_id, body=body)
+
     def _build_empty_response(self, request: BapEncryptedRequest, *, request_service: int, response_service: int) -> bytes | None:
         if request.service != request_service:
             return None
-        plaintext = _RESPONSE_HEADER.pack(response_service, request.task_id, _STATUS_OK)
+        return self._seal_response(response_service=response_service, task_id=request.task_id, body=b"")
+
+    def _seal_response(self, *, response_service: int, task_id: int, body: bytes) -> bytes:
+        plaintext = _RESPONSE_HEADER.pack(response_service, task_id, _STATUS_OK) + body
         sealed = AESGCM(self._session_key).encrypt(bytes(self._send_nonce), plaintext, None)
         payload = sealed[-16:] + sealed[:-16]
         self._advance_send_nonce()

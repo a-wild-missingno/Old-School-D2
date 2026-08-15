@@ -172,3 +172,28 @@ def test_answers_authenticated_echo_with_empty_response_251() -> None:
     assert response is not None
     payload = response[6:]
     assert AESGCM(key).decrypt(nonce, payload[16:] + payload[:16], None) == struct.pack(">HIH", 251, 6, 200)
+
+
+def test_builds_uncorrelated_notification_with_sequence_zero_and_advances_send_nonce() -> None:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+    key = bytes(range(16))
+    server_nonce = bytes(range(12))
+    state = BapConnectionState.from_server_hello(session_key=key, server_nonce=server_nonce)
+
+    response = state.build_notification(service=123, body=b"queuez-fixture")
+
+    assert response is not None
+    payload = response[6:]
+    plaintext = AESGCM(key).decrypt(server_nonce, payload[16:] + payload[:16], None)
+    assert plaintext == struct.pack(">HI", 123, 0) + b"queuez-fixture"
+    assert state.send_nonce == bytes([server_nonce[0] + 1]) + server_nonce[1:]
+
+
+def test_rejects_invalid_notification_without_advancing_send_nonce() -> None:
+    state = BapConnectionState.from_server_hello(session_key=b"K" * 16, server_nonce=b"N" * 12)
+    before = state.send_nonce
+
+    assert state.build_notification(service=0, body=b"ignored") is None
+
+    assert state.send_nonce == before

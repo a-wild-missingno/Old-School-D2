@@ -1,3 +1,5 @@
+import pytest
+
 from old_school_d2_service.signon import build_signon_response, build_signon_response_with_session
 
 
@@ -70,3 +72,38 @@ def test_exposes_ephemeral_signon_material_only_to_the_calling_listener() -> Non
     assert success[2] == [session.encryption_key]
     assert success[3] == [session.authentication_key]
     assert success[4] == [session.session_token]
+
+
+def test_encodes_owned_entitlement_identifiers_in_signon_field_10() -> None:
+    response = build_signon_response(
+        relay_host="192.168.0.129",
+        relay_port=30974,
+        owned_entitlement_ids=(0xE0200001, 1090090),
+        now_seconds=1_700_000_000,
+        random_bytes=lambda length: bytes(range(length)),
+    )
+
+    ownership = _fields(_fields(response)[10][0])
+
+    assert ownership == {1: [0xE0200001, 1090090]}
+
+
+def test_rejects_out_of_range_owned_entitlement_identifier() -> None:
+    with pytest.raises(ValueError, match="unsigned 32-bit"):
+        build_signon_response(
+            relay_host="192.168.0.129",
+            relay_port=30974,
+            owned_entitlement_ids=(-1,),
+        )
+
+
+def test_sunrise_default_ownership_policy_matches_configured_handles_and_applications() -> None:
+    from old_school_d2_service.entitlements import SUNRISE_DEFAULT_OWNED_ENTITLEMENT_IDS
+
+    assert SUNRISE_DEFAULT_OWNED_ENTITLEMENT_IDS == (
+        0xE0200001,
+        0xE0200002,
+        1090090, 1090091, 1090092, 1090093, 1090094, 1090095, 1090096,
+        1090150, 1090151, 1090152, 1090170, 1090171, 1090200, 1090201,
+        1090202, 1330040,
+    )

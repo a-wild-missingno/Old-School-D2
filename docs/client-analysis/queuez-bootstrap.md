@@ -26,6 +26,21 @@ boundary is server-initiated, not an unhandled client response.
 | Queuez data is produced from a prepared family snapshot, not an empty generic response. | `push/queuez/queuez_subscription.cpp` | High |
 | Publication depends on per-connection Queuez state plus selected account/character and subscription/activity transitions. | `bap_connection_publication.*`, `push/queuez/queuez_subscription.cpp` | High |
 
+## Minimal family-body format now modeled
+
+The public reference encodes a Queuez notification body as a big-endian family
+count followed by packed family records. A family record contains its 32-bit
+type, 64-bit root key, signed 32-bit version, one-byte flags, and 32-bit object
+count. Each object record contains a 32-bit definition id, 64-bit version,
+32-bit payload size, 32-bit encoding selector, then unchanged payload bytes.
+
+The clean-room implementation now supports deterministic empty families and
+object records using the documented encodings 1 through 4. For encoding 3
+(raw), it validates that the payload starts with that object's 64-bit version
+in little-endian form. It remains deliberately disconnected from the runtime
+listener: producing a well-framed family body is not evidence that it names
+valid account, character, or activity state for this client.
+
 ## Implications for Old-School-D2
 
 1. A service-123 transport envelope alone is insufficient. Its body must be a
@@ -38,6 +53,20 @@ boundary is server-initiated, not an unhandled client response.
    nonce, fixed sequence zero, and no implicit service/body selection.
 4. A later Queuez body codec needs a separately evidenced family schema and
    deterministic fixtures before it can be wired to the lab listener.
+
+## Trigger analysis
+
+The public route maps client service 12 to the family-subscription response
+service 13 and appends Queuez publications only as a side effect of that
+subscription. A Family-3 subscription may also cause its Family-4 companion
+and a banner update. Deferred re-pushes are armed only after a prior
+subscription publication.
+
+The observed isolated-client trace contains no service-12 request after BAP
+bootstrap; it transitions directly to service-250 keepalives. Therefore the
+minimal body encoder is a verified framing component, not authority to send a
+notification. The missing boundary to investigate is what prevents this client
+configuration from entering the client-driven subscription path.
 
 ## Next evidence required
 

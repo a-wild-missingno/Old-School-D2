@@ -116,6 +116,10 @@ class BapConnectionState:
     def receive_nonce(self) -> bytes:
         return bytes(self._receive_nonce)
 
+    @property
+    def send_nonce(self) -> bytes:
+        return bytes(self._send_nonce)
+
     def open_encrypted_request(self, frame: bytes) -> BapEncryptedRequest | None:
         """Authenticate one type-1 frame and advance only after a valid inner request."""
         if len(frame) < _OUTER_HEADER.size:
@@ -148,6 +152,20 @@ class BapConnectionState:
     def build_echo_response(self, request: BapEncryptedRequest) -> bytes | None:
         """Return only the documented encrypted service-251 acknowledgement for service 250."""
         return self._build_empty_response(request, request_service=250, response_service=251)
+
+    def build_notification(self, *, service: int, body: bytes) -> bytes | None:
+        """Build one uncorrelated encrypted notification with fixed sequence zero.
+
+        This is transport-only: callers must supply a separately evidenced service and body.
+        Invalid inputs leave the connection send nonce unchanged.
+        """
+        if not 0 < service <= 0xFFFF or len(body) > 65508:
+            return None
+        plaintext = _REQUEST_HEADER.pack(service, 0) + bytes(body)
+        sealed = AESGCM(self._session_key).encrypt(bytes(self._send_nonce), plaintext, None)
+        payload = sealed[-16:] + sealed[:-16]
+        self._advance_send_nonce()
+        return _OUTER_HEADER.pack(_MAGIC, 1, len(payload)) + payload
 
     def build_sign_certificate_response(self, request: BapEncryptedRequest) -> bytes | None:
         """Rewrap only service-304 protobuf certificate field 3 in the documented service-305 body."""

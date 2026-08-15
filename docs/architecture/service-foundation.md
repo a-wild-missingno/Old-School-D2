@@ -15,13 +15,13 @@ The service is a standalone Python process, independent of the Destiny client an
 Initial components:
 
 - `src/old_school_d2_service/discovery.py`: pure request classification and reply construction.
-- `src/old_school_d2_service/storage.py`: SQLite schema and append-only experiment-event storage.
+- `src/old_school_d2_service/storage.py`: PostgreSQL schema and append-only experiment-event storage.
 - `src/old_school_d2_service/server.py`: UDP adapter that binds configured discovery ports and passes data through the pure service boundary.
 - `tests/`: unit tests plus a local loopback socket smoke test.
 
 ## SignOn boundary
 
-The next observed client dependency is an HTTPS `POST /SignOn` request after UDP discovery. The service now has a minimal protobuf success-response encoder that issues per-response random session material, returns the OptiPlex relay address and BAP port, and does not persist session secrets. It intentionally stops at that boundary: BAP frames remain capture-only until a fresh client run demonstrates their required sequence.
+The next observed client dependency is an HTTPS `POST /SignOn` request after UDP discovery. The service now has a minimal protobuf success-response encoder that issues per-response random session material, returns the configured relay address and BAP port, and does not persist session secrets. It also has a ContentConfig encoder that accepts only the exact version-2 local Sunrise manifest-cache layout, emits public package descriptors and the configured fetch GUID, and keeps that cache outside the repository. It intentionally stops after this evidenced HTTP boundary: BAP frames remain capture-only until a fresh client run demonstrates their required sequence.
 
 ## Database decision
 

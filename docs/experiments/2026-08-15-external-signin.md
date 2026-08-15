@@ -47,3 +47,7 @@ Sunrise's public BAP path indicates that the next request uses AES-GCM with a co
 ## Preservation
 
 Raw packet captures, request bodies, TLS materials, database URLs, and generated SignOn session material remain local and are not committed.
+
+## Prepared encrypted-frame observation
+
+Before the next run, the lab listener was changed to retain the generated BAP session key and receive nonce only inside the active TCP handler. It validates a type-1 outer frame, authenticates and decrypts it with AES-GCM, advances the little-endian receive nonce only after a valid request, and records only authentication outcome, service ID, task ID, and body length. It deliberately sends no encrypted response. Unit tests cover successful decryption/nonce advancement and rejected-tag behavior; a deterministic local encrypted-frame smoke test passed.

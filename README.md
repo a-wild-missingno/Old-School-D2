@@ -20,10 +20,10 @@ Status as of the current controlled lab experiment:
 | ContentConfig | Implemented | Strict local manifest-cache parser and response encoder; cache stays outside Git. |
 | BAP channel start | Implemented | Plaintext service 30 receives documented service-31 nonce echo. |
 | BAP ServerHello | Implemented | Plaintext service 25 receives authenticated service-26 key/nonce envelope. |
-| Post-hello BAP | Investigating | The first encrypted type-1 frame has been captured as sanitized metadata only; no encrypted service is decoded or answered yet. |
+| Post-hello BAP | Prepared for live observation | Connection-scoped AES-GCM receive state is retained in memory; the next test will log only authenticated service/task/body-size metadata and will not answer the encrypted request. |
 | Accounts, profiles, inventory, matchmaking, activities, world state | Not implemented | Deliberately out of scope until each dependency is independently documented. |
 
-The client currently reaches the post-ServerHello encrypted BAP boundary and then remains at the loading screen because that next request is intentionally capture-only. This is progress relative to the original discovery-only baseline, not a claim of playable offline Destiny 2.
+The latest client run reached the post-ServerHello encrypted BAP boundary and remained at the loading screen because that request was capture-only. The next lab listener retains the required receive state to identify the encrypted request safely, but still intentionally sends no speculative response. This is progress relative to the original discovery-only baseline, not a claim of playable offline Destiny 2.
 
 ## Safety and research rules
 
@@ -75,7 +75,7 @@ The documented sequence currently observed in the isolated Sunrise external-serv
 5. BAP plaintext ServerHello: service 25 → service 26
 6. First AES-GCM encrypted BAP request — captured, not yet decoded or answered
 
-Sunrise’s public implementation shows why the next step matters: after service 26, it arms per-connection send/receive nonces and authenticates encrypted frames with AES-GCM. The next research task is to retain that per-connection BAP state, decrypt the observed frame without recording secrets or raw payloads, identify its service ID, and add only the corresponding evidence-backed behavior.
+Sunrise’s public implementation shows why the next step matters: after service 26, it arms per-connection send/receive nonces and authenticates encrypted frames with AES-GCM. The next research test is to decrypt the observed frame without recording secrets or raw payloads, record its service ID/task ID/body size, and add only the corresponding evidence-backed behavior after a fresh trace.
 
 ## Local development
 

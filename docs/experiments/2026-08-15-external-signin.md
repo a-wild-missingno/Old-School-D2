@@ -24,6 +24,12 @@ Before the next client run, the external ContentConfig boundary was prepared fro
 
 The lab listener now validates and reads only the exact version-2 local manifest-cache layout, encodes the documented entitlement and package-row protobuf fields, and returns the same configured UUID in field 5. The cache remains a local runtime input and is ignored by Git. A local TLS request received HTTP 200 and a response with the expected field-5 UUID and package-row count. This is a service smoke test, not evidence that the client accepts the response.
 
+## BAP bootstrap observation
+
+The next live attempt passed SignOn and ContentConfig, then opened the configured BAP TCP port. Its first complete frame was a 140-byte plaintext-type-2 request for service 30 with task id 0 and a 128-byte body. The previous capture-only listener read that frame and immediately closed the connection, which explains the client waiting at the white loading screen.
+
+The listener now implements only the source-documented service-30 bootstrap: it returns service 31, status 200, preserves the task id and echoes the body, while keeping the connection open for the next frame. A local socket smoke test confirmed that exact response. It still does not answer later BAP services, including service 25 / ServerHello, until a fresh client run captures the next frame.
+
 ## Next session
 
 1. Launch the client once with capture active and record whether `/config/` is requested and served.

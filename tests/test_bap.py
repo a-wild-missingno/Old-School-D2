@@ -1,6 +1,6 @@
 import struct
 
-from old_school_d2_service.bap import build_server_hello_response, build_start_response
+from old_school_d2_service.bap import BapConnectionState, build_server_hello_response, build_start_response
 
 
 def _frame(frame_type: int, service: int, task_id: int, body: bytes) -> bytes:
@@ -65,3 +65,62 @@ def test_rejects_non_server_hello_frame() -> None:
         session_key=b"d" * 16,
         envelope_iv=b"e" * 16,
     ) is None
+
+
+def _encrypted_frame(key: bytes, receive_nonce: bytes, service: int, task_id: int, body: bytes = b"") -> bytes:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+    plaintext = struct.pack(">HI", service, task_id) + body
+    sealed = AESGCM(key).encrypt(receive_nonce, plaintext, None)
+    payload = sealed[-16:] + sealed[:-16]
+    return b"\x01\x01" + struct.pack(">I", len(payload)) + payload
+
+
+def test_decrypts_one_connection_scoped_encrypted_request_and_advances_receive_nonce() -> None:
+    key = bytes(range(16))
+    server_nonce = bytes(range(12))
+    state = BapConnectionState.from_server_hello(session_key=key, server_nonce=server_nonce)
+    expected_receive_nonce = server_nonce[:-1] + bytes([server_nonce[-1] ^ 1])
+
+    request = state.open_encrypted_request(_encrypted_frame(key, expected_receive_nonce, 250, 7))
+
+    assert request is not None
+    assert (request.service, request.task_id, request.body_size) == (250, 7, 0)
+    assert state.receive_nonce == bytes([expected_receive_nonce[0] + 1]) + expected_receive_nonce[1:]
+
+
+def test_rejects_unauthenticated_encrypted_frame_without_advancing_receive_nonce() -> None:
+    state = BapConnectionState.from_server_hello(session_key=b"K" * 16, server_nonce=b"N" * 12)
+    before = state.receive_nonce
+    frame = bytearray(_encrypted_frame(b"K" * 16, before, 250, 7))
+    frame[-1] ^= 1
+
+    assert state.open_encrypted_request(bytes(frame)) is None
+    assert state.receive_nonce == before
+
+
+def test_answers_authenticated_register_subscriber_with_empty_response_122() -> None:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+    key = bytes(range(16))
+    server_nonce = bytes(range(12))
+    state = BapConnectionState.from_server_hello(session_key=key, server_nonce=server_nonce)
+    receive_nonce = state.receive_nonce
+    request = state.open_encrypted_request(_encrypted_frame(key, receive_nonce, 121, 2))
+    assert request is not None
+
+    response = state.build_register_subscriber_response(request)
+
+    assert response is not None
+    payload_size = struct.unpack(">I", response[2:6])[0]
+    assert (response[0], response[1], payload_size) == (1, 1, 24)
+    payload = response[6:]
+    plaintext = AESGCM(key).decrypt(server_nonce, payload[16:] + payload[:16], None)
+    assert struct.unpack(">HIH", plaintext) == (122, 2, 200)
+
+
+def test_refuses_to_reply_to_a_different_encrypted_service() -> None:
+    state = BapConnectionState.from_server_hello(session_key=b"K" * 16, server_nonce=b"N" * 12)
+    request = state.open_encrypted_request(_encrypted_frame(b"K" * 16, state.receive_nonce, 250, 2))
+    assert request is not None
+    assert state.build_register_subscriber_response(request) is None

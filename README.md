@@ -20,10 +20,11 @@ Status as of the current controlled lab experiment:
 | ContentConfig | Implemented | Strict local manifest-cache parser and response encoder; cache stays outside Git. |
 | BAP channel start | Implemented | Plaintext service 30 receives documented service-31 nonce echo. |
 | BAP ServerHello | Implemented | Plaintext service 25 receives authenticated service-26 key/nonce envelope. |
-| Post-hello BAP | Incrementally implemented | The first three authenticated encrypted requests are service 121 (register subscriber), service 302 (register relay client), and service 304 (certificate signing), and service 250 (echo). The listener returns their documented service-122, service-303, service-305, and service-251 replies; service 305 rewraps only protobuf field 3 and records no certificate data. Later encrypted services remain evidence-gathering only. |
-| Accounts, profiles, inventory, matchmaking, activities, world state | Not implemented | Deliberately out of scope until each dependency is independently documented. |
+| Post-hello BAP | Implemented through observed keepalive | Services 121 → 122, 302 → 303, 304 → 305, and recurring 250 → 251 are accepted by the live client. Service 305 rewraps only protobuf field 3 and records no certificate data. |
+| Server-initiated BAP state | Investigating | The client now remains on a black-screen stable wait state while acknowledging recurring 250 → 251 keepalives. No additional client request or other LAN flow was observed. Sunrise indicates that the next capability is documented server-initiated Queuez/activity publication, backed by account/character state. |
+| Accounts, profiles, inventory, matchmaking, activities, world state | Not implemented | Multi-user account/session design is documented, but schema, credentials, character state, Queuez bootstrap, matchmaking, and activity/world services are not implemented. |
 
-The latest client run reached the post-ServerHello encrypted BAP boundary and remained at the loading screen because service 121 was capture-only. The next lab listener returns only the evidence-backed service-122, service-303, service-305, and service-251 replies; it does not speculate about later encrypted services. This is progress relative to the original discovery-only baseline, not a claim of playable offline Destiny 2.
+The latest controlled run passed the prior white-screen BAP timeouts and reached a stable black-screen wait with an open authenticated BAP connection. This is protocol progress, not a claim of playable offline Destiny 2. No speculative server notification has been sent.
 
 ## Safety and research rules
 
@@ -73,9 +74,10 @@ The documented sequence currently observed in the isolated Sunrise external-serv
 3. HTTPS `GET /config/`
 4. BAP plaintext channel start: service 30 → service 31
 5. BAP plaintext ServerHello: service 25 → service 26
-6. First AES-GCM encrypted BAP request — captured, not yet decoded or answered
+6. AES-GCM encrypted BAP services 121 → 122, 302 → 303, 304 → 305, and recurring 250 → 251
+7. Stable black-screen wait with no additional observed client request
 
-Sunrise’s public implementation shows why the next step matters: after service 26, it arms per-connection send/receive nonces and authenticates encrypted frames with AES-GCM. The next research test is to decrypt the observed frame without recording secrets or raw payloads, record its service ID/task ID/body size, and add only the corresponding evidence-backed behavior after a fresh trace.
+Sunrise’s public implementation indicates that the next research boundary is server-initiated Queuez/activity publication backed by account and character state. The project will not emit speculative notifications merely to clear the black screen.
 
 ## Local development
 

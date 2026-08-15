@@ -89,3 +89,24 @@ The service-305 reply changed the client-visible transition from the usual white
 The final controlled run accepted all currently implemented encrypted replies: 121 to 122, 302 to 303, 304 to 305, and recurring 250 to 251 echoes every five seconds. The client acknowledged each response and kept the BAP connection open while remaining on the black screen. A timed LAN capture during that state found only the BAP echo traffic and normal ARP; no further HTTPS, BAP request, or other client-to-lab flow was observed.
 
 This is a stable server-initiated-state boundary, not an unanswered request boundary. Sunrise has a deferred publication path for encrypted Queuez/activity notifications, driven by account/character state and connection-owned send nonces. The lab listener does not yet implement that state model or send any speculative notification. The next session should begin with an evidence-backed Queuez/bootstrap design rather than another restart.
+
+## External bootstrap-token handoff design
+
+The normal in-process Sunrise server reads a 16-byte bootstrap content identifier from the
+client process and returns it inside SignOn `CommonInfo` field 3. An external listener cannot
+infer that runtime value from the existing network handshake.
+
+The external-mode bridge therefore carries the canonical lowercase hexadecimal representation
+only on the already-existing HTTPS SignOn URL as the `sunrise_bootstrap` query parameter. The
+client-side URL-rewrite hook appends it only for the SignOn route, after the client has extracted
+the value into process State. The listener validates exactly one 16-byte canonical value and
+uses it immediately to build that same SignOn response; it does not persist the value.
+
+Safety requirements:
+
+- HTTPS listener logs the route without query values and records only whether a query existed.
+- Client external-mode logging records URL rewrite status only, never full URLs or query values.
+- Invalid handoff values receive HTTP 400 and are recorded only as a format rejection.
+- No token is placed in settings, a repository, a capture decoder, or an application log.
+- The mechanism remains disabled until the client-side Sunrise component containing the hook is
+  built and installed on the controlled test client.

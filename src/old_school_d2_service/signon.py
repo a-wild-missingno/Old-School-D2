@@ -44,6 +44,7 @@ def build_signon_response_with_session(
     *,
     relay_host: str,
     relay_port: int,
+    owned_entitlement_ids: tuple[int, ...] = (),
     now_seconds: int | None = None,
     random_bytes: Callable[[int], bytes] = secrets.token_bytes,
 ) -> tuple[bytes, SignOnSession]:
@@ -59,6 +60,9 @@ def build_signon_response_with_session(
         raise ValueError("random_bytes returned an unexpected length")
 
     extended = _field_varint(1, 1) + _field_bytes(3, b"\x11" * 16) + _field_bytes(4, b"\x22" * 16)
+    if any(not 0 <= identifier <= 0xFFFFFFFF for identifier in owned_entitlement_ids):
+        raise ValueError("owned entitlement identifiers must be unsigned 32-bit values")
+    ownership = b"".join(_field_varint(1, identifier) for identifier in owned_entitlement_ids)
     host = str(ipaddress.IPv4Address(relay_address))
     success = b"".join((
         _field_bytes(1, b"\x00" * 16),
@@ -81,7 +85,7 @@ def build_signon_response_with_session(
         _field_varint(5, 1),
         _field_bytes(6, b"d2legacy"),
         _field_varint(8, 0),
-        _field_bytes(10, b""),
+        _field_bytes(10, ownership),
         _field_varint(12, now),
         _field_bytes(13, b"live"),
         _field_varint(14, relay_address),
@@ -93,6 +97,7 @@ def build_signon_response(
     *,
     relay_host: str,
     relay_port: int,
+    owned_entitlement_ids: tuple[int, ...] = (),
     now_seconds: int | None = None,
     random_bytes: Callable[[int], bytes] = secrets.token_bytes,
 ) -> bytes:
@@ -100,6 +105,7 @@ def build_signon_response(
     response, _ = build_signon_response_with_session(
         relay_host=relay_host,
         relay_port=relay_port,
+        owned_entitlement_ids=owned_entitlement_ids,
         now_seconds=now_seconds,
         random_bytes=random_bytes,
     )

@@ -24,6 +24,22 @@ Before the next client run, the external ContentConfig boundary was prepared fro
 
 The lab listener now validates and reads only the exact version-2 local manifest-cache layout, encodes the documented entitlement and package-row protobuf fields, and returns the same configured UUID in field 5. The cache remains a local runtime input and is ignored by Git. A local TLS request received HTTP 200 and a response with the expected field-5 UUID and package-row count. This is a service smoke test, not evidence that the client accepts the response.
 
+## Entitlement-policy audit
+
+The external-server ContentConfig response and SignOn success response jointly
+define ownership. ContentConfig field 2 declares every entitlement definition;
+SignOn field 10 carries the repeated owned identifiers the client matches
+against those definitions. The Sunrise default policy uses a mixture of
+manifest handles and numeric application identifiers, while leaving explicitly
+unowned definitions absent.
+
+The lab ContentConfig definitions already cover the bundled entitlement names,
+but its prior SignOn field 10 was empty. A configurable, validated ownership
+list is now available in the clean-room SignOn encoder, but is not passed to
+the live listener yet. It must be derived from the installed client/Sunrise
+policy and tested as a single controlled variable; no DLC entitlement is being
+assumed or granted by default.
+
 ## BAP bootstrap observation
 
 The next live attempt passed SignOn and ContentConfig, then opened the configured BAP TCP port. Its first complete frame was a 140-byte plaintext-type-2 request for service 30 with task id 0 and a 128-byte body. The previous capture-only listener read that frame and immediately closed the connection, which explains the client waiting at the white loading screen.

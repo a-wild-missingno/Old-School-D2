@@ -19,6 +19,10 @@ Initial components:
 - `src/old_school_d2_service/server.py`: UDP adapter that binds configured discovery ports and passes data through the pure service boundary.
 - `tests/`: unit tests plus a local loopback socket smoke test.
 
+## SignOn boundary
+
+The next observed client dependency is an HTTPS `POST /SignOn` request after UDP discovery. The service now has a minimal protobuf success-response encoder that issues per-response random session material, returns the OptiPlex relay address and BAP port, and does not persist session secrets. It intentionally stops at that boundary: BAP frames remain capture-only until a fresh client run demonstrates their required sequence.
+
 ## Database decision
 
 Use PostgreSQL from the first service release, not SQLite and not a production account or world database. This avoids a storage-engine rebuild once the service needs concurrent listeners, migrations, queryable experiment history, and later service components. The initial schema contains only:

@@ -40,11 +40,25 @@ def _field_bytes(number: int, value: bytes) -> bytes:
     return _varint((number << 3) | 2) + _varint(len(value)) + value
 
 
+def parse_bootstrap_token_hex(value: str) -> bytes:
+    """Parse the canonical 16-byte bootstrap-token query value without exposing it in errors."""
+    if len(value) != 32 or value != value.lower():
+        raise ValueError("bootstrap token must be canonical lowercase hexadecimal")
+    try:
+        token = bytes.fromhex(value)
+    except ValueError as error:
+        raise ValueError("bootstrap token must be canonical lowercase hexadecimal") from error
+    if len(token) != 16 or token.hex() != value:
+        raise ValueError("bootstrap token must be canonical lowercase hexadecimal")
+    return token
+
+
 def build_signon_response_with_session(
     *,
     relay_host: str,
     relay_port: int,
     owned_entitlement_ids: tuple[int, ...] = (),
+    bootstrap_token: bytes | None = None,
     now_seconds: int | None = None,
     random_bytes: Callable[[int], bytes] = secrets.token_bytes,
 ) -> tuple[bytes, SignOnSession]:
@@ -63,6 +77,13 @@ def build_signon_response_with_session(
     if any(not 0 <= identifier <= 0xFFFFFFFF for identifier in owned_entitlement_ids):
         raise ValueError("owned entitlement identifiers must be unsigned 32-bit values")
     ownership = b"".join(_field_varint(1, identifier) for identifier in owned_entitlement_ids)
+    if bootstrap_token is not None and len(bootstrap_token) != 16:
+        raise ValueError("bootstrap_token must be exactly 16 bytes")
+    config_blob = b"" if bootstrap_token is None else (
+        bytes((0x56, 0x34, 0x12, 0x00, 0x0F, 0x62, 0x7B, 0x00, 0x10))
+        + bootstrap_token
+        + bytes(4)
+    )
     host = str(ipaddress.IPv4Address(relay_address))
     success = b"".join((
         _field_bytes(1, b"\x00" * 16),
@@ -77,7 +98,11 @@ def build_signon_response_with_session(
         _field_bytes(15, f"http://{host}/cfg_b/".encode()),
         _field_bytes(16, f"http://{host}/cfg_c/".encode()),
     ))
-    common_info = _field_varint(1, 1) + _field_varint(2, 1)
+    common_info = (
+        _field_varint(1, 1)
+        + _field_varint(2, 1)
+        + (b"" if bootstrap_token is None else _field_bytes(3, config_blob))
+    )
     response = b"".join((
         _field_varint(1, 0),
         _field_bytes(2, success),
@@ -98,6 +123,7 @@ def build_signon_response(
     relay_host: str,
     relay_port: int,
     owned_entitlement_ids: tuple[int, ...] = (),
+    bootstrap_token: bytes | None = None,
     now_seconds: int | None = None,
     random_bytes: Callable[[int], bytes] = secrets.token_bytes,
 ) -> bytes:
@@ -106,6 +132,7 @@ def build_signon_response(
         relay_host=relay_host,
         relay_port=relay_port,
         owned_entitlement_ids=owned_entitlement_ids,
+        bootstrap_token=bootstrap_token,
         now_seconds=now_seconds,
         random_bytes=random_bytes,
     )

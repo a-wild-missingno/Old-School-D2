@@ -1,6 +1,10 @@
 import pytest
 
-from old_school_d2_service.signon import build_signon_response, build_signon_response_with_session
+from old_school_d2_service.signon import (
+    build_signon_response,
+    build_signon_response_with_session,
+    parse_bootstrap_token_hex,
+)
 
 
 def _read_varint(data: bytes, offset: int) -> tuple[int, int]:
@@ -107,3 +111,80 @@ def test_sunrise_default_ownership_policy_matches_configured_handles_and_applica
         1090150, 1090151, 1090152, 1090170, 1090171, 1090200, 1090201,
         1090202, 1330040,
     )
+
+
+def test_encodes_full_configured_sunrise_ownership_policy() -> None:
+    from old_school_d2_service.entitlements import SUNRISE_DEFAULT_OWNED_ENTITLEMENT_IDS
+
+    response = build_signon_response(
+        relay_host="192.168.0.129",
+        relay_port=30974,
+        owned_entitlement_ids=SUNRISE_DEFAULT_OWNED_ENTITLEMENT_IDS,
+        now_seconds=1_700_000_000,
+        random_bytes=lambda length: bytes(range(length)),
+    )
+
+    ownership = _fields(_fields(response)[10][0])
+
+    assert ownership == {1: list(SUNRISE_DEFAULT_OWNED_ENTITLEMENT_IDS)}
+
+
+def test_encodes_bootstrap_token_in_common_info_config_blob() -> None:
+    token = bytes(range(16))
+
+    response = build_signon_response(
+        relay_host="192.168.0.129",
+        relay_port=30974,
+        bootstrap_token=token,
+        now_seconds=1_700_000_000,
+        random_bytes=lambda length: bytes(range(length)),
+    )
+
+    common_info = _fields(_fields(response)[4][0])
+
+    assert common_info[3] == [
+        bytes((0x56, 0x34, 0x12, 0x00, 0x0F, 0x62, 0x7B, 0x00, 0x10))
+        + token
+        + bytes(4)
+    ]
+
+
+def test_rejects_bootstrap_token_with_wrong_size() -> None:
+    with pytest.raises(ValueError, match="exactly 16 bytes"):
+        build_signon_response(
+            relay_host="192.168.0.129",
+            relay_port=30974,
+            bootstrap_token=b"too-short",
+        )
+
+
+def test_parses_exact_lowercase_hex_bootstrap_token() -> None:
+    token = bytes(range(16))
+
+    assert parse_bootstrap_token_hex(token.hex()) == token
+
+
+def test_rejects_malformed_bootstrap_token_text_without_echoing_input() -> None:
+    malformed = "not-a-token"
+
+    with pytest.raises(ValueError) as error:
+        parse_bootstrap_token_hex(malformed)
+
+    assert malformed not in str(error.value)
+
+
+def test_rejects_noncanonical_bootstrap_token_hex() -> None:
+    with pytest.raises(ValueError):
+        parse_bootstrap_token_hex("AA" * 16)
+
+
+def test_omitted_bootstrap_token_preserves_absent_common_info_config_blob() -> None:
+    response = build_signon_response(
+        relay_host="192.168.0.129",
+        relay_port=30974,
+        bootstrap_token=None,
+        now_seconds=1_700_000_000,
+        random_bytes=lambda length: bytes(range(length)),
+    )
+
+    assert 3 not in _fields(_fields(response)[4][0])

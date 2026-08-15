@@ -28,7 +28,9 @@ The lab listener now validates and reads only the exact version-2 local manifest
 
 The next live attempt passed SignOn and ContentConfig, then opened the configured BAP TCP port. Its first complete frame was a 140-byte plaintext-type-2 request for service 30 with task id 0 and a 128-byte body. The previous capture-only listener read that frame and immediately closed the connection, which explains the client waiting at the white loading screen.
 
-The listener now implements only the source-documented service-30 bootstrap: it returns service 31, status 200, preserves the task id and echoes the body, while keeping the connection open for the next frame. A local socket smoke test confirmed that exact response. It still does not answer later BAP services, including service 25 / ServerHello, until a fresh client run captures the next frame.
+The listener now implements only the source-documented service-30 bootstrap: it returns service 31, status 200, preserves the task id and echoes the body, while keeping the connection open for the next frame. A local socket smoke test confirmed that exact response.
+
+The subsequent live run captured plaintext service 25 (ServerHello), task id 1, with the documented 36-byte body. The service now keeps the ephemeral SignOn keys and token only in listener memory for the active lab run and returns the source-documented service-26 envelope: AES-128-CBC encrypted nonce/key material authenticated with HMAC-SHA256. A local SignOn-to-BAP smoke test verified the sequence through service 26 without logging or persisting key material. Post-hello encrypted BAP frames remain capture-only until a fresh client run identifies the next request.
 
 ## Next session
 

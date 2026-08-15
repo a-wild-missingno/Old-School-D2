@@ -1,4 +1,4 @@
-from old_school_d2_service.signon import build_signon_response
+from old_school_d2_service.signon import build_signon_response, build_signon_response_with_session
 
 
 def _read_varint(data: bytes, offset: int) -> tuple[int, int]:
@@ -55,3 +55,18 @@ def test_builds_minimal_successful_signon_response() -> None:
     assert success[6] == [0xC0A80081]
     assert success[7] == [30974]
     assert success[14] == [b"http://192.168.0.129/cfg_a/"]
+
+
+def test_exposes_ephemeral_signon_material_only_to_the_calling_listener() -> None:
+    response, session = build_signon_response_with_session(
+        relay_host="192.168.0.129",
+        relay_port=30974,
+        now_seconds=1_700_000_000,
+        random_bytes=lambda length: bytes(range(length)),
+    )
+
+    outer = _fields(response)
+    success = _fields(outer[2][0])
+    assert success[2] == [session.encryption_key]
+    assert success[3] == [session.authentication_key]
+    assert success[4] == [session.session_token]

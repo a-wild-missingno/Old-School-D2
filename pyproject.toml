@@ -7,7 +7,7 @@ name = "old-school-d2-service"
 version = "0.1.0"
 description = "Clean-room laboratory service for Old-School-D2 research"
 requires-python = ">=3.11"
-dependencies = ["psycopg[binary]>=3.2"]
+dependencies = ["psycopg[binary]>=3.2", "cryptography>=43,<46"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]

@@ -67,3 +67,9 @@ After the service-303 acknowledgement, the client sent authenticated encrypted s
 ## Fourth authenticated encrypted request
 
 The service-305 reply changed the client-visible transition from the usual white loading loop to the intermediate black screen. Five seconds later, the client issued empty authenticated service 250, task id 6. Sunrise maps this echo request to empty status-200 response service 251. The listener now returns only that documented reply; the next boundary remains capture-only.
+
+## Session-close status
+
+The final controlled run accepted all currently implemented encrypted replies: 121 to 122, 302 to 303, 304 to 305, and recurring 250 to 251 echoes every five seconds. The client acknowledged each response and kept the BAP connection open while remaining on the black screen. A timed LAN capture during that state found only the BAP echo traffic and normal ARP; no further HTTPS, BAP request, or other client-to-lab flow was observed.
+
+This is a stable server-initiated-state boundary, not an unanswered request boundary. Sunrise has a deferred publication path for encrypted Queuez/activity notifications, driven by account/character state and connection-owned send nonces. The lab listener does not yet implement that state model or send any speculative notification. The next session should begin with an evidence-backed Queuez/bootstrap design rather than another restart.

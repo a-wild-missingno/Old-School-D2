@@ -2,10 +2,22 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 import ipaddress
 import secrets
 import time
 from collections.abc import Callable
+
+
+@dataclass(frozen=True)
+class SignOnSession:
+    """Ephemeral material shared only by the HTTPS and BAP handlers for one lab run."""
+
+    encryption_key: bytes
+    authentication_key: bytes
+    session_token: bytes
+
 
 
 def _varint(value: int) -> bytes:
@@ -28,14 +40,14 @@ def _field_bytes(number: int, value: bytes) -> bytes:
     return _varint((number << 3) | 2) + _varint(len(value)) + value
 
 
-def build_signon_response(
+def build_signon_response_with_session(
     *,
     relay_host: str,
     relay_port: int,
     now_seconds: int | None = None,
     random_bytes: Callable[[int], bytes] = secrets.token_bytes,
-) -> bytes:
-    """Build the smallest documented success response for an observed SignOn request."""
+) -> tuple[bytes, SignOnSession]:
+    """Build a SignOn response and retain its ephemeral material for the local BAP handler."""
     if not 1 <= relay_port <= 65535:
         raise ValueError("relay_port must be between 1 and 65535")
     relay_address = int(ipaddress.IPv4Address(relay_host))
@@ -62,7 +74,7 @@ def build_signon_response(
         _field_bytes(16, f"http://{host}/cfg_c/".encode()),
     ))
     common_info = _field_varint(1, 1) + _field_varint(2, 1)
-    return b"".join((
+    response = b"".join((
         _field_varint(1, 0),
         _field_bytes(2, success),
         _field_bytes(4, common_info),
@@ -74,3 +86,21 @@ def build_signon_response(
         _field_bytes(13, b"live"),
         _field_varint(14, relay_address),
     ))
+    return response, SignOnSession(encryption_key, authentication_key, session_token)
+
+
+def build_signon_response(
+    *,
+    relay_host: str,
+    relay_port: int,
+    now_seconds: int | None = None,
+    random_bytes: Callable[[int], bytes] = secrets.token_bytes,
+) -> bytes:
+    """Build the response body for callers that do not own the following BAP connection."""
+    response, _ = build_signon_response_with_session(
+        relay_host=relay_host,
+        relay_port=relay_port,
+        now_seconds=now_seconds,
+        random_bytes=random_bytes,
+    )
+    return response

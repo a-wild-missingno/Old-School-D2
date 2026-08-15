@@ -161,6 +161,23 @@ Implement independently written services from the protocol documentation. Do not
 
 The first meaningful milestone should be modest, such as the client advancing farther than before after contacting controlled replacement infrastructure. Larger gameplay goals should wait until the protocol surface is understood.
 
+## Service foundation
+
+The repository now contains the first clean-room lab-service slice: a narrow UDP discovery responder plus a PostgreSQL event store. It exists to record and reproduce only the explicitly observed Sunrise external-server discovery exchange. It is not a general Destiny service implementation.
+
+For a local development run:
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -e ".[dev]"
+.venv/bin/python -m pytest
+export OLD_SCHOOL_D2_DATABASE_URL=postgresql://oldschoold2:change-me@127.0.0.1:5432/oldschoold2
+.venv/bin/python -m old_school_d2_service --migrate
+.venv/bin/python -m old_school_d2_service --host 127.0.0.1 --port 3074 --label local-smoke
+```
+
+The PostgreSQL database stores sanitized experiment metadata and payload hashes by default. It intentionally does not model accounts, characters, inventories, matchmaking, or world state yet; those require independently documented protocol evidence. See [the service-foundation design](docs/architecture/service-foundation.md).
+
 ## Repository rules
 
 This repository is public. Do not commit:

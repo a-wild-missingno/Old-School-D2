@@ -176,7 +176,10 @@ export OLD_SCHOOL_D2_DATABASE_URL=postgresql://oldschoold2:change-me@127.0.0.1:5
 .venv/bin/python -m old_school_d2_service --host 127.0.0.1 --port 3074 --label local-smoke
 ```
 
-The PostgreSQL database stores sanitized experiment metadata and payload hashes by default. It intentionally does not model accounts, characters, inventories, matchmaking, or world state yet; those require independently documented protocol evidence. See [the service-foundation design](docs/architecture/service-foundation.md).
+The PostgreSQL database stores sanitized experiment metadata and payload hashes by default.
+
+For the isolated lab host, the versioned systemd template at `deploy/systemd/old-school-d2-discovery@.service` runs one UDP listener per port. It reads the database URL and bind host from the root-readable `/etc/old-school-d2/discovery.env`; copy the template as a local starting point, set a service-specific PostgreSQL URL and bind host, run migrations, then enable the desired port instances. Do not commit that environment file.
+ It intentionally does not model accounts, characters, inventories, matchmaking, or world state yet; those require independently documented protocol evidence. See [the service-foundation design](docs/architecture/service-foundation.md).
 
 ## Repository rules
 

@@ -57,3 +57,16 @@ tokens/
 *.csr
 id_rsa*
 id_ed25519*
+
+# Old-School-D2 service runtime
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.sqlite3
+*.db
+var/
+.env
+
+# Safe configuration template is intentionally committed
+!.env.example

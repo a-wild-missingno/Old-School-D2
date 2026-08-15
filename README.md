@@ -116,3 +116,7 @@ This is a public research repository. Do not commit:
 ## Acknowledgements
 
 [Sunrise](https://github.com/stanuwu/Sunrise) is used as a client-side research baseline. The working reference fork is [a-wild-missingno/Sunrise](https://github.com/a-wild-missingno/Sunrise). Sunrise retains its own authorship, license, notices, and project rules. Old-School-D2 does not copy Sunrise source into this repository; it independently documents and implements only the lab behavior required by controlled experiments.
+
+## Multi-user account planning
+
+The current SignOn fixture is not a username/password login system. Future multi-user support will use PostgreSQL-backed accounts and Argon2id password verifiers; player credentials will never be stored in repository configuration or protocol-capture records. See [account and session design](docs/architecture/account-and-session-design.md).

@@ -51,3 +51,7 @@ Raw packet captures, request bodies, TLS materials, database URLs, and generated
 ## Prepared encrypted-frame observation
 
 Before the next run, the lab listener was changed to retain the generated BAP session key and receive nonce only inside the active TCP handler. It validates a type-1 outer frame, authenticates and decrypts it with AES-GCM, advances the little-endian receive nonce only after a valid request, and records only authentication outcome, service ID, task ID, and body length. It deliberately sends no encrypted response. Unit tests cover successful decryption/nonce advancement and rejected-tag behavior; a deterministic local encrypted-frame smoke test passed.
+
+## First authenticated encrypted request
+
+The prepared observation run authenticated and decrypted the first type-1 request without recording its plaintext: service 121, task id 2, empty body. Sunrise's public routing table maps request service 121 (register subscriber) to response service 122 with an empty status-200 body. The listener now sends only that AES-GCM encrypted acknowledgement and advances its send nonce. The next client run will establish whether a later encrypted request follows; no later service is pre-implemented.

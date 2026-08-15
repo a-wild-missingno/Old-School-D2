@@ -35,11 +35,12 @@ class BapEncryptedRequest:
 class BapConnectionState:
     """In-memory receive-direction state for one authenticated BAP TCP connection."""
 
-    def __init__(self, *, session_key: bytes, receive_nonce: bytes) -> None:
-        if len(session_key) != 16 or len(receive_nonce) != 12:
-            raise ValueError("BAP session key and receive nonce must be 16 and 12 bytes")
+    def __init__(self, *, session_key: bytes, receive_nonce: bytes, send_nonce: bytes) -> None:
+        if len(session_key) != 16 or len(receive_nonce) != 12 or len(send_nonce) != 12:
+            raise ValueError("BAP session key and nonces must be 16 and 12 bytes")
         self._session_key = bytes(session_key)
         self._receive_nonce = bytearray(receive_nonce)
+        self._send_nonce = bytearray(send_nonce)
 
     @classmethod
     def from_server_hello(cls, *, session_key: bytes, server_nonce: bytes) -> "BapConnectionState":
@@ -47,7 +48,7 @@ class BapConnectionState:
             raise ValueError("BAP server nonce must be 12 bytes")
         receive_nonce = bytearray(server_nonce)
         receive_nonce[-1] ^= 1
-        return cls(session_key=session_key, receive_nonce=bytes(receive_nonce))
+        return cls(session_key=session_key, receive_nonce=bytes(receive_nonce), send_nonce=server_nonce)
 
     @property
     def receive_nonce(self) -> bytes:
@@ -74,10 +75,27 @@ class BapConnectionState:
         self._advance_receive_nonce()
         return BapEncryptedRequest(service=service, task_id=task_id, body_size=len(plaintext) - _REQUEST_HEADER.size)
 
+    def build_register_subscriber_response(self, request: BapEncryptedRequest) -> bytes | None:
+        """Return only the documented encrypted service-122 acknowledgement for service 121."""
+        if request.service != 121:
+            return None
+        plaintext = _RESPONSE_HEADER.pack(122, request.task_id, _STATUS_OK)
+        sealed = AESGCM(self._session_key).encrypt(bytes(self._send_nonce), plaintext, None)
+        payload = sealed[-16:] + sealed[:-16]
+        self._advance_send_nonce()
+        return _OUTER_HEADER.pack(_MAGIC, 1, len(payload)) + payload
+
     def _advance_receive_nonce(self) -> None:
-        for index, value in enumerate(self._receive_nonce):
+        self._advance_nonce(self._receive_nonce)
+
+    def _advance_send_nonce(self) -> None:
+        self._advance_nonce(self._send_nonce)
+
+    @staticmethod
+    def _advance_nonce(nonce: bytearray) -> None:
+        for index, value in enumerate(nonce):
             next_value = (value + 1) % 256
-            self._receive_nonce[index] = next_value
+            nonce[index] = next_value
             if next_value != 0:
                 return
 

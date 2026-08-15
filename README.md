@@ -20,10 +20,10 @@ Status as of the current controlled lab experiment:
 | ContentConfig | Implemented | Strict local manifest-cache parser and response encoder; cache stays outside Git. |
 | BAP channel start | Implemented | Plaintext service 30 receives documented service-31 nonce echo. |
 | BAP ServerHello | Implemented | Plaintext service 25 receives authenticated service-26 key/nonce envelope. |
-| Post-hello BAP | Incrementally implemented | The first three authenticated encrypted requests are service 121 (register subscriber), service 302 (register relay client), and service 304 (certificate signing). The listener returns their documented service-122, service-303, and service-305 replies; service 305 rewraps only protobuf field 3 and records no certificate data. Later encrypted services remain evidence-gathering only. |
+| Post-hello BAP | Incrementally implemented | The first three authenticated encrypted requests are service 121 (register subscriber), service 302 (register relay client), and service 304 (certificate signing), and service 250 (echo). The listener returns their documented service-122, service-303, service-305, and service-251 replies; service 305 rewraps only protobuf field 3 and records no certificate data. Later encrypted services remain evidence-gathering only. |
 | Accounts, profiles, inventory, matchmaking, activities, world state | Not implemented | Deliberately out of scope until each dependency is independently documented. |
 
-The latest client run reached the post-ServerHello encrypted BAP boundary and remained at the loading screen because service 121 was capture-only. The next lab listener returns only the evidence-backed service-122, service-303, and service-305 replies; it does not speculate about later encrypted services. This is progress relative to the original discovery-only baseline, not a claim of playable offline Destiny 2.
+The latest client run reached the post-ServerHello encrypted BAP boundary and remained at the loading screen because service 121 was capture-only. The next lab listener returns only the evidence-backed service-122, service-303, service-305, and service-251 replies; it does not speculate about later encrypted services. This is progress relative to the original discovery-only baseline, not a claim of playable offline Destiny 2.
 
 ## Safety and research rules
 

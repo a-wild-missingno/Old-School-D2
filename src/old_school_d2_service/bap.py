@@ -145,6 +145,10 @@ class BapConnectionState:
         """Return only the documented encrypted service-303 acknowledgement for service 302."""
         return self._build_empty_response(request, request_service=302, response_service=303)
 
+    def build_echo_response(self, request: BapEncryptedRequest) -> bytes | None:
+        """Return only the documented encrypted service-251 acknowledgement for service 250."""
+        return self._build_empty_response(request, request_service=250, response_service=251)
+
     def build_sign_certificate_response(self, request: BapEncryptedRequest) -> bytes | None:
         """Rewrap only service-304 protobuf certificate field 3 in the documented service-305 body."""
         if request.service != 304:

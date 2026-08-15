@@ -63,3 +63,7 @@ After the service-122 acknowledgement, the same client connection sent authentic
 ## Third authenticated encrypted request
 
 After the service-303 acknowledgement, the client sent authenticated encrypted service 304, task id 4, with a 98-byte protobuf body. Sunrise maps it to service 305. Its documented body codec copies only the first valid length-delimited protobuf field 3 into a response containing field 1 = 0 and that field-3 wrapper. The listener now performs this transformation only in connection memory, never logs certificate bytes, and returns the encrypted service-305 response. A fresh run is required to observe the next boundary.
+
+## Fourth authenticated encrypted request
+
+The service-305 reply changed the client-visible transition from the usual white loading loop to the intermediate black screen. Five seconds later, the client issued empty authenticated service 250, task id 6. Sunrise maps this echo request to empty status-200 response service 251. The listener now returns only that documented reply; the next boundary remains capture-only.

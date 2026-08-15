@@ -1,240 +1,118 @@
 # Old-School-D2
 
-Old-School-D2 is an experimental research project to understand how historical Destiny 2 clients interacted with their online service infrastructure, with the long-term hope of documenting and eventually building clean-room replacement services for offline or preservation-focused PvE experiences.
+Old-School-D2 is a clean-room, lab-only research project for documenting how a historical Destiny 2 client, configured with Sunrise external-server mode, interacts with replacement service boundaries. Its long-term preservation goal is an offline or preservation-focused PvE research environment—not access to Bungie services and not a general-purpose game server.
 
-The immediate goal is not to make the game work. The first milestone is a safe, reproducible network-isolation and observation environment. The current client-side research baseline is [Sunrise](https://github.com/a-wild-missingno/Sunrise), a fork of the [upstream Sunrise project](https://github.com/stanuwu/Sunrise).
+The project uses controlled client experiments, public Sunrise source as a behavioral reference, narrow independent implementations, and reproducible tests. It does **not** copy Destiny binaries, assets, account data, keys, packet captures, or proprietary service code into this repository.
 
-## Current milestone: isolated network discovery
+## AI-assisted development disclosure
 
-Before any protocol emulation work begins, the client machine must be isolated from Bungie and the public Internet while still allowing a controlled lab machine to observe the client's attempted network traffic.
+This repository is developed with substantial assistance from AI coding tools. AI is used for implementation, test drafting, documentation, and research synthesis; it can make mistakes or produce incomplete conclusions. Changes are intended to be evidence-backed, reviewed, tested, and constrained to the project safety rules below. Contributors and maintainers—not an AI system—remain responsible for review, security, licensing, and research decisions.
 
-The intended topology is:
+## Current progress
+
+Status as of the current controlled lab experiment:
+
+| Boundary | State | Evidence / scope |
+| --- | --- | --- |
+| Network isolation | Verified | The client lab has no forwarding, NAT, or WAN path. |
+| UDP discovery | Implemented | Narrow Sunrise NatProbe replies with sanitized PostgreSQL event recording. |
+| HTTPS SignOn | Implemented | Minimal protobuf success response issues ephemeral, in-memory session material. |
+| ContentConfig | Implemented | Strict local manifest-cache parser and response encoder; cache stays outside Git. |
+| BAP channel start | Implemented | Plaintext service 30 receives documented service-31 nonce echo. |
+| BAP ServerHello | Implemented | Plaintext service 25 receives authenticated service-26 key/nonce envelope. |
+| Post-hello BAP | Investigating | The first encrypted type-1 frame has been captured as sanitized metadata only; no encrypted service is decoded or answered yet. |
+| Accounts, profiles, inventory, matchmaking, activities, world state | Not implemented | Deliberately out of scope until each dependency is independently documented. |
+
+The client currently reaches the post-ServerHello encrypted BAP boundary and then remains at the loading screen because that next request is intentionally capture-only. This is progress relative to the original discovery-only baseline, not a claim of playable offline Destiny 2.
+
+## Safety and research rules
+
+- Never allow the research client to contact Bungie or public production infrastructure.
+- Never forward, NAT, proxy, or tunnel client traffic to the Internet.
+- Use only narrowly scoped, documented local interception and DNS mappings.
+- Keep raw captures, certificates, local network details, database URLs, credentials, tokens, and generated session material outside the repository.
+- Record observed facts separately from hypotheses.
+- Implement one evidenced protocol boundary at a time; do not add speculative behavior merely to clear a screen.
+- Preserve backups and rollback steps before changing client or network configuration.
+
+## Architecture
 
 ```text
-Historical Destiny client
+Historical client (isolated)
         |
         v
-Lab gateway + DNS logger
+Lab gateway / DNS observer / packet capture
         |
-        X no forwarding / no NAT / no WAN access for client traffic
+        X  no forwarding, NAT, or WAN access
+        |
+        v
+Local HTTPS + BAP lab listener
+        |
+        +-- clean-room Python protocol helpers
+        +-- PostgreSQL sanitized experiment-event store
 ```
 
-The lab gateway acts as the client's configured gateway and DNS server. This lets us observe packets whose original destinations are remote addresses, including both DNS-discovered services and hard-coded IP destinations, without forwarding those packets to the real services.
+The repository contains the reusable clean-room Python components. The active HTTPS/BAP listener, TLS material, manifest cache, capture files, and lab configuration are runtime-local inputs and are intentionally not committed.
 
-## Safety principles
+### Implemented repository components
 
-- Do not allow the historical client to contact Bungie infrastructure.
-- Do not forward, NAT, proxy, or tunnel client traffic to the public Internet.
-- Do not blindly wildcard DNS.
-- Do not forward Destiny/Bungie-related DNS queries upstream unless explicitly reviewed and approved.
-- Do not make router changes without first documenting the router, proposed change, and rollback plan.
-- Do not implement speculative server behavior before baseline captures are complete.
-- Prefer reversible, local, documented changes.
-- Keep observed facts separate from hypotheses.
+- `discovery.py` — narrow UDP NatProbe request classification and local reply construction.
+- `storage.py` and `migrations.py` — PostgreSQL migrations and sanitized append-only event storage.
+- `signon.py` — minimal SignOn protobuf response and ephemeral session material.
+- `content_config.py` — strict version-2 local manifest-cache parsing and ContentConfig response encoding.
+- `bap.py` — BAP channel-start and ServerHello response helpers, including the authenticated ServerHello envelope.
+- `server.py` — UDP discovery adapter.
+- `tests/` — deterministic protocol-unit tests and local socket-oriented validation.
 
-## DNS discovery strategy
+## Protocol progress
 
-Initially, DNS is used for discovery only.
+The documented sequence currently observed in the isolated Sunrise external-server experiment is:
 
-The DNS logger should record:
+1. UDP discovery / NatProbe
+2. HTTPS `POST /SignOn`
+3. HTTPS `GET /config/`
+4. BAP plaintext channel start: service 30 → service 31
+5. BAP plaintext ServerHello: service 25 → service 26
+6. First AES-GCM encrypted BAP request — captured, not yet decoded or answered
 
-- timestamp
-- requesting client
-- query sequence
-- hostname
-- query type
-- response behavior
+Sunrise’s public implementation shows why the next step matters: after service 26, it arms per-connection send/receive nonces and authenticates encrypted frames with AES-GCM. The next research task is to retain that per-connection BAP state, decrypt the observed frame without recording secrets or raw payloads, identify its service ID, and add only the corresponding evidence-backed behavior.
 
-Unknown names may safely fail resolution during early discovery. Once specific services are identified and selected for emulation, individual hostnames can be mapped to the lab gateway. Mappings should be narrow, reviewed, and documented.
+## Local development
 
-## Packet capture strategy
+Requirements:
 
-The lab gateway should capture all traffic originating from the isolated client while preserving original destination information.
+- Python 3.11+
+- PostgreSQL for discovery-event storage
+- An isolated lab environment for live experiments
 
-Captures should support analysis of:
-
-- destination IPs
-- destination ports
-- protocols
-- connection order
-- retry intervals
-- TCP resets
-- TLS negotiation attempts
-- DNS activity
-- persistent versus short-lived connections
-- UDP flows
-- packet sizes
-- timing relationships
-
-Raw captures may contain sensitive local-network information and should be reviewed before publication.
-
-## Research workflow
-
-### Phase 1: Network discovery
-
-Launch the historical client only after isolation has been experimentally verified. When Sunrise is the client baseline, record whether it is operating in its default offline mode or its external-server mode before interpreting a capture; these modes have materially different egress behavior. Capture a complete startup attempt and build an endpoint inventory including:
-
-- hostname, if DNS-based
-- resolved IP, if applicable
-- hard-coded IP, if suspected
-- protocol and port
-- TCP or UDP
-- order during startup
-- retry behavior
-- whether failure blocks further startup
-- whether the connection appears optional
-- observable TLS metadata
-- likely purpose
-- confidence level
-
-### Phase 2: Static client analysis
-
-Analyze client files for network and service architecture references, such as:
-
-- hostnames and URLs
-- IP literals and ports
-- protocol names
-- serialization formats
-- message identifiers
-- service names
-- error messages
-- authentication and session state-machine hints
-- matchmaking, activity, world, or destination terminology
-- configuration files and manifests
-- TLS or HTTP client usage
-- socket and DNS resolution code
-
-The goal is understanding expected interfaces, not bypassing protections or contacting real services.
-
-### Phase 3: Controlled fake services
-
-Create small local listeners for identified endpoints. Begin with the smallest possible behavior:
-
-1. accept a connection
-2. record the first bytes or message
-3. optionally return a controlled failure or minimal response
-4. observe how the client reacts
-
-Every experiment should document:
-
-- client state before experiment
-- endpoint
-- request bytes or structure
-- response supplied
-- resulting client behavior
-- logs or packet evidence
-- hypothesis
-- confidence
-
-### Phase 4: Selective DNS substitution
-
-Map only identified hostnames that are intentionally being intercepted. Avoid wildcard DNS and unrelated names.
-
-### Phase 5: Narrow transparent interception
-
-If the client uses hard-coded IPs, cached addresses, or non-DNS discovery, use narrowly scoped interception rules only for specific destinations and ports. Do not forward intercepted connections to real remote destinations.
-
-### Phase 6: Protocol documentation
-
-For each identified protocol, maintain independent documentation covering:
-
-- transport
-- framing
-- byte order
-- compression
-- serialization
-- message IDs
-- request fields
-- response fields
-- state transitions
-- unknown fields
-- observed examples
-- confidence level
-
-Observed facts and hypotheses should be clearly separated.
-
-### Phase 7: Clean-room replacement services
-
-Implement independently written services from the protocol documentation. Do not copy Bungie code, assets, or proprietary data.
-
-### Phase 8: Minimal boot milestone
-
-The first meaningful milestone should be modest, such as the client advancing farther than before after contacting controlled replacement infrastructure. Larger gameplay goals should wait until the protocol surface is understood.
-
-## Service foundation
-
-The repository now contains the first clean-room lab-service slice: a narrow UDP discovery responder plus a PostgreSQL event store. It exists to record and reproduce only the explicitly observed Sunrise external-server discovery exchange. It is not a general Destiny service implementation.
-
-For a local development run:
+Create a development environment and run the test suite:
 
 ```bash
 python3 -m venv .venv
 .venv/bin/pip install -e ".[dev]"
 .venv/bin/python -m pytest
-export OLD_SCHOOL_D2_DATABASE_URL=postgresql://oldschoold2:change-me@127.0.0.1:5432/oldschoold2
-.venv/bin/python -m old_school_d2_service --migrate
-.venv/bin/python -m old_school_d2_service --host 127.0.0.1 --port 3074 --label local-smoke
+python3 -m compileall -q src
 ```
 
-The PostgreSQL database stores sanitized experiment metadata and payload hashes by default.
+The package dependencies include `psycopg` for PostgreSQL and `cryptography` for the documented BAP cryptographic envelope. Do not commit database URLs or runtime secrets. For discovery migration and listener configuration, start from the checked-in systemd template under `deploy/systemd/` and provide a root-readable local environment file outside Git.
 
-For the isolated lab host, the versioned systemd template at `deploy/systemd/old-school-d2-discovery@.service` runs one UDP listener per port. It reads the database URL and bind host from the root-readable `/etc/old-school-d2/discovery.env`; copy the template as a local starting point, set a service-specific PostgreSQL URL and bind host, run migrations, then enable the desired port instances. Do not commit that environment file.
- It intentionally does not model accounts, characters, inventories, matchmaking, or world state yet; those require independently documented protocol evidence. See [the service-foundation design](docs/architecture/service-foundation.md).
+## Documentation
 
-## Repository rules
+- `docs/architecture/service-foundation.md` — service constraints, storage decision, and validation gates.
+- `docs/experiments/2026-08-15-external-signin.md` — evidence record for the current SignOn, ContentConfig, and BAP sequence.
+- `docs/client-analysis/sunrise.md` — Sunrise external-server integration notes.
+- `docs/experiments/sunrise-external-server.md` — controlled experiment template.
 
-This repository is public. Do not commit:
+## Repository hygiene
 
-- Destiny binaries
-- Bungie assets
-- extracted cinematics
-- extracted audio
-- textures or models
-- copyrighted configuration dumps where redistribution would be inappropriate
-- encryption or signing keys
-- credentials or account tokens
-- raw packet captures containing sensitive local-network data
-- machine-specific LAN details such as private IP addresses, hostnames, MAC addresses, or router details
+This is a public research repository. Do not commit:
 
-Generated technical metadata should be reviewed before committing.
-
-## Documentation structure
-
-Planned organization:
-
-```text
-docs/
-  network/              Network lab design, verification, and capture notes
-  protocols/            Protocol notes and independent specifications
-  experiments/          Experiment logs with evidence and confidence levels
-  client-analysis/      Static-analysis notes and references
-tools/
-  capture/              Capture and summary helpers
-  dns/                  DNS logging and selective mapping tools
-  protocol-analysis/    Parsers, decoders, and analysis utilities
-server/
-  gateway/              Local gateway/listener components
-  auth/                 Clean-room auth/session experiments
-  profile/              Profile-related experiments
-  world/                World/activity experiments
-```
-
-## Sunrise baseline
-
-Sunrise is used as a research starting point because it makes an old Destiny 2 build usable for offline exploration and contains a documented external-server switch. It is not a replacement service, and this project does not treat it as evidence of the original Bungie service behavior.
-
-- Default Sunrise behavior is intentionally offline: it redirects or handles relevant egress locally. A gateway capture may therefore show no game-originated LAN traffic in this mode.
-- External-server mode is a separate, supported experiment path. It redirects selected client egress to one researcher-controlled host before packets leave Windows. This permits transport and protocol observation, but it does not preserve the original remote IP destination in the packet capture.
-- Enable external-server mode only for a documented experiment, after stopping the client, and only with an isolated lab listener. Do not use it to contact production infrastructure.
-
-See [Sunrise integration notes](docs/client-analysis/sunrise.md) and the [external-server experiment template](docs/experiments/sunrise-external-server.md).
+- Destiny binaries, extracted game assets, or copyrighted dumps
+- encryption/signing keys, accounts, credentials, or session tokens
+- raw packet captures, TLS material, database URLs, or local configuration files
+- private IP addresses, hostnames, MAC addresses, router details, or other LAN identifiers
+- unreviewed AI-generated material that lacks an evidence source or test
 
 ## Acknowledgements
 
-This project builds on the publicly available [Sunrise](https://github.com/stanuwu/Sunrise) project by `stanuwu`, which is described by its authors as a Destiny 2 offline exploration mod. The working fork is [a-wild-missingno/Sunrise](https://github.com/a-wild-missingno/Sunrise).
-
-Sunrise retains its own license, notices, authorship, and project rules. Old-School-D2 does not copy Sunrise source, Destiny binaries, game assets, keys, or proprietary data into this repository.
-
-## Status
-
-Preparation is in progress. The current work is limited to network-isolation planning, DNS logging, packet-capture tooling, Sunrise source/configuration analysis, and reproducible documentation. Client experiments should not begin until isolation checks have passed and a specific experiment record exists.
+[Sunrise](https://github.com/stanuwu/Sunrise) is used as a client-side research baseline. The working reference fork is [a-wild-missingno/Sunrise](https://github.com/a-wild-missingno/Sunrise). Sunrise retains its own authorship, license, notices, and project rules. Old-School-D2 does not copy Sunrise source into this repository; it independently documents and implements only the lab behavior required by controlled experiments.

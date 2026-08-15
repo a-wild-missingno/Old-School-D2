@@ -32,11 +32,17 @@ The listener now implements only the source-documented service-30 bootstrap: it 
 
 The subsequent live run captured plaintext service 25 (ServerHello), task id 1, with the documented 36-byte body. The service now keeps the ephemeral SignOn keys and token only in listener memory for the active lab run and returns the source-documented service-26 envelope: AES-128-CBC encrypted nonce/key material authenticated with HMAC-SHA256. A local SignOn-to-BAP smoke test verified the sequence through service 26 without logging or persisting key material. Post-hello encrypted BAP frames remain capture-only until a fresh client run identifies the next request.
 
+## Current encrypted-BAP boundary
+
+The latest controlled run completed services 30 and 25/26, then sent one 28-byte type-1 encrypted BAP frame (22-byte payload: the fixed 16-byte authentication tag plus 6 ciphertext bytes). The listener correctly recorded only its framing metadata and did not answer it; the client closed that BAP connection after its timeout. The client-visible result remained the white loading screen.
+
+Sunrise's public BAP path indicates that the next request uses AES-GCM with a connection-owned receive nonce: it starts from the service-26 nonce with the final byte direction-marked, authenticates/decrypts the frame with the generated BAP session key, and advances the nonce after a valid frame. The current lab listener generated this material for service 26 but does not yet retain it per TCP connection, so it cannot safely decode the captured request.
+
 ## Next session
 
-1. Launch the client once with capture active and record whether `/config/` is requested and served.
-2. Correlate the client-visible result with the sanitized listener event metadata.
-3. Implement only the next observed boundary. If the client reaches `30974`, retain BAP as capture-only until its first frame is documented.
+1. Add a deterministic, non-secret test harness for connection-scoped BAP nonce/key state and AES-GCM frame opening.
+2. Retain BAP state only for the active TCP connection, decrypt the first encrypted request in memory, and log only service ID, task ID, body length, and authentication outcome.
+3. Run one controlled client attempt and implement only the identified response route if the decrypted request and Sunrise reference agree.
 
 ## Preservation
 

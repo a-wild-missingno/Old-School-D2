@@ -77,9 +77,16 @@ class BapConnectionState:
 
     def build_register_subscriber_response(self, request: BapEncryptedRequest) -> bytes | None:
         """Return only the documented encrypted service-122 acknowledgement for service 121."""
-        if request.service != 121:
+        return self._build_empty_response(request, request_service=121, response_service=122)
+
+    def build_register_relay_client_response(self, request: BapEncryptedRequest) -> bytes | None:
+        """Return only the documented encrypted service-303 acknowledgement for service 302."""
+        return self._build_empty_response(request, request_service=302, response_service=303)
+
+    def _build_empty_response(self, request: BapEncryptedRequest, *, request_service: int, response_service: int) -> bytes | None:
+        if request.service != request_service:
             return None
-        plaintext = _RESPONSE_HEADER.pack(122, request.task_id, _STATUS_OK)
+        plaintext = _RESPONSE_HEADER.pack(response_service, request.task_id, _STATUS_OK)
         sealed = AESGCM(self._session_key).encrypt(bytes(self._send_nonce), plaintext, None)
         payload = sealed[-16:] + sealed[:-16]
         self._advance_send_nonce()

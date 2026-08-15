@@ -20,10 +20,10 @@ Status as of the current controlled lab experiment:
 | ContentConfig | Implemented | Strict local manifest-cache parser and response encoder; cache stays outside Git. |
 | BAP channel start | Implemented | Plaintext service 30 receives documented service-31 nonce echo. |
 | BAP ServerHello | Implemented | Plaintext service 25 receives authenticated service-26 key/nonce envelope. |
-| Post-hello BAP | Incrementally implemented | The first authenticated encrypted request was service 121 (register subscriber), task 2, empty body; the listener now returns the documented empty service-122 acknowledgement. Later encrypted services remain evidence-gathering only. |
+| Post-hello BAP | Incrementally implemented | The first two authenticated encrypted requests are service 121 (register subscriber) and service 302 (register relay client); the listener returns their documented empty service-122 and service-303 acknowledgements. Later encrypted services remain evidence-gathering only. |
 | Accounts, profiles, inventory, matchmaking, activities, world state | Not implemented | Deliberately out of scope until each dependency is independently documented. |
 
-The latest client run reached the post-ServerHello encrypted BAP boundary and remained at the loading screen because service 121 was capture-only. The next lab listener returns only the evidence-backed service-122 acknowledgement; it does not speculate about later encrypted services. This is progress relative to the original discovery-only baseline, not a claim of playable offline Destiny 2.
+The latest client run reached the post-ServerHello encrypted BAP boundary and remained at the loading screen because service 121 was capture-only. The next lab listener returns only the evidence-backed service-122 and service-303 acknowledgements; it does not speculate about later encrypted services. This is progress relative to the original discovery-only baseline, not a claim of playable offline Destiny 2.
 
 ## Safety and research rules
 

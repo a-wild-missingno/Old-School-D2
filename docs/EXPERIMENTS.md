@@ -69,3 +69,12 @@
 **CONFIDENCE:** Confirmed.
 
 **NEXT TEST:** One controlled launch; inspect the local Sunrise file log for Queuez hook-install and source-seed records, then correlate with the external listener/capture.
+
+## Queuez source-list fallback / service-12 acknowledgement (prepared)
+
+**Observed boundary:** encrypted BAP completed through services 121/122, 302/303, 304/305, and 250/251. Client logging confirmed Queuez hook installation but no family-zero source-list seed.
+
+**Minimal change:** prefer the client manager's observed key; only when it is zero, seed from Sunrise's checked authored primary SOID. The isolated listener now returns the reference empty acknowledgement for service 12 as service 13. No Queuez notification payload is fabricated.
+
+**Acceptance evidence for the next run:** `result=seeded source=state` (or `source=manager`) in the client log, followed by an authenticated BAP service-12 request and a listener service-13 response.
+

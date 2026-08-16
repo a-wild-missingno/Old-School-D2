@@ -1,3 +1,11 @@
+
+## 2026-08-16 Queuez source-list evidence
+
+- With Sunrise file logging enabled through a size-preserving settings edit, the client completed SignOn and BAP service 121/122, 302/303, 304/305, and 250/251.
+- Both Queuez hooks installed, but no `ev=queuez stage=family0 result=seeded` line appeared during the black-screen interval. The source-list hook therefore had no nonzero manager account key to write.
+- The authored primary SOID is the compatible fallback identity: Sunrise's Steam implementation explicitly ties the local Steam identity to `primary_soid`. The next DLL uses that checked State value only when the live manager key has not been observed.
+- The external listener now has an automated, source-backed service-12 -> empty service-13 acknowledgement ready. It does not emit unevidenced Queuez object payloads.
+
 # Project State
 
 ## Current client frontier

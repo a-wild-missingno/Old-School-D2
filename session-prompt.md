@@ -6,6 +6,15 @@ This `session-prompt.md` file (located at a-wild-missingno/Old-School-D2 on GitH
 
 The repository is the project memory and is located at a-wild-missingno/Old-School-D2 on GitHub.
 
+Keep this setup in mind:
+* You are running on a MacBook
+* You execute on an Optiplex running Ubuntu
+* Destiny 2 runs on a Legion Cube running Windows 10.
+
+The Windows machine is isolated from the internet and communicates only and directly to the Optiplex (which you execute on).
+
+SSH keys already exist for connecting to Windows from the Optiplex
+
 Do **not** rely on memories of previous conversations, prior agent sessions, compressed context, or undocumented assumptions.
 
 Everything needed to understand, operate, investigate, and continue this project should ultimately be represented in:

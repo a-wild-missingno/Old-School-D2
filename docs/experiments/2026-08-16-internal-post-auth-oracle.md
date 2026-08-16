@@ -23,6 +23,8 @@ A dedicated local Oracle runtime used the Windows-CI-built metadata-only Sunrise
 
 The instrumented DLL loaded successfully and its internal BAP transport listener reported startup. During the bounded 100-second run, the client process remained alive but did not progress to BAP authentication. The oracle log contained no `post_auth_send` record and no authenticated BAP route record.
 
+**Procedural limitation (CONFIRMED):** no visual-state record was captured, no keyboard/controller input event was recorded, and no action equivalent to pressing Enter at the Shadowkeep title/start screen was performed. The run therefore did not test whether the dedicated runtime could reach authenticated BAP after normal title-screen start input. It must not be interpreted as a launcher/invocation mismatch.
+
 The sanitized log facts were:
 
 ```text
@@ -43,8 +45,8 @@ No payload, account, character, token, key, private address, or packet content i
 
 ## Result
 
-**PARTIAL / diagnostic.** The instrumentation build and dedicated internal/default runtime were validated through transport startup, but this invocation did not reach the required authenticated BAP state. It cannot establish an ordered post-auth outbound oracle and provides no authority to emit a Queuez frame externally.
+**PARTIAL / procedural diagnostic.** The instrumentation build and dedicated internal/default runtime were validated through transport startup, but the required title/start-screen input did not occur. This invocation did not reach the required authenticated BAP state, cannot establish an ordered post-auth outbound oracle, and provides no authority to emit a Queuez frame externally.
 
 ## Follow-up
 
-Determine the documented launcher/invocation that makes the dedicated internal/default runtime reach BAP authentication while retaining metadata-only tracing. Capture exactly one authenticated oracle trace and compare it to the external stable wait before changing the external listener.
+Run the already-prepared dedicated internal/default runtime, perform exactly one Enter-equivalent action at the title/start screen, and leave it running for the bounded observation. Only if that controlled input run fails before authentication should launcher/invocation behavior be investigated. Capture exactly one authenticated oracle trace and compare it to the external stable wait before changing the external listener.

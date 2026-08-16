@@ -905,7 +905,7 @@ Confirmed working behavior includes the currently documented request/reply seque
 
 The external client remains connected but does not advance to character selection, and no later client-originated route has been observed.
 
-`docs/experiments/2026-08-16-internal-post-auth-oracle.md` records that the dedicated oracle runtime and trace DLL started its local transport but the attempted direct executable invocation did not reach BAP authentication. It is not an oracle trace.
+`docs/experiments/2026-08-16-internal-post-auth-oracle.md` records that the dedicated oracle runtime and trace DLL started its local transport but the run did not receive the required title/start-screen Enter-equivalent input. It did not test BAP authentication and is not an oracle trace.
 
 `docs/client-analysis/post-auth-oracle.md` confirms from source that Queuez service 123 is not automatically emitted solely on authentication.
 
@@ -914,12 +914,12 @@ Do not modify already-confirmed protocol boundaries without contradictory eviden
 ## Required Work
 
 1. Reconstruct state from the documents above and inspect the dedicated oracle’s local ignored handoff/evidence before changing it.
-2. Identify the full launcher/invocation used by the existing known-good internal/default client path; do not infer it from a direct `destiny2.exe` invocation.
+2. Do not investigate launcher/invocation behavior until the prepared runtime has received exactly one title/start-screen Enter-equivalent action and the resulting bounded run has been observed.
 3. Preserve the original external-validation runtime; use the existing dedicated oracle copy only.
 4. Before launch, verify the trace DLL/settings and client Internet isolation, and confirm no Old-School-D2 external listener is running.
-5. Run exactly one bounded internal/default oracle experiment with `external_server.enabled=false` and the existing metadata-only instrumentation.
-6. Stop the game and retrieve only sanitized metadata/log evidence.
-7. Determine whether authenticated BAP was reached. If it was, record the ordered `post_auth_send` trace and stop; if not, record the first deterministic launch/authentication divergence and replace this TODO with that more precise diagnostic.
+5. Prepare exactly one internal/default oracle experiment with `external_server.enabled=false` and the existing metadata-only instrumentation, then request/perform one title/start-screen Enter-equivalent action.
+6. After that input, leave the game running for the bounded observation; stop it and retrieve only sanitized metadata/log evidence afterward.
+7. Determine whether authenticated BAP was reached. If it was, record the ordered `post_auth_send` trace and stop; if not, record the first deterministic post-input divergence and replace this TODO with that more precise diagnostic.
 8. Restore any changed oracle files and verify the original external-validation DLL/settings were unchanged.
 9. Update documentation, validation, commit, push, and PR according to the result.
 

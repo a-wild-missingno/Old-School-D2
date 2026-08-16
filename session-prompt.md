@@ -4,7 +4,7 @@ You are continuing development of **Old-School-D2**, a clean-room research proje
 
 This file is intentionally designed to be copied into a **fresh AI-agent session at the beginning of every development session**.
 
-The repository is the project memory.
+The repository is the project memory and is located within the a-wild-missingno/Old-School-D2 repository on GitHub in the `session-prompt.md` file.
 
 Do **not** rely on memories of previous conversations, prior agent sessions, compressed context, or undocumented assumptions.
 

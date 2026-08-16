@@ -893,7 +893,7 @@ Maintain these constraints:
 
 ## Objective
 
-Identify the **first server-initiated authenticated BAP message/publication emitted by known-good internal/default Sunrise after the already-confirmed authenticated BAP sequence**, determine its exact trigger and client-relevant structure, and reproduce exactly that one evidenced event from the external replacement server.
+Produce one controlled, metadata-only **authenticated BAP** trace from the dedicated known-good internal/default Sunrise oracle runtime, so the previously instrumented outbound-send seam can identify the actual first post-auth event (or a deterministic earlier launch/authentication failure).
 
 ## Known Starting State
 
@@ -903,38 +903,35 @@ The current external client is confirmed to reach a stable authenticated encrypt
 
 Confirmed working behavior includes the currently documented request/reply sequence through recurring keepalive traffic.
 
-The client remains connected but does not advance to character selection, and no later client-originated route has been observed.
+The external client remains connected but does not advance to character selection, and no later client-originated route has been observed.
+
+`docs/experiments/2026-08-16-internal-post-auth-oracle.md` records that the dedicated oracle runtime and trace DLL started its local transport but the attempted direct executable invocation did not reach BAP authentication. It is not an oracle trace.
+
+`docs/client-analysis/post-auth-oracle.md` confirms from source that Queuez service 123 is not automatically emitted solely on authentication.
 
 Do not modify already-confirmed protocol boundaries without contradictory evidence.
 
 ## Required Work
 
-1. Reconstruct the current state from repository evidence.
-2. Use internal/default Sunrise as the known-good oracle.
-3. Trace and instrument the earliest post-authenticated server→client send/publication path.
-4. Record the exact trigger/state prerequisites.
-5. Identify the BAP service/route and body/protocol classification.
-6. Determine whether Queuez is actually involved rather than assuming it.
-7. Capture a known-good ordered oracle.
-8. Compare that oracle against the external server's stable authenticated wait.
-9. Identify the **first missing server-originated event**.
-10. Implement exactly that one event externally.
-11. Add deterministic regression coverage.
-12. Perform one controlled client experiment.
-13. Determine whether the client accepts the event and advances to a new state.
-14. Update project documentation and this TODO according to the result.
-15. Complete the full session cleanup/commit/PR procedure above.
+1. Reconstruct state from the documents above and inspect the dedicated oracle’s local ignored handoff/evidence before changing it.
+2. Identify the full launcher/invocation used by the existing known-good internal/default client path; do not infer it from a direct `destiny2.exe` invocation.
+3. Preserve the original external-validation runtime; use the existing dedicated oracle copy only.
+4. Before launch, verify the trace DLL/settings and client Internet isolation, and confirm no Old-School-D2 external listener is running.
+5. Run exactly one bounded internal/default oracle experiment with `external_server.enabled=false` and the existing metadata-only instrumentation.
+6. Stop the game and retrieve only sanitized metadata/log evidence.
+7. Determine whether authenticated BAP was reached. If it was, record the ordered `post_auth_send` trace and stop; if not, record the first deterministic launch/authentication divergence and replace this TODO with that more precise diagnostic.
+8. Restore any changed oracle files and verify the original external-validation DLL/settings were unchanged.
+9. Update documentation, validation, commit, push, and PR according to the result.
 
 ## Completion Criteria
 
 This TODO is PASS only if:
 
-- the first known-good post-auth server-originated event is evidenced rather than guessed
-- its trigger and protocol framing are documented
-- the external implementation emits it using the existing authoritative BAP connection/crypto state
+- the controlled internal/default oracle reaches authenticated BAP
+- the metadata-only trace records the ordered first post-auth outbound-send event, or records a deterministic authenticated state with no such event in the bounded window
+- the launcher/configuration and evidence classification are documented without private values or raw payloads
+- the original external-validation runtime is verified unchanged
 - tests pass
-- a controlled client run demonstrates that the client accepts the event or otherwise provides a deterministic new frontier
-- the result is documented
 - the next CURRENT TODO is written
 - the session branch is committed, pushed, and represented by a PR into `main`
 
@@ -942,11 +939,9 @@ This TODO is PASS only if:
 
 Do not:
 
-- implement a full Queuez system unless the evidence requires it for this one event
-- build the account/character database
-- implement inventory
-- implement matchmaking
-- implement activity/world state
-- refactor proven BAP crypto unnecessarily
+- change the external replacement listener or its proven BAP crypto
+- implement Queuez, account/character state, activity, or a notification
+- alter client Internet isolation or contact public/Bungie services
+- modify the existing external-validation installation in place
 - send speculative notifications
 - continue automatically into the next newly discovered boundary

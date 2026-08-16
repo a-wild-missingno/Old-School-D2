@@ -2,7 +2,7 @@
 
 Date: 2026-08-16
 
-Status: complete — diagnostic result; no external server behavior changed.
+Status: complete — authenticated internal/default oracle captured; no external server behavior changed.
 
 ## Question
 
@@ -22,6 +22,8 @@ A dedicated local Oracle runtime used the Windows-CI-built metadata-only Sunrise
 ## Observation
 
 The instrumented DLL loaded successfully and its internal BAP transport listener reported startup. During the bounded 100-second run, the client process remained alive but did not progress to BAP authentication. The oracle log contained no `post_auth_send` record and no authenticated BAP route record.
+
+**Procedural limitation (CONFIRMED):** no visual-state record was captured, no keyboard/controller input event was recorded, and no action equivalent to pressing Enter at the Shadowkeep title/start screen was performed. The run therefore did not test whether the dedicated runtime could reach authenticated BAP after normal title-screen start input. It must not be interpreted as a launcher/invocation mismatch.
 
 The sanitized log facts were:
 
@@ -43,8 +45,12 @@ No payload, account, character, token, key, private address, or packet content i
 
 ## Result
 
-**PARTIAL / diagnostic.** The instrumentation build and dedicated internal/default runtime were validated through transport startup, but this invocation did not reach the required authenticated BAP state. It cannot establish an ordered post-auth outbound oracle and provides no authority to emit a Queuez frame externally.
+**PARTIAL / frontier advanced.** The initial attempt was limited by absent title-screen input. In the completed second run, the user performed one Enter-equivalent action, observed character select, and the metadata-only trace independently recorded SignOn, ContentConfig, BAP authentication, and subsequent client state transitions.
+
+The trace confirms that the already-known correlated replies `122`, `303`, `305`, and `251` occur first. The first new uncorrelated authenticated publication is encrypted service `123` (`queuez_update`): it follows an inbound client service `10` and correlated service `11` reply, and is logged with trigger `queuez_update_frame.append`. Two service-123 frames were emitted in that first observed publication point.
+
+The external baseline has not emitted service `10`. This evidence therefore does not authorize sending service `123` during the external stable wait; the next boundary is the earliest divergence that prevents the external client from reaching service `10`.
 
 ## Follow-up
 
-Determine the documented launcher/invocation that makes the dedicated internal/default runtime reach BAP authentication while retaining metadata-only tracing. Capture exactly one authenticated oracle trace and compare it to the external stable wait before changing the external listener.
+Compare the authenticated internal trace to the external stable wait and identify the earliest divergence before internal client service `10`. Preserve current external BAP crypto/replies and do not add service `123` first.

@@ -78,3 +78,27 @@
 
 **Acceptance evidence for the next run:** `result=seeded source=state` (or `source=manager`) in the client log, followed by an authenticated BAP service-12 request and a listener service-13 response.
 
+
+## EXPERIMENT ID: 2026-08-16-external-contentconfig-parity
+
+**DATE/TIME:** 2026-08-16T14:27Z
+
+**QUESTION:** Does externally hosted `/config/` match internal/default Sunrise ContentConfig sufficiently for the client to advance beyond `bootflow:content_check`?
+
+**CLIENT CONFIG:** Isolated pristine external-validation runtime; `external.config_url=https://192.168.0.129/config/`; `external.config_guid=09d54b23-9aec-88c0-8d21-69e89d62197a`.
+
+**SERVER CONFIG:** Frozen STUN and SignOn behavior; TLS `/config/` returned the exact internal oracle protobuf body with only HTTP framing. No BAP reply behavior was enabled.
+
+**OBSERVATION:** White loading advanced to a black screen, then returned to class-icon loading after BAP timeout; character select did not appear.
+
+**NETWORK EVIDENCE:** The TLS service logged `GET /config/ HTTP/1.1` and `content_config_ok`, returning 105,232 bytes. The passive BAP observer accepted one connection and received a 140-byte payload. Capture: `/home/syzygy/destiny-re/network/20260814-161330/validation/upstream-b12a9da/captures/contentconfig-external.pcap`.
+
+**CLIENT EVIDENCE:** `content_config stage=external result=ok`; 549 ms in `bootflow:content_check`; subsequent `bootflow:package_registration`; then `bootflow:bap_signin`. BAP failed only because the observer intentionally did not respond.
+
+**RESULT:** External ContentConfig accepted.
+
+**CONCLUSION:** This closes the external ContentConfig boundary. BAP is now the next observed protocol/state boundary; it was not changed during this experiment.
+
+**CONFIDENCE:** Confirmed.
+
+**NEXT TEST:** A separately authorized BAP-parity investigation, beginning with the captured 140-byte client payload and known-good internal BAP behavior.

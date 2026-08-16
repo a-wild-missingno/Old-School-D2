@@ -99,3 +99,12 @@ One change since the reproduced 2026-08-16 launch: client settings now enable th
 ## Windows SSH command
 
 `ssh -i ~/.ssh/hermes_legion missingno@192.168.0.225`
+
+
+## 2026-08-16 isolated external ContentConfig parity
+
+- **Confirmed:** external Sunrise accepted the oracle-derived ContentConfig response and left `bootflow:content_check`; this is separate from the existing old-school BAP/Queuez runtime.
+- Exact returned fixture: 105,232 bytes; SHA-256 `ba9288666f5871f51e8300392d10b06a611ff74803b31394aad49e532d9ef572`; field-5 GUID `09d54b23-9aec-88c0-8d21-69e89d62197a`.
+- The pristine external client logged `content_config stage=external result=ok`, completed ContentConfig in 549 ms, then entered `bootflow:package_registration` and `bootflow:bap_signin`.
+- First next boundary: one 140-byte BAP client payload reached the passive TCP/30974 observer. It received no reply and the client timed out after ~10 s. No BAP implementation was changed or added.
+- Evidence: `/home/syzygy/destiny-re/network/20260814-161330/validation/upstream-b12a9da/docs/CONTENT_CONFIG_ORACLE.md`, `external-contentconfig/raw/sunrise.log`, `logs/contentconfig-tls.jsonl`, `logs/contentconfig-bap-observer.jsonl`, and `captures/contentconfig-external.pcap`.

@@ -8,7 +8,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 **CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. No later client request was observed during the documented window.
 
-**CURRENT FRONTIER:** a metadata-only instrumented internal/default runtime has been built and its local transport startup was observed, but the prior bounded run did not include the required title/start-screen Enter-equivalent input. It did not test whether the dedicated runtime can reach BAP authentication. The ordered internal post-auth outbound oracle is therefore still UNKNOWN; no external publication has been implemented.
+**CURRENT FRONTIER:** the controlled internal/default oracle reached character select and captured authenticated BAP ordering. Its first new uncorrelated publication was Queuez service `123`, but only after the internal client emitted service `10`; the external client has not emitted service `10`. The earliest divergence before that client route is now the next boundary.
 
 ## Confirmed Protocol Progress
 
@@ -58,14 +58,16 @@ The runtime logs state-before/event/state-after metadata. An unhandled route is 
 
 **DISPROVEN for the current evidence:** authentication alone causes an automatic Queuez service-123 publication. The public reference only stages Queuez on a completed subscription/selection/change outcome or from previously armed deferred state.
 
-**UNKNOWN:** the first server-originated event in a full known-good internal/default authenticated run. The 2026-08-16 dedicated runtime did not receive the required title/start input and did not reach BAP authentication, so it cannot establish the required ordering.
+**CONFIRMED:** the first new uncorrelated publication in the complete internal/default run is encrypted service `123` (`queuez_update`), immediately after client service `10` and its correlated service `11` reply. This comes from metadata-only trace evidence, not captured payloads.
+
+**UNKNOWN:** the preceding external divergence that prevents client service `10`.
 
 ## Failed Hypotheses / Dead Ends
 
 - The black screen is **not** evidence that an earlier `121`, `302`, or `250` acknowledgement should change; each is accepted in the confirmed run.
 - An empty or invented Queuez frame is **not** a valid next step.
 - No later client request was observed; implementing a guessed client-response route cannot advance this frontier.
-- A dedicated runtime that starts the Sunrise transport but does not receive title/start input is **not** a post-auth oracle; its lack of a trace event cannot be interpreted as launcher failure or evidence of no publication.
+- Service `123` must not be sent during the external stable wait: its first observed internal emission followed client service `10`, which is absent externally.
 
 ## Important Runtime Findings
 
@@ -91,7 +93,7 @@ Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local eviden
 
 ## Next Experiment
 
-Run the already-prepared dedicated internal/default oracle runtime with its metadata-only trace DLL and `external_server.enabled=false`; perform exactly one Enter-equivalent title/start input and leave the client running for bounded observation. The run must reach authenticated BAP and produce an ordered metadata-only trace (or a deterministic earlier failure after input). Only then compare that oracle with the external stable wait; do not change the external listener or emit any publication first.
+Compare the authenticated internal/default trace with the external stable wait to locate the earliest semantic divergence before internal client service `10`. Do not change confirmed BAP replies or emit Queuez service `123` first.
 
 ## Things That Must Not Be Reopened Without New Evidence
 

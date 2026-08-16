@@ -2,7 +2,7 @@
 
 Date: 2026-08-16
 
-Status: complete — diagnostic result; no external server behavior changed.
+Status: complete — authenticated internal/default oracle captured; no external server behavior changed.
 
 ## Question
 
@@ -45,8 +45,12 @@ No payload, account, character, token, key, private address, or packet content i
 
 ## Result
 
-**PARTIAL / procedural diagnostic.** The instrumentation build and dedicated internal/default runtime were validated through transport startup, but the required title/start-screen input did not occur. This invocation did not reach the required authenticated BAP state, cannot establish an ordered post-auth outbound oracle, and provides no authority to emit a Queuez frame externally.
+**PARTIAL / frontier advanced.** The initial attempt was limited by absent title-screen input. In the completed second run, the user performed one Enter-equivalent action, observed character select, and the metadata-only trace independently recorded SignOn, ContentConfig, BAP authentication, and subsequent client state transitions.
+
+The trace confirms that the already-known correlated replies `122`, `303`, `305`, and `251` occur first. The first new uncorrelated authenticated publication is encrypted service `123` (`queuez_update`): it follows an inbound client service `10` and correlated service `11` reply, and is logged with trigger `queuez_update_frame.append`. Two service-123 frames were emitted in that first observed publication point.
+
+The external baseline has not emitted service `10`. This evidence therefore does not authorize sending service `123` during the external stable wait; the next boundary is the earliest divergence that prevents the external client from reaching service `10`.
 
 ## Follow-up
 
-Run the already-prepared dedicated internal/default runtime, perform exactly one Enter-equivalent action at the title/start screen, and leave it running for the bounded observation. Only if that controlled input run fails before authentication should launcher/invocation behavior be investigated. Capture exactly one authenticated oracle trace and compare it to the external stable wait before changing the external listener.
+Compare the authenticated internal trace to the external stable wait and identify the earliest divergence before internal client service `10`. Preserve current external BAP crypto/replies and do not add service `123` first.

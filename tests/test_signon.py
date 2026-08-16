@@ -39,7 +39,7 @@ def _fields(data: bytes) -> dict[int, list[bytes | int]]:
 
 def test_builds_minimal_successful_signon_response() -> None:
     response = build_signon_response(
-        relay_host="192.168.0.129",
+        relay_host="192.0.2.10",
         relay_port=30974,
         now_seconds=1_700_000_000,
         random_bytes=lambda length: bytes(range(length)),
@@ -51,21 +51,21 @@ def test_builds_minimal_successful_signon_response() -> None:
     assert outer[6] == [b"d2legacy"]
     assert outer[12] == [1_700_000_000]
     assert outer[13] == [b"live"]
-    assert outer[14] == [0xC0A80081]
+    assert outer[14] == [0xC000020A]
 
     success = _fields(outer[2][0])
     assert success[1] == [b"\x00" * 16]
     assert success[2] == [bytes(range(16))]
     assert success[3] == [bytes(range(16))]
     assert success[4] == [bytes(range(32))]
-    assert success[6] == [0xC0A80081]
+    assert success[6] == [0xC000020A]
     assert success[7] == [30974]
-    assert success[14] == [b"http://192.168.0.129/cfg_a/"]
+    assert success[14] == [b"http://192.0.2.10/cfg_a/"]
 
 
 def test_exposes_ephemeral_signon_material_only_to_the_calling_listener() -> None:
     response, session = build_signon_response_with_session(
-        relay_host="192.168.0.129",
+        relay_host="192.0.2.10",
         relay_port=30974,
         now_seconds=1_700_000_000,
         random_bytes=lambda length: bytes(range(length)),
@@ -80,7 +80,7 @@ def test_exposes_ephemeral_signon_material_only_to_the_calling_listener() -> Non
 
 def test_encodes_owned_entitlement_identifiers_in_signon_field_10() -> None:
     response = build_signon_response(
-        relay_host="192.168.0.129",
+        relay_host="192.0.2.10",
         relay_port=30974,
         owned_entitlement_ids=(0xE0200001, 1090090),
         now_seconds=1_700_000_000,
@@ -95,7 +95,7 @@ def test_encodes_owned_entitlement_identifiers_in_signon_field_10() -> None:
 def test_rejects_out_of_range_owned_entitlement_identifier() -> None:
     with pytest.raises(ValueError, match="unsigned 32-bit"):
         build_signon_response(
-            relay_host="192.168.0.129",
+            relay_host="192.0.2.10",
             relay_port=30974,
             owned_entitlement_ids=(-1,),
         )
@@ -117,7 +117,7 @@ def test_encodes_full_configured_sunrise_ownership_policy() -> None:
     from old_school_d2_service.entitlements import SUNRISE_DEFAULT_OWNED_ENTITLEMENT_IDS
 
     response = build_signon_response(
-        relay_host="192.168.0.129",
+        relay_host="192.0.2.10",
         relay_port=30974,
         owned_entitlement_ids=SUNRISE_DEFAULT_OWNED_ENTITLEMENT_IDS,
         now_seconds=1_700_000_000,
@@ -133,7 +133,7 @@ def test_encodes_bootstrap_token_in_common_info_config_blob() -> None:
     token = bytes(range(16))
 
     response = build_signon_response(
-        relay_host="192.168.0.129",
+        relay_host="192.0.2.10",
         relay_port=30974,
         bootstrap_token=token,
         now_seconds=1_700_000_000,
@@ -152,7 +152,7 @@ def test_encodes_bootstrap_token_in_common_info_config_blob() -> None:
 def test_rejects_bootstrap_token_with_wrong_size() -> None:
     with pytest.raises(ValueError, match="exactly 16 bytes"):
         build_signon_response(
-            relay_host="192.168.0.129",
+            relay_host="192.0.2.10",
             relay_port=30974,
             bootstrap_token=b"too-short",
         )
@@ -180,7 +180,7 @@ def test_rejects_noncanonical_bootstrap_token_hex() -> None:
 
 def test_omitted_bootstrap_token_preserves_absent_common_info_config_blob() -> None:
     response = build_signon_response(
-        relay_host="192.168.0.129",
+        relay_host="192.0.2.10",
         relay_port=30974,
         bootstrap_token=None,
         now_seconds=1_700_000_000,

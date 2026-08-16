@@ -4,7 +4,7 @@
 
 - The external client hook automatically forwards the runtime bootstrap value only on the HTTPS SignOn route. The value remains in process memory and is not logged or stored.
 - The isolated listener validates that handoff and inserts the source-matched optional SignOn config blob.
-- The Windows x64 Sunrise client build passed in CI. The active Legion `D:\Sunrise\bin\x64\steam_api64.dll` matched the built artifact hash during the test setup.
+- The external client Sunrise client build passed in CI. The active controlled client `<LOCAL_CLIENT_ARTIFACT>` matched the built artifact hash during the test setup.
 - The fresh isolated external run completed SignOn, ContentConfig, BAP 30→31, 25→26, 121→122, 302→303 (twice), and 304→305, then only 250→251 keepalives.
 - The listener accepted the real client handoff value (no format rejection). No raw bootstrap/session/account material was written to logs or this document.
 
@@ -24,7 +24,7 @@ The earliest verified BAP acknowledgements are not the discrepancy: the Sunrise 
 2. Compare its trigger and state prerequisites with the listener, especially `bap_route.cpp`, `bap_connection_publication.cpp`, Queuez outcome staging, and push paths.
 3. Add metadata-only listener instrumentation at the selected seam.
 4. Write a red test and implement exactly one source-backed, synthetic/config-driven state publication or response adapter.
-5. Run the full suite, static safety scan, independent review, listener restart, isolation check, and fresh capture before another Legion launch.
+5. Run the full suite, static safety scan, independent review, listener restart, isolation check, and fresh capture before another controlled client launch.
 
 ## Guardrails
 
@@ -36,4 +36,4 @@ The earliest verified BAP acknowledgements are not the discrepancy: the Sunrise 
 
 - Transition plan (local, intentionally untracked): `.hermes/plans/2026-08-15_215500-external-post-bap-unblock.md`
 - Redacted baseline analyzer: `tools/analyze_bap_transition.py`
-- Fresh bootstrap-handoff capture: `/home/syzygy/destiny-re/network/20260814-161330/captures/legion-20260815-214247Z.pcap`
+- Fresh bootstrap-handoff capture: `<LOCAL_CAPTURE_PATH>`

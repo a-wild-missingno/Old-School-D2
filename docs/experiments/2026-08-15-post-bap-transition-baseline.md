@@ -1,6 +1,6 @@
 # External post-BAP transition baseline
 
-Fresh isolated Legion launch window: 2026-08-15T21:46:00Z through 2026-08-15T21:48:00Z.
+Fresh isolated controlled client launch window: 2026-08-15T21:46:00Z through 2026-08-15T21:48:00Z.
 
 Redacted transition ledger:
 

@@ -2,7 +2,7 @@
 
 ## Scope
 
-Controlled Sunrise external-server experiment with the client isolated from the Internet. The OptiPlex remains non-forwarding; the lab service only responds on explicitly configured local endpoints.
+Controlled Sunrise external-server experiment with the client isolated from the Internet. The lab gateway remains non-forwarding; the lab service only responds on explicitly configured local endpoints.
 
 ## Observed sequence
 

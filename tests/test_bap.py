@@ -162,6 +162,31 @@ def test_rewraps_certificate_field_for_authenticated_sign_certificate_response()
     assert plaintext[8:] == b"\x08\x00\x1a\x03abc"
 
 
+def test_answers_authenticated_subscribe_family_with_empty_response_13() -> None:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+    key = bytes(range(16))
+    server_nonce = bytes(range(12))
+    state = BapConnectionState.from_server_hello(session_key=key, server_nonce=server_nonce)
+    request = state.open_encrypted_request(
+        _encrypted_frame(key, state.receive_nonce, 12, 6, b"\x00" + (b"R" * 8))
+    )
+    assert request is not None
+
+    response = state.build_subscribe_family_response(request)
+
+    assert response is not None
+    payload = response[6:]
+    assert AESGCM(key).decrypt(server_nonce, payload[16:] + payload[:16], None) == struct.pack(">HIH", 13, 6, 200)
+
+
+def test_refuses_subscribe_family_response_for_other_service() -> None:
+    state = BapConnectionState.from_server_hello(session_key=b"K" * 16, server_nonce=b"N" * 12)
+    request = state.open_encrypted_request(_encrypted_frame(b"K" * 16, state.receive_nonce, 250, 2))
+    assert request is not None
+    assert state.build_subscribe_family_response(request) is None
+
+
 def test_answers_authenticated_echo_with_empty_response_251() -> None:
     from cryptography.hazmat.primitives.ciphers.aead import AESGCM
     key = bytes(range(16)); nonce = bytes(range(12))

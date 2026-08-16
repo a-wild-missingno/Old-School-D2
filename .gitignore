@@ -70,3 +70,6 @@ var/
 
 # Safe configuration template is intentionally committed
 !.env.example
+
+# Per-machine Hermes lab handoff (template remains committed)
+.hermes/HANDOFF.local.md

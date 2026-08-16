@@ -51,3 +51,21 @@
 **CONFIDENCE:** Confirmed.
 
 **NEXT TEST:** Enable existing Sunrise file logging and the client information-level threshold only; repeat one controlled launch and inspect the Queuez hook records plus BAP metadata.
+
+## EXPERIMENT ID: 2026-08-16-client-log-config-repair
+
+**DATE/TIME:** 2026-08-16T12:42Z–12:48Z
+
+**QUESTION:** Can existing client Queuez diagnostics be enabled without changing the protocol or exceeding Sunrise's settings-loader limit?
+
+**CHANGE:** Backed up the controlled-client settings. An initial full JSON serializer rewrite was rejected by the client because it expanded the file beyond the 64 KiB loader cap; it was immediately restored. The final edit changed only `file_sink: false` → `true` and the existing logging `client: warn` → `info` tokens in place.
+
+**OBSERVATION:** Final settings parse, preserve external-server mode, and measure 45,186 bytes.
+
+**RESULT:** The diagnostics probe is configured. No game protocol launch has yet occurred with it.
+
+**CONCLUSION:** Do not reserialize Sunrise settings documents wholesale. Make bounded in-place scalar edits and verify the 64 KiB cap before launch.
+
+**CONFIDENCE:** Confirmed.
+
+**NEXT TEST:** One controlled launch; inspect the local Sunrise file log for Queuez hook-install and source-seed records, then correlate with the external listener/capture.

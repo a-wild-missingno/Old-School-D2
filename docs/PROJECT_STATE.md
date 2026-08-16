@@ -21,7 +21,7 @@ Current blocker: no client family-subscription request was observed after the au
 - In Sunrise, encrypted deferred Queuez sends are evaluated from `bap_route.cpp` after a frame or on a transport poll, but `queuez_deferred_push.cpp` requires previously armed per-session Queuez state. The shown startup path does not establish that state before a subscription/outcome.
 - Sunrise contains a client Queuez family-zero hook whose source comments state that an empty source list results in no family-zero record and no subscription. The controlled client was running with its client log threshold at `warn` and file sink disabled, so its installation/seed status was not observable in the completed launch.
 - On 2026-08-16, a fresh launch reproduced the boundary with 304→305 followed only by a second 302→303 and 250→251 keepalives. The TCP BAP connection remained established through capture stop; no service 12 arrived.
-- The controlled-client settings were backed up and changed only to enable the Sunrise file sink and `client=info` logging for the next launch. The artifact and external-server endpoint fields were not changed.
+- The controlled-client settings were backed up and changed only to enable the Sunrise file sink and `client=info` logging for the next launch. The artifact and external-server endpoint fields were not changed. An initial full JSON reserialization exceeded Sunrise's 64 KiB settings-loader cap and caused a local launch-content error; it was rolled back immediately. The final edit changes two existing scalar values in place and is 45,186 bytes, below the cap.
 
 ## Active hypotheses
 

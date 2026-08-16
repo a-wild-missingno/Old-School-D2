@@ -19,11 +19,13 @@ Current blocker: no client family-subscription request was observed after the au
 - The local HTTPS/BAP listener is a separate runtime-local script, not a systemd service. It was not running at session reconstruction.
 - The BAP external listener authenticates the documented bootstrap requests and records only metadata for them.
 - In Sunrise, encrypted deferred Queuez sends are evaluated from `bap_route.cpp` after a frame or on a transport poll, but `queuez_deferred_push.cpp` requires previously armed per-session Queuez state. The shown startup path does not establish that state before a subscription/outcome.
-- Sunrise contains a client Queuez family-zero hook whose source comments state that an empty source list results in no family-zero record and no subscription. Its seed/installation status has not been captured from the controlled client yet.
+- Sunrise contains a client Queuez family-zero hook whose source comments state that an empty source list results in no family-zero record and no subscription. The controlled client was running with its client log threshold at `warn` and file sink disabled, so its installation/seed status was not observable in the completed launch.
+- On 2026-08-16, a fresh launch reproduced the boundary with 304→305 followed only by a second 302→303 and 250→251 keepalives. The TCP BAP connection remained established through capture stop; no service 12 arrived.
+- The controlled-client settings were backed up and changed only to enable the Sunrise file sink and `client=info` logging for the next launch. The artifact and external-server endpoint fields were not changed.
 
 ## Active hypotheses
 
-1. **Likely:** the client-side Queuez family-zero hook is not installed or not seeded for the actual deployed client, so it never sends the candidate service-12 subscription. The next launch will distinguish this through client runtime logs if available, while the listener records the 304→305 post-BAP boundary.
+1. **Likely:** the client-side Queuez family-zero hook is not installed or not seeded for the actual deployed client, so it never sends the candidate service-12 subscription. The next launch will distinguish this through now-enabled client runtime logs while the listener records the 304→305 post-BAP boundary.
 2. **Possible:** the Queuez hook seeds successfully but another client-side readiness condition suppresses the first subscription.
 3. **Possible:** a still-unidentified pre-subscription response/state semantic is incomplete. No Queuez frame will be fabricated to test this.
 
@@ -54,9 +56,9 @@ Current blocker: no client family-subscription request was observed after the au
 
 ## Next experiment
 
-Question: after the documented 304→305 boundary, does the controlled client produce a client-side Queuez hook diagnostic and/or a new non-keepalive route?
+Question: does the controlled client log a Queuez family-zero installation/seed result after the documented 304→305 boundary, and does it emit service 12?
 
-One change since the prior launch: metadata-only listener `post_bap_wait` logging after the existing 304→305 response. No protocol body, account, character, entitlement, or Queuez notification is added.
+One change since the reproduced 2026-08-16 launch: client settings now enable the existing Sunrise file sink and `client=info` diagnostics. The listener retains metadata-only `post_bap_wait` logging. No protocol body, account, character, entitlement, or Queuez notification is added.
 
 ## How to start the lab
 

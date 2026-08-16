@@ -145,6 +145,10 @@ class BapConnectionState:
         """Return only the documented encrypted service-122 acknowledgement for service 121."""
         return self._build_empty_response(request, request_service=121, response_service=122)
 
+    def build_subscribe_family_response(self, request: BapEncryptedRequest) -> bytes | None:
+        """Return the source-documented empty service-13 acknowledgement for service 12."""
+        return self._build_empty_response(request, request_service=12, response_service=13)
+
     def build_register_relay_client_response(self, request: BapEncryptedRequest) -> bytes | None:
         """Return only the documented encrypted service-303 acknowledgement for service 302."""
         return self._build_empty_response(request, request_service=302, response_service=303)

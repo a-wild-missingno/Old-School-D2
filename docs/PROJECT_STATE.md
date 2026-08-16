@@ -8,7 +8,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 **CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. No later client request was observed during the documented window.
 
-**CURRENT FRONTIER:** the first proven server-initiated authenticated state publication needed after this stable wait has not been identified or implemented.
+**CURRENT FRONTIER:** a metadata-only instrumented internal/default runtime has been built and its local transport startup was observed, but the controlled dedicated-copy launch did not reach BAP authentication. The ordered internal post-auth outbound oracle is therefore still UNKNOWN; no external publication has been implemented.
 
 ## Confirmed Protocol Progress
 
@@ -25,7 +25,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 ## Current Missing Behavior
 
-Account/character state, Queuez subscription/publication state, and any initial authenticated state publication are absent. A Queuez encoder and generic notification framing are foundations only; they are not authority to send a notification.
+Account/character state, Queuez subscription/publication state, and any initial authenticated state publication are absent. A Queuez encoder and generic notification framing are foundations only; they are not authority to send a notification. Reference-source review confirms that Queuez service `123` requires a completed subscription/selection/change outcome or previously armed deferred state; it is not an automatic consequence of BAP authentication.
 
 ## Confirmed Network Architecture
 
@@ -54,15 +54,18 @@ The runtime logs state-before/event/state-after metadata. An unhandled route is 
 
 ## Current Hypotheses
 
-**LIKELY:** the stable wait requires a source-backed server-initiated authenticated publication tied to per-connection state and account/character prerequisites.
+**LIKELY:** the stable wait requires an additional source-backed authenticated state transition, but the transition need not be an unsolicited publication.
 
-**SPECULATIVE:** the first publication is a Queuez service-123 update. Public-reference structure supports Queuez as an outbound mechanism, but the trigger and valid state body for this exact client path are not proven.
+**DISPROVEN for the current evidence:** authentication alone causes an automatic Queuez service-123 publication. The public reference only stages Queuez on a completed subscription/selection/change outcome or from previously armed deferred state.
+
+**UNKNOWN:** the first server-originated event in a full known-good internal/default authenticated run. The 2026-08-16 dedicated runtime did not reach BAP authentication, so it cannot establish the required ordering.
 
 ## Failed Hypotheses / Dead Ends
 
 - The black screen is **not** evidence that an earlier `121`, `302`, or `250` acknowledgement should change; each is accepted in the confirmed run.
 - An empty or invented Queuez frame is **not** a valid next step.
 - No later client request was observed; implementing a guessed client-response route cannot advance this frontier.
+- A dedicated runtime that starts the Sunrise transport but does not reach BAP authentication is **not** a post-auth oracle; its lack of a trace event cannot be interpreted as evidence of no publication.
 
 ## Important Runtime Findings
 
@@ -74,7 +77,9 @@ Raw captures, certificate material, manifest caches, session material, and local
 - `src/old_school_d2_service/bap.py`
 - `src/old_school_d2_service/queuez.py`
 - `docs/client-analysis/queuez-bootstrap.md`
+- `docs/client-analysis/post-auth-oracle.md`
 - `docs/experiments/2026-08-15-external-post-bap-differential.md`
+- `docs/experiments/2026-08-16-internal-post-auth-oracle.md`
 
 ## Relevant Commits
 
@@ -86,7 +91,7 @@ Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local eviden
 
 ## Next Experiment
 
-First trace and document the earliest reference-server post-auth outbound send site reachable before a client subscription request. Add metadata-only instrumentation at that seam, then run exactly one isolated experiment. Do not emit a notification until its trigger, route, and body are independently evidenced.
+Reproduce the documented full internal/default launcher path in the already-created dedicated oracle runtime, keeping its metadata-only trace DLL and `external_server.enabled=false`. The run must reach authenticated BAP and produce an ordered metadata-only trace (or a deterministic earlier failure). Only then compare that oracle with the external stable wait; do not change the external listener or emit any publication first.
 
 ## Things That Must Not Be Reopened Without New Evidence
 

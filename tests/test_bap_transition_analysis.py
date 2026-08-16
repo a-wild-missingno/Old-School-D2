@@ -17,7 +17,7 @@ def test_reports_absent_post_bap_transition_without_sensitive_fields() -> None:
     module = _load_module()
     events = [
         {"timestamp": "2026-08-15T21:46:13+00:00", "event": "signon_session_issued"},
-        {"timestamp": "2026-08-15T21:46:18+00:00", "event": "bap_start_replied", "service": 30, "response_service": 31, "task_id": 0, "status": 200, "peer": "192.168.0.225"},
+        {"timestamp": "2026-08-15T21:46:18+00:00", "event": "bap_start_replied", "service": 30, "response_service": 31, "task_id": 0, "status": 200, "peer": "192.0.2.20"},
         {"timestamp": "2026-08-15T21:46:18+00:00", "event": "bap_server_hello_replied", "service": 25, "response_service": 26, "task_id": 1, "status": 200},
         {"timestamp": "2026-08-15T21:46:18+00:00", "event": "bap_register_subscriber_replied", "service": 121, "response_service": 122, "task_id": 2, "status": 200},
         {"timestamp": "2026-08-15T21:46:23+00:00", "event": "bap_echo_replied", "service": 250, "response_service": 251, "task_id": 6, "status": 200},

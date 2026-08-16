@@ -1,69 +1,55 @@
-# Continuation prompt — external Sunrise parity
+# Old-School-D2 Hermes Operating Manual
 
-Continue the isolated external Sunrise validation on syzygy. Read this entire prompt first, then inspect the named primary artifacts instead of relying only on this summary. Do not ask Emily to repeat the completed evidence.
+## AUTHORITATIVE CURRENT STATE
 
-## Completed, frozen boundaries
+Read `docs/PROJECT_STATE.md`.
 
-External STUN, TLS, SignOn, and ContentConfig are confirmed working and must not be modified without direct contradictory evidence.
+## CURRENT RESTART/HANDOFF
 
-```text
-STUN → TLS → POST /SignOn → HTTP 200 SignOn protobuf → SignOn _success
-→ GET /config/ → ContentConfig accepted → package_registration → BAP sign-in
-```
+Read `docs/HANDOFF.md`.
 
-The latest external ContentConfig run is a PASS. The external client accepted the exact internal/default ContentConfig artifact, left `bootflow:content_check`, completed `bootflow:package_registration`, entered `bootflow:bap_signin`, and opened TCP to the passive BAP observer.
+These files override any stale current-state information elsewhere in this prompt. If present, read `.hermes/HANDOFF.local.md` for local-only substitutions; never commit its contents.
 
-## Current frontier / stop boundary
+## Project Objective
 
-The first next observed boundary is BAP TCP at `192.168.0.129:30974`. The client opened one connection and sent a 140-byte payload. The observer intentionally returned nothing. The client timed out after about 10 seconds in `bootflow:bap_signin`, then entered cleanup. The white/class-icon UI was the resulting BAP timeout, not a ContentConfig failure.
+Maintain a clean-room, lab-only replacement service for preservation research. Never contact, proxy, tunnel, NAT, or forward traffic to Bungie or public production infrastructure.
 
-No BAP behavior was implemented or changed during the ContentConfig validation. Do not resume BAP work automatically unless the new user request explicitly authorizes that next boundary.
+## Hardware and Network Architecture
 
-## Exact confirmed ContentConfig facts
+The isolated historical client talks only to a non-forwarding lab gateway/DNS/capture point and local replacement listeners. Private values belong in the ignored local handoff file. Read `docs/network/isolation-plan.md` before a live run.
 
-- Internal/default request bytes: `sunrise://local/config` (22 bytes); it is in-process, so it has no native HTTP headers/framing.
-- External client request: `GET /config/ HTTP/1.1` through TLS to the configured `https://192.168.0.129/config/`.
-- Exact accepted body: 105,232 bytes; SHA-256 `ba9288666f5871f51e8300392d10b06a611ff74803b31394aad49e532d9ef572`.
-- Field-5 manifest GUID: `09d54b23-9aec-88c0-8d21-69e89d62197a`.
-- Body composition: 19 entitlement definitions and 2,199 package rows.
-- External `config_guid` was changed by a bounded settings edit to the exact field-5 GUID, with a timestamped backup first. Never bulk-reserialize Sunrise settings: the loader has a 64 KiB limit.
+## Evidence Standards and Anti-Hallucination Rules
 
-## Key source and result documents
+- Label claims `CONFIRMED`, `LIKELY`, or `SPECULATIVE`.
+- A response is confirmed only with source/reference evidence plus a controlled client result.
+- HTTP success, unit-test success, or a UI change alone is insufficient.
+- Never infer a missing message body, account identity, character state, or Queuez publication from a screen state.
+- Preserve raw evidence locally; commit only sanitized metadata, hashes, and reproducible tests.
 
-1. `/home/syzygy/destiny-re/network/20260814-161330/validation/upstream-b12a9da/docs/CONTENT_CONFIG_ORACLE.md` — source-backed internal contract, captured body semantics, GUID relationship, and external comparison.
-2. `/home/syzygy/destiny-re/network/20260814-161330/validation/upstream-b12a9da/docs/EXTERNAL_CONTENTCONFIG_RESULT.md` — final pass report and exact stop boundary.
-3. `/home/syzygy/destiny-re/network/20260814-161330/validation/upstream-b12a9da/external-contentconfig/raw/sunrise.log` — client proof: `content_config stage=external result=ok`, then package registration and BAP timeout.
-4. `/home/syzygy/destiny-re/network/20260814-161330/validation/upstream-b12a9da/logs/contentconfig-tls.jsonl` — SignOn and successful `/config/` request/response metadata.
-5. `/home/syzygy/destiny-re/network/20260814-161330/validation/upstream-b12a9da/logs/contentconfig-bap-observer.jsonl` — initial BAP accept and 140-byte client payload.
-6. `/home/syzygy/destiny-re/network/20260814-161330/validation/upstream-b12a9da/captures/contentconfig-external.pcap` — capture SHA-256 `550fc28780509b4fa83582f6793b54ffe76089991df281f00922c9ebaaf5cf13`.
+## Git Workflow
 
-## Harness and source locations
+Inspect `git status --short --branch`, recent history, and diffs before coding. Preserve unrelated work. Keep commits focused. Do not push automatically. Audit staged content for local paths, IPs, secrets, captures, keys, binaries, and copyrighted data.
 
-- External SignOn/ContentConfig harness: `/home/syzygy/destiny-re/network/20260814-161330/validation/upstream-b12a9da/signon_parity/`.
-  - `signon_server.py` handles only demonstrated SignOn and exact `/config/`; unknown routes are explicitly logged/404.
-  - `content_config.py` validates the fixture’s field-5 GUID before serving.
-  - Fixture: `fixtures/internal-contentconfig-response.bin`; checksum in `fixtures/SHA256SUMS`.
-  - Tests: `6 passed` using `/home/syzygy/dev/old-school-d2-service/.venv/bin/python -m pytest -q` from that harness directory.
-- Clean upstream source checkout: `/home/syzygy/dev/Sunrise-upstream-clean`, source oracle base `b12a9dab780f47c89f1c147d4a8ef3ddbc839734`.
-- Instrumented internal oracle commit: `c82d3a6`, pushed to `jules-the-ai/sunrise-external-lab` branch `validation/upstream-b12a9da`. This added only request/response artifact capture and built successfully.
-- Pristine external runtime: `C:\Sunrise-ExternalValidation`; exact deployed DLL SHA-256 `9F2FD0EF85B818EEB74E92A4DC33D151E242499CFCCEF08FA2E96FA45DC5C9AE`.
-- Internal oracle runtime: `C:\Sunrise-InternalConfigOracle`.
-- Legion / D2 client: `192.168.0.225`; OptiPlex harness: `192.168.0.129`.
+## Experiment Methodology
 
-## Repository state
+1. Define one bounded question and a tight deterministic test where possible.
+2. Verify client isolation, disabled forwarding/NAT, listeners, and capture before launch.
+3. Change one evidenced variable.
+4. Correlate capture, structured server log, reference evidence, and visual client state by time.
+5. Stop at the first new boundary and record it in `docs/experiments/`.
 
-This repository has the documented state in `docs/PROJECT_STATE.md` and `docs/EXPERIMENTS.md`; ContentConfig documentation commit is `3f2c119`. Keep unrelated untracked `.hermes/` and `0001-feat-add-encrypted-BAP-notification-foundation.patch` untouched.
+## Source Versus Hypothesis Discipline
 
-## Safety and launch discipline
+Keep source locations, observed behavior, and hypotheses separate. A public-reference route is not proof that it is reachable in this client state. A serializer or encrypted transport helper is not authorization to send a message.
 
-- Preserve all existing work, settings backups, and packet captures.
-- Confirm Legion SSH and Internet isolation before any future run.
-- Confirm no stale TCP/443, UDP/3074/3075, or TCP/30974 listeners before starting controlled services.
-- Start capture before launching Destiny.
-- Do not log or retain passwords, credentials, tokens, or SSH secrets.
-- Do not infer success from HTTP 200 alone; inspect client state and request/response artifacts.
-- Stop after the first authorized boundary and document exact evidence.
+## Monotonic Protocol Progress
 
-## Suggested next task only if explicitly authorized
+Do not regress or casually revisit previously accepted stages. Preserve BAP nonce ownership in its single authoritative implementation. Never combine a structural refactor with a protocol behavior change.
 
-Build a known-good internal BAP oracle for the captured 140-byte initial client request, compare it with the passive external observation, and implement only the minimal proven response required to reach the next state. Do not alter STUN, SignOn, or ContentConfig.
+## Fresh-Session Reading Order
+
+1. `docs/PROJECT_STATE.md`
+2. `docs/HANDOFF.md`
+3. `.hermes/HANDOFF.local.md` if present
+4. `docs/EXPERIMENTS.md` and the linked detailed record
+5. Git history, source, and tests

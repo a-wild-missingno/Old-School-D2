@@ -53,7 +53,7 @@ Local HTTPS + BAP lab listener
         +-- PostgreSQL sanitized experiment-event store
 ```
 
-The repository contains the reusable clean-room Python components. The active HTTPS/BAP listener, TLS material, manifest cache, capture files, and lab configuration are runtime-local inputs and are intentionally not committed.
+The repository contains the complete clean-room Python replacement server, including the HTTPS/BAP runtime listener. TLS material, manifest caches, capture files, database URLs, and machine-specific configuration remain local runtime inputs and are intentionally not committed.
 
 ### Implemented repository components
 
@@ -63,6 +63,8 @@ The repository contains the reusable clean-room Python components. The active HT
 - `content_config.py` — strict version-2 local manifest-cache parsing and ContentConfig response encoding.
 - `bap.py` — BAP channel-start and ServerHello response helpers, including the authenticated ServerHello envelope.
 - `server.py` — UDP discovery adapter.
+- `runtime/app.py` — runnable metadata-logging HTTPS and BAP listener.
+- `runtime/config.py` — environment-only runtime configuration.
 - `tests/` — deterministic protocol-unit tests and local socket-oriented validation.
 
 ## Protocol progress
@@ -93,7 +95,10 @@ Create a development environment and run the test suite:
 python3 -m venv .venv
 .venv/bin/pip install -e ".[dev]"
 .venv/bin/python -m pytest
+scripts/run-tests.sh
 python3 -m compileall -q src
+
+For an isolated lab run, copy `.env.example` to ignored `.env`, populate only local values, then run `scripts/lab-start.sh`. See `docs/HANDOFF.md`.
 ```
 
 The package dependencies include `psycopg` for PostgreSQL and `cryptography` for the documented BAP cryptographic envelope. Do not commit database URLs or runtime secrets. For discovery migration and listener configuration, start from the checked-in systemd template under `deploy/systemd/` and provide a root-readable local environment file outside Git.

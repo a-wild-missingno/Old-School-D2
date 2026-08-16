@@ -2,9 +2,9 @@
 
 You are continuing development of **Old-School-D2**, a clean-room research project whose long-term goal is to make a historical Destiny 2 client running through Project Sunrise function against an independently implemented local replacement server.
 
-This file is intentionally designed to be copied into a **fresh AI-agent session at the beginning of every development session**.
+This `session-prompt.md` file (located at a-wild-missingno/Old-School-D2 on GitHub) is intentionally designed to be copied into a **fresh AI-agent session at the beginning of every development session**.
 
-The repository is the project memory and is located within the a-wild-missingno/Old-School-D2 repository on GitHub in the `session-prompt.md` file.
+The repository is the project memory and is located at a-wild-missingno/Old-School-D2 on GitHub.
 
 Do **not** rely on memories of previous conversations, prior agent sessions, compressed context, or undocumented assumptions.
 

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source "$(dirname "$0")/common.sh"
+alias=${1:?usage: restore-runtime.sh <runtime>}; runtime=$(require_runtime "$alias")
+win_ps "\$root=$(ps_quote "$runtime"); \$manifest=Join-Path \$root '.lab-control-backups\\manifest.jsonl'; if (!(Test-Path -LiteralPath \$manifest -PathType Leaf)) { Write-Error 'MANAGED_BACKUP=MISSING'; exit 2 }; \$last=(Get-Content -LiteralPath \$manifest | Select-Object -Last 1 | ConvertFrom-Json); if (\$last.target_relative -ne $(ps_quote "$LEGION_SUNRISE_DLL_RELATIVE")) { Write-Error 'managed backup target does not match configured DLL'; exit 3 }; \$target=Join-Path \$root \$last.target_relative; if (!(Test-Path -LiteralPath \$last.backup -PathType Leaf)) { Write-Error 'MANAGED_BACKUP_FILE=MISSING'; exit 4 }; Copy-Item -LiteralPath \$last.backup -Destination \$target -Force; \$hash=(Get-FileHash -Algorithm SHA256 -LiteralPath \$target).Hash.ToLower(); Write-Output 'RESTORE_RUNTIME=PASS'; Write-Output ('RESTORED_FILE=' + \$last.target_relative); Write-Output ('SHA256=' + \$hash); Write-Output ('BACKUP_PATH=' + \$last.backup)"

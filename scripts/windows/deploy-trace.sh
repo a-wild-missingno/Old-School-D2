@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+source "$(dirname "$0")/common.sh"
+alias=${1:?usage: deploy-trace.sh <runtime> <prepared-artifact>}; artifact=${2:?usage: deploy-trace.sh <runtime> <prepared-artifact>}
+assert_trace_target "$alias"; runtime=$(require_runtime "$alias")
+[ -f "$artifact" ] || { echo "trace artifact does not exist: $artifact" >&2; exit 66; }
+source_hash=$(sha256sum "$artifact" | awk '{print tolower($1)}'); leaf=$(basename "$artifact"); stamp=$(date -u +%Y%m%dT%H%M%SZ)
+staging="$runtime\\.lab-control-staging\\$stamp-$leaf"
+win_ps "New-Item -ItemType Directory -Force -Path (Split-Path -Parent $(ps_quote "$staging")) | Out-Null"
+win_scp_to "$artifact" "$staging"
+win_ps "\$root=$(ps_quote "$runtime"); \$target=Join-Path \$root $(ps_quote "$LEGION_SUNRISE_DLL_RELATIVE"); \$source=$(ps_quote "$staging"); if (!(Test-Path -LiteralPath \$source -PathType Leaf)) { Write-Error 'staged artifact missing'; exit 2 }; if (!(Test-Path -LiteralPath \$target -PathType Leaf)) { Write-Error 'target DLL missing'; exit 3 }; \$sourceHash=(Get-FileHash -Algorithm SHA256 -LiteralPath \$source).Hash.ToLower(); if (\$sourceHash -ne $(ps_quote "$source_hash")) { Write-Error ('SOURCE_SHA256_MISMATCH=' + \$sourceHash); exit 4 }; \$backupDir=Join-Path \$root ('.lab-control-backups\\$stamp'); New-Item -ItemType Directory -Force -Path \$backupDir | Out-Null; \$backup=Join-Path \$backupDir ([IO.Path]::GetFileName(\$target)); Copy-Item -LiteralPath \$target -Destination \$backup -Force; Copy-Item -LiteralPath \$source -Destination \$target -Force; \$remoteHash=(Get-FileHash -Algorithm SHA256 -LiteralPath \$target).Hash.ToLower(); if (\$remoteHash -ne \$sourceHash) { Copy-Item -LiteralPath \$backup -Destination \$target -Force; Write-Error ('REMOTE_SHA256_MISMATCH=' + \$remoteHash); exit 5 }; @{runtime='$(printf '%s' "$alias")'; target_relative=$(ps_quote "$LEGION_SUNRISE_DLL_RELATIVE"); backup=\$backup; source_sha256=\$sourceHash; deployed_utc=[DateTime]::UtcNow.ToString('o')} | ConvertTo-Json -Compress | Add-Content -LiteralPath (Join-Path \$root '.lab-control-backups\\manifest.jsonl') -Encoding UTF8; Remove-Item -LiteralPath \$source -Force; Write-Output 'DEPLOY_TRACE=PASS'; Write-Output ('SOURCE_SHA256=' + \$sourceHash); Write-Output ('REMOTE_SHA256=' + \$remoteHash); Write-Output ('BACKUP_PATH=' + \$backup)"

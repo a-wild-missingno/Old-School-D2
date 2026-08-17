@@ -12,6 +12,7 @@ logs/
 .env
 .env.*
 local.*
+.hermes/*.local.env
 *.local
 private/
 secrets/

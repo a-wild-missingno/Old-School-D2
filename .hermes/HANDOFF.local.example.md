@@ -6,6 +6,7 @@ Fill this file only on the lab host. Never commit a populated copy.
 - Listener address: `<LISTENER_IP>`
 - Capture host/interface: `<CAPTURE_HOST>` / `<INTERFACE>`
 - Windows SSH: `ssh <WINDOWS_USER>@<WINDOWS_HOST>`
+- Windows lab-control config: copy `.hermes/windows-lab.local.env.example` to ignored `.hermes/windows-lab.local.env` and fill runtime aliases/relative paths locally.
 - TLS certificate: `<CERT_PATH>`
 - TLS private key: `<KEY_PATH>`
 - Manifest cache: `<MANIFEST_CACHE_PATH>`

@@ -12,6 +12,7 @@ This file is the evergreen prompt given to a fresh agent each session. **The rep
 - The Legion communicates only with the OptiPlex.
 - Windows SSH credentials/config already exist.
 - Machine-specific addresses, paths, and commands belong in `.hermes/HANDOFF.local.md` and must not be committed.
+- For routine Legion process, runtime, log, and isolation operations, load the repository `windows-lab` skill and use `scripts/windows/` rather than authoring ad-hoc SSH/PowerShell commands.
 
 ## Sources of Truth
 

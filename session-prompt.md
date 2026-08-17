@@ -192,41 +192,35 @@ Human attention needed:
 
 ## Objective
 
-Compare the captured authenticated internal/default BAP oracle with the external stable wait and identify the **earliest evidenced divergence before the internal client emits encrypted service `10`**.
+Use the dedicated internal/default oracle to identify the client-side state transition or configuration condition that immediately precedes its first encrypted service-`29` notification, then compare that condition with the external stable-wait client.
 
 ## Starting Evidence
 
-Use `docs/PROJECT_STATE.md` as authoritative state.
+`docs/PROJECT_STATE.md` is authoritative. `docs/experiments/2026-08-17-pre-service10-route-ledger.md` confirms that the internal and external authenticated BAP ledgers share the bootstrap through the second `302 -> 303`; internal then sends five `29 -> no reply` routes before keepalive and later service `10`, while external proceeds directly to recurring `250 -> 251` and has no observed service `29`.
 
-The external client is confirmed through stable authenticated encrypted BAP and recurring keepalive traffic, but does not advance to character selection.
-
-`docs/experiments/2026-08-16-internal-post-auth-oracle.md` records an input-driven internal/default oracle that reached character select. Its first new uncorrelated service-123 publication followed client service `10`; the external baseline does not reach service `10`.
-
-`docs/client-analysis/post-auth-oracle.md` confirms service `123` is not automatically emitted solely on authentication.
+The pinned public Sunrise source routes `notification29` with `ResponseMode::none` and an empty body codec. A server reply is therefore contradicted by the oracle and is not a candidate implementation.
 
 ## Required Work
 
-1. Reconstruct the ordered internal and external route/state ledgers through the point immediately before internal service `10`.
-2. Preserve the existing external-validation runtime and use the dedicated oracle copy only.
-3. Before any launch, verify trace DLL/settings, client Internet isolation, and that conflicting Old-School-D2 listeners are absent.
-4. Identify one falsifiable candidate for the **earliest missing semantic condition/event before external service `10`**. Do not infer it from the later service-123 payload.
-5. Add only instrumentation or deterministic coverage needed to test that candidate.
-6. Run at most one controlled external experiment if necessary, following the Human/UI Interaction Gate.
-7. Do **not** emit Queuez service `123` during the current external stable wait.
-8. Restore any changed oracle files, verify the external-validation DLL/settings were unchanged, then document/validate/commit/push/open a PR.
+1. Inspect the dedicated oracle’s ignored local handoff/evidence and public source call paths for client service `29`; do not use later service-123 payloads as evidence.
+2. Add metadata-only instrumentation in the dedicated oracle only at the client-side transition/call path that produces service `29`. Do not retain payloads, identities, addresses, keys, tokens, or assets.
+3. Before any launch, verify the dedicated trace DLL/settings, original external-validation DLL/settings hashes, Internet isolation, and absence of conflicting Old-School-D2 listeners.
+4. Run one input-gated internal/default oracle observation only if the instrumentation is ready. Establish title-screen progression before beginning the bounded window.
+5. Compare the recorded service-29 trigger/state with the external client’s documented stable wait and identify one falsifiable external semantic candidate.
+6. Restore oracle files, re-check the untouched external-validation DLL/settings, document the result, validate, commit, push, and open a PR. Do not run an external replacement-server experiment unless the candidate requires exactly one safe controlled test.
 
 ## PASS Criteria
 
-- The first actual divergence before external service `10` is evidenced.
-- Any implementation is limited to that divergence and has deterministic regression coverage.
-- A controlled external run accepts the change or establishes a deterministic new frontier.
-- Tests pass, documentation is updated, the next TODO is written, and a session PR is opened.
+- Metadata-only evidence identifies the internal client-side trigger/state immediately preceding service `29`.
+- The external comparison produces one falsifiable semantic candidate without inventing a service-29 reply or Queuez notification.
+- Any controlled run satisfies the Human/UI Interaction Gate; tests pass; documentation and this next TODO are updated; and a session PR is opened.
 
 ## Non-Goals
 
 Do not:
-- alter proven external BAP crypto/listener behavior without evidence;
-- implement Queuez, account/character state, activity, or speculative notifications;
-- alter client Internet isolation or contact public/Bungie services;
 - modify the external-validation installation in place;
+- change proven external BAP crypto, framing, or accepted replies;
+- add a service-29 response;
+- emit Queuez service `123`, account/character state, activity, or speculative notifications;
+- alter client Internet isolation or contact public/Bungie services;
 - continue into the next discovered boundary.

@@ -8,7 +8,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 **CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. No later client request was observed during the documented window.
 
-**CURRENT FRONTIER:** the controlled internal/default oracle reached character select and captured authenticated BAP ordering. Its first new uncorrelated publication was Queuez service `123`, but only after the internal client emitted service `10`; the external client has not emitted service `10`. The earliest divergence before that client route is now the next boundary.
+**CURRENT FRONTIER:** the controlled internal/default oracle reached character select and captured authenticated BAP ordering. The internal and external ledgers share the accepted bootstrap through the second `302 -> 303`. The first observed divergence before internal client service `10` is then five internal encrypted client service-`29` requests, each accepted with no correlated reply; the external client instead next emits `250 -> 251` keepalives and never emits service `29` in the documented window. Source routing names service `29` `notification29` and explicitly assigns `ResponseMode::none` with an empty body codec. The missing condition that makes the external client emit service `29` remains UNKNOWN.
 
 ## Confirmed Protocol Progress
 
@@ -17,7 +17,9 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 - **CONFIRMED:** `GET /config/` and accepted ContentConfig response.
 - **CONFIRMED:** BAP plaintext `30 -> 31` and `25 -> 26`.
 - **CONFIRMED:** encrypted `121 -> 122`, `302 -> 303`, `304 -> 305`, and recurring `250 -> 251`.
-- **CONFIRMED:** no later client-originated route in the bounded post-BAP observation.
+- **CONFIRMED:** no later client-originated route in the bounded external post-BAP observation.
+- **CONFIRMED:** internal/default and external ledgers share `30 -> 31`, `25 -> 26`, `121 -> 122`, `302 -> 303`, `304 -> 305`, and a second `302 -> 303` before their first route difference.
+- **CONFIRMED:** internal then emits five service-`29` requests with no correlated reply before its first `250 -> 251`; external instead next emits `250 -> 251` and does not emit service `29` in its bounded stable-wait record.
 
 ## Proven Working Components
 
@@ -25,7 +27,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 ## Current Missing Behavior
 
-Account/character state, Queuez subscription/publication state, and any initial authenticated state publication are absent. A Queuez encoder and generic notification framing are foundations only; they are not authority to send a notification. Reference-source review confirms that Queuez service `123` requires a completed subscription/selection/change outcome or previously armed deferred state; it is not an automatic consequence of BAP authentication.
+Account/character state, Queuez subscription/publication state, and the semantic condition that causes the client to issue its first no-reply service `29` notification are absent. A Queuez encoder and generic notification framing are foundations only; they are not authority to send a notification. Reference-source review confirms that Queuez service `123` requires a completed subscription/selection/change outcome or previously armed deferred state; it is not an automatic consequence of BAP authentication.
 
 ## Confirmed Network Architecture
 
@@ -60,13 +62,16 @@ The runtime logs state-before/event/state-after metadata. An unhandled route is 
 
 **CONFIRMED:** the first new uncorrelated publication in the complete internal/default run is encrypted service `123` (`queuez_update`), immediately after client service `10` and its correlated service `11` reply. This comes from metadata-only trace evidence, not captured payloads.
 
-**UNKNOWN:** the preceding external divergence that prevents client service `10`.
+**CONFIRMED:** the first actual ordered route divergence before client service `10` is the absent external service `29` notification.
+
+**UNKNOWN:** which pre-service-`29` semantic condition in the internal/default configuration or client state causes the client to send that no-reply notification. The source route proves only that a response is not the missing behavior.
 
 ## Failed Hypotheses / Dead Ends
 
 - The black screen is **not** evidence that an earlier `121`, `302`, or `250` acknowledgement should change; each is accepted in the confirmed run.
 - An empty or invented Queuez frame is **not** a valid next step.
 - No later client request was observed; implementing a guessed client-response route cannot advance this frontier.
+- Service `29` is not a missing acknowledgement: the reference routes `notification29` as `ResponseMode::none` with an empty body codec, and the internal oracle progresses after five such no-reply requests. Adding a synthetic service-`29` reply would contradict the oracle.
 - Service `123` must not be sent during the external stable wait: its first observed internal emission followed client service `10`, which is absent externally.
 
 ## Important Runtime Findings
@@ -82,6 +87,8 @@ Raw captures, certificate material, manifest caches, session material, and local
 - `docs/client-analysis/post-auth-oracle.md`
 - `docs/experiments/2026-08-15-external-post-bap-differential.md`
 - `docs/experiments/2026-08-16-internal-post-auth-oracle.md`
+- `docs/experiments/2026-08-17-pre-service10-route-ledger.md`
+- `src/old_school_d2_service/authenticated_route_ledger.py`
 
 ## Relevant Commits
 
@@ -93,7 +100,7 @@ Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local eviden
 
 ## Next Experiment
 
-Compare the authenticated internal/default trace with the external stable wait to locate the earliest semantic divergence before internal client service `10`. Do not change confirmed BAP replies or emit Queuez service `123` first.
+Use the dedicated internal/default oracle to instrument the client-side trigger/state boundary that precedes its first service-`29` notification, then compare that trigger with the external client. Do not add a service-`29` reply or emit Queuez service `123`.
 
 ## Things That Must Not Be Reopened Without New Evidence
 

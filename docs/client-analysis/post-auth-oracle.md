@@ -21,8 +21,12 @@ The public Sunrise reference is pinned at `b12a9dab780f47c89f1c147d4a8ef3ddbc839
 
 **CONFIRMED:** the external baseline has no client service-12 request. Therefore there is no evidence that the external replacement should fabricate an unsolicited Queuez service-123 notification at the stable authenticated wait.
 
-**UNKNOWN:** the ordered authenticated traffic in a full, instrumented internal/default launch has not yet been captured. The internal oracle process launched during this session initialized the instrumented local transport but did not reach BAP authentication, so it produced no `post_auth_send` record. See `docs/experiments/2026-08-16-internal-post-auth-oracle.md`.
+## Superseded preliminary limitation
+
+The former statement that no full authenticated internal/default launch had been captured is superseded by the completed input-driven oracle in `docs/experiments/2026-08-16-internal-post-auth-oracle.md`. Its sanitized route ledger and the external stable-wait ledger share `30 -> 31`, `25 -> 26`, `121 -> 122`, `302 -> 303`, `304 -> 305`, and a second `302 -> 303`.
+
+**CONFIRMED:** before internal client service `10`, the first actual route difference is five internal service-`29` requests with no correlated reply. The external ledger instead next contains `250 -> 251` keepalives and no service `29`. Public source at the pinned reference maps `notification29` to `ResponseMode::none` with the empty body codec. Thus a synthetic reply is contradicted by the oracle; the UNKNOWN is the condition that causes the external client not to issue service `29`. See `docs/experiments/2026-08-17-pre-service10-route-ledger.md`.
 
 ## Consequence for the external replacement
 
-Do not wire `BapConnectionState.build_notification()` into the external runtime. The next bounded task is to obtain a full internal/default BAP-authenticated trace first, then compare the first source-emitted outbound event with the external stable wait.
+Do not wire `BapConnectionState.build_notification()` into the external runtime. The next bounded task is to instrument the dedicated oracle at the client-side transition immediately before its first service-`29` notification and compare that trigger with the external configuration/state.

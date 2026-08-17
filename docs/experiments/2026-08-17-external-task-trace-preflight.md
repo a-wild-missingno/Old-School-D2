@@ -23,3 +23,9 @@ This is procedurally inconclusive, not evidence that task `ENUM(0)` is absent or
 ## Next falsifiable step
 
 Using the current Windows operator access, hash the known-good external-validation DLL and settings, create a dedicated trace copy, install only the artifact identified above, set only that copy for external validation with informational task/server logging, and re-hash the baseline. Re-verify client isolation, disabled forwarding, and no conflicting listener; then, after the operator performs the title-screen start action, run one bounded external observation and compare `retail_task task_enum=0 transition=completed` and any service-29 metadata with the documented Oracle ordering. Restore/remove the trace copy afterward. Do not add service-29 replies, Queuez service 123, account state, or speculative notifications.
+
+## Superseding bounded observation
+
+The following run supersedes the statement above that no client observation had occurred. After the stated Human/UI action, the operator immediately saw Marionberry. The dedicated trace log had recorded successful external egress-hook and config-getter installation but contained zero `retail_task` completion records. The replacement listener recorded no HTTP or BAP application event beyond listener startup, and therefore no service-29 metadata.
+
+**FAIL for the stated differential, not a negative protocol result.** This observation ended before authenticated BAP/task progression, so task `ENUM(0)`, service 29 after task 0, and the earliest semantic differential are all UNKNOWN. The trace copy and bounded raw capture were removed after collecting only sanitized metadata; the original external-validation DLL/settings hashes were unchanged after cleanup.

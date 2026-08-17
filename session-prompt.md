@@ -192,24 +192,22 @@ Human attention needed:
 
 ## Objective
 
-Use the prepared dedicated payload-free trace artifact to run exactly one Human/UI-gated external-validation observation and establish whether client task `ENUM(0)` completes before the stable wait and whether service 29 follows.
+Diagnose why the dedicated payload-free external trace runtime reaches a client-visible Marionberry error before it produces an HTTP or BAP application event at the isolated replacement listener.
 
 ## Starting Evidence
 
-The dedicated trace source commit `d025f3d` emits only timestamped numeric `retail_task` completion metadata and no formatted retail text. Its Windows CI artifact is documented in `docs/experiments/2026-08-17-external-task-trace-preflight.md`. The internal/default Oracle observed `ENUM(0)` completion 16 ms before first service 29. No external task-timed observation exists.
+The sole authorized external task-trace observation completed its Human/UI gate but ended immediately at Marionberry. The trace log confirmed egress-hook and config-getter installation and recorded zero `retail_task` completions. The listener recorded no HTTP or BAP application event. The baseline external-validation runtime was unchanged after trace-copy cleanup. Therefore external task `ENUM(0)`, external service 29 after task 0, and the earliest semantic differential are UNKNOWN.
 
 ## Required Work
 
-1. Before modifying anything, record hashes/timestamps for the known-good Windows external-validation DLL and settings, then create a dedicated trace copy only.
-2. Install only the documented trace artifact in that copy; enable only required metadata/server informational logging. Confirm the trace copy and settings while re-verifying that the external-validation baseline hashes are unchanged.
-3. Before launch, verify Legion Internet isolation, disabled IPv4/IPv6 forwarding, no NAT/proxy/tunnel/WAN route, and absence of conflicting listeners.
-4. Establish verified Windows interactive visual/input control. If it is unavailable, do not launch or interpret a run; state `READY FOR GAME TEST` with the exact minimum title-screen action.
-5. Run at most one bounded observation after the title-screen action. Retain only sanitized task/service metadata or hashes; no BAP bodies, retail text, identities, or raw client data.
-6. Compare the external task-0/service-29 ordering with the internal Oracle. Do not add a service-29 reply, Queuez service 123, account state, or speculative notifications.
-7. Restore/remove changed trace files, re-verify the external-validation copy, document, validate, commit, push, and open a PR.
+1. Do not repeat the game observation or add any protocol response.
+2. Compare the dedicated trace source/build provenance and startup/transport behavior with the known-good external-validation artifact using only metadata and source evidence.
+3. Identify the first evidenced trace-vs-baseline startup or external-transport divergence that can explain Marionberry before listener application traffic.
+4. If necessary, add only narrowly scoped payload-free startup/transport metadata to the dedicated trace branch, with Windows CI validation; do not retain retail text, BAP bodies, identities, endpoints, or raw client data.
+5. Preserve the baseline runtime and client isolation. Document the result, validate, commit, push, and update the existing PR.
 
 ## PASS Criteria
 
-- The single external observation establishes whether task `ENUM(0)` completes before stable wait and whether service 29 follows.
-- The baseline external-validation copy remains unchanged and the trace records only the allowed metadata.
-- Tests pass, documentation is updated, and a session PR is opened.
+- The first trace-vs-baseline startup/transport divergence before listener application traffic is directly evidenced, or a specific falsifiable next diagnostic is recorded.
+- No additional game observation or speculative protocol behavior is introduced.
+- Tests pass, documentation is updated, and the existing session PR is updated.

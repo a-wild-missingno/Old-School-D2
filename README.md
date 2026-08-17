@@ -21,7 +21,7 @@ Status as of the current controlled lab experiment:
 | BAP channel start | Implemented | Plaintext service 30 receives documented service-31 nonce echo. |
 | BAP ServerHello | Implemented | Plaintext service 25 receives authenticated service-26 key/nonce envelope. |
 | Post-hello BAP | Implemented through observed keepalive | Services 121 → 122, 302 → 303, 304 → 305, and recurring 250 → 251 are accepted by the live client. Service 305 rewraps only protobuf field 3 and records no certificate data. |
-| Server-initiated BAP state | Investigating | The client remains on a black-screen stable wait while acknowledging recurring 250 → 251 keepalives. Source review confirms Queuez is not emitted merely on authentication; its known reference triggers require prior subscription/selection/change or deferred state. The first full internal/default authenticated oracle trace remains to be captured. |
+| Server-initiated BAP state | Investigating | The client remains on a black-screen stable wait while acknowledging recurring 250 → 251 keepalives. A completed internal/default oracle shows the same bootstrap followed by client service-29 notifications (which require no server reply) before later service 10; the external client never emits service 29 in the documented wait. The semantic condition for that client-side divergence is still under investigation. Queuez is not emitted merely on authentication. |
 | Accounts, profiles, inventory, matchmaking, activities, world state | Not implemented | Multi-user account/session design is documented, but schema, credentials, character state, Queuez bootstrap, matchmaking, and activity/world services are not implemented. |
 
 The latest controlled run passed the prior white-screen BAP timeouts and reached a stable black-screen wait with an open authenticated BAP connection. This is protocol progress, not a claim of playable offline Destiny 2. No speculative server notification has been sent.
@@ -79,7 +79,7 @@ The documented sequence currently observed in the isolated Sunrise external-serv
 6. AES-GCM encrypted BAP services 121 → 122, 302 → 303, 304 → 305, and recurring 250 → 251
 7. Stable black-screen wait with no additional observed client request
 
-Sunrise’s public implementation shows Queuez/activity publication mechanisms, but the known Queuez paths require prior state and are not automatic on BAP authentication. The project will obtain a complete internal/default authenticated oracle trace before emitting any notification merely to clear the black screen.
+Sunrise’s public implementation shows Queuez/activity publication mechanisms, but the known Queuez paths require prior state and are not automatic on BAP authentication. A completed internal/default oracle also shows that service 29 is a no-reply client notification, so the current work is identifying why external mode never reaches that client-side event—not sending a speculative response or notification to clear the black screen.
 
 ## Local development
 

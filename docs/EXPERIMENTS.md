@@ -9,7 +9,8 @@ Detailed records live in `docs/experiments/`. `PASS` means the stated boundary w
 | 2026-08-15 | Encrypted BAP bootstrap acknowledgements | PASS | yes: reached stable authenticated wait | `docs/experiments/2026-08-15-external-signin.md` |
 | 2026-08-15 | Post-BAP transition baseline | PASS | no: confirmed absence of later client route | `docs/experiments/2026-08-15-post-bap-transition-baseline.md` |
 | 2026-08-15 | External post-BAP differential | PARTIAL | no: identifies server-initiated state as the next boundary | `docs/experiments/2026-08-15-external-post-bap-differential.md` |
-| 2026-08-16 | Internal/default post-auth oracle | PARTIAL | no: instrumented runtime started but launch did not reach BAP authentication | `docs/experiments/2026-08-16-internal-post-auth-oracle.md` |
+| 2026-08-16 | Internal/default post-auth oracle | PARTIAL | no: input-driven trace identifies later authenticated ordering | `docs/experiments/2026-08-16-internal-post-auth-oracle.md` |
+| 2026-08-17 | Pre-service-10 authenticated route-ledger comparison | PARTIAL | yes: first route divergence is absent external service 29, not a missing reply | `docs/experiments/2026-08-17-pre-service10-route-ledger.md` |
 
 ## Superseded Records
 

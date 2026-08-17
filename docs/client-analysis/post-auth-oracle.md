@@ -30,3 +30,7 @@ The former statement that no full authenticated internal/default launch had been
 ## Consequence for the external replacement
 
 Do not wire `BapConnectionState.build_notification()` into the external runtime. The next bounded task is to instrument the dedicated oracle at the client-side transition immediately before its first service-`29` notification and compare that trigger with the external configuration/state.
+
+## 2026-08-17 timestamped task/service-29 correlation
+
+Dedicated-Oracle metadata correlates the first accepted service-29 request to the immediately prior client transition: `world_controller` task `ENUM(0)` completed 16 ms earlier. The Oracle accepted nine one-way service-29 requests with no reply and later observed service 10 while the client reached character select. This supports only ordered correlation; task `ENUM(0)` semantics and causal role are still unknown. External stable-wait evidence has no timestamped retail-task trace yet, so it cannot be equated with a missing task-0 transition.

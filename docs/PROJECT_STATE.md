@@ -8,7 +8,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 **CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. No later client request was observed during the documented window.
 
-**CURRENT FRONTIER:** the internal/default oracle now proves that client task `ENUM(0)` completion is immediately followed (16 ms) by one-way service 29; external stable wait lacks both observed service 29 and equivalent task-timed evidence.
+**CURRENT FRONTIER:** the internal/default Oracle proves task `ENUM(0)` completion is followed 16 ms later by one-way service 29. The sole dedicated external task-trace observation ended at a client-visible Marionberry error before an authenticated BAP application event; external task `ENUM(0)`, external service 29 after task 0, and the earliest semantic differential remain UNKNOWN.
 
 ## Confirmed Protocol Progress
 
@@ -17,9 +17,9 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 - **CONFIRMED:** `GET /config/` and accepted ContentConfig response.
 - **CONFIRMED:** BAP plaintext `30 -> 31` and `25 -> 26`.
 - **CONFIRMED:** encrypted `121 -> 122`, `302 -> 303`, `304 -> 305`, and recurring `250 -> 251`.
-- **CONFIRMED:** no later client-originated route in the bounded external post-BAP observation.
+- **CONFIRMED (historical non-task record only):** one bounded external post-BAP observation recorded no later client-originated route.
 - **CONFIRMED:** internal/default and external ledgers share `30 -> 31`, `25 -> 26`, `121 -> 122`, `302 -> 303`, `304 -> 305`, and a second `302 -> 303` before their first route difference.
-- **CONFIRMED:** internal then emits five service-`29` requests with no correlated reply before its first `250 -> 251`; external instead next emits `250 -> 251` and does not emit service `29` in its bounded stable-wait record.
+- **CONFIRMED:** internal emits service-`29` requests with no correlated reply before its first `250 -> 251`. A historical external stable-wait ledger lacks service 29, but without equivalent task-timed evidence it does not establish the earliest semantic differential.
 
 ## Proven Working Components
 
@@ -62,7 +62,7 @@ The runtime logs state-before/event/state-after metadata. An unhandled route is 
 
 **CONFIRMED:** the first new uncorrelated publication in the complete internal/default run is encrypted service `123` (`queuez_update`), immediately after client service `10` and its correlated service `11` reply. This comes from metadata-only trace evidence, not captured payloads.
 
-**CONFIRMED:** the first actual ordered route divergence before client service `10` is the absent external service `29` notification.
+**SUPERSEDED interpretation:** the historical ledger made absent external service 29 the earliest *recorded route* difference before client service 10. It cannot establish the earliest semantic differential without a successful task-timed external observation.
 
 **UNKNOWN:** which pre-service-`29` semantic condition in the internal/default configuration or client state causes the client to send that no-reply notification. The source route proves only that a response is not the missing behavior.
 
@@ -100,7 +100,7 @@ Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local eviden
 
 ## Next Experiment
 
-Use the dedicated internal/default oracle to instrument the client-side trigger/state boundary that precedes its first service-`29` notification, then compare that trigger with the external client. Do not add a service-`29` reply or emit Queuez service `123`.
+Diagnose why the dedicated external trace runtime reaches a client-visible Marionberry error before it produces an authenticated application event. First establish, with metadata-only trace/source evidence, whether the trace DLL changes the external transport/startup path relative to the known-good external-validation runtime. Do not add a service-29 reply or emit Queuez service `123`.
 
 ## Things That Must Not Be Reopened Without New Evidence
 
@@ -114,3 +114,19 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 **LIMIT:** This is a temporal correlation, not proof that `ENUM(0)` causes service 29. External stable wait still has no equivalent client task timing, so its first missing semantic condition remains unresolved.
 
 **NEXT:** Instrument the external-validation observation with the same timestamped retail-task metadata and compare the task-0/service-29 boundary.
+
+## 2026-08-17 external task-trace preflight
+
+**CONFIRMED:** inspection found the prior dedicated trace source wrote formatted retail-log text, so it could not meet the payload-free external-observation constraint. The dedicated trace branch now emits only timestamped numeric task-completion metadata; Windows CI build `32069461540` succeeded for source commit `d025f3d`, producing the documented artifact digest.
+
+**CONFIRMED:** immediately before any client launch, the replacement listener and capture were stopped, relevant local listener ports were unoccupied, and the OptiPlex reported IPv4/IPv6 forwarding disabled.
+
+**NOT OBSERVED:** no external client run occurred. The Windows validation baseline's DLL/settings hashes, trace-copy deployment, client isolation, task `ENUM(0)`, and service 29 status remain unverified because this session had no configured Windows target or verified Legion interactive control. This is procedurally inconclusive.
+
+## 2026-08-17 external task-0/service-29 observation
+
+**FAIL (bounded observation):** after the Human/UI gate, the operator immediately observed Marionberry. The dedicated trace log recorded external-hook and config-getter installation, but zero `retail_task` completion records. The local replacement listener recorded no HTTP or BAP application event beyond its own startup, so no authenticated service 29 metadata was observed.
+
+**LIMIT:** this does not demonstrate absent task 0 or absent service 29. The run failed before the task/service boundary. The historical non-task external ledger remains evidence of its own capture but does not establish the earliest semantic divergence.
+
+**CONFIRMED hygiene:** the dedicated trace copy was removed, its client process was stopped after the observation, and the known-good external-validation DLL/settings hashes remained unchanged. The bounded raw capture was discarded because it included SSH control traffic; only sanitized metadata is documented.

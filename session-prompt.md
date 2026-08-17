@@ -192,26 +192,24 @@ Human attention needed:
 
 ## Objective
 
-Instrument the external-validation client with the same payload-free timestamped retail-task metadata used by the internal/default Oracle, then determine whether client task `ENUM(0)` completes before the external stable wait and whether any service 29 follows.
+Use the prepared dedicated payload-free trace artifact to run exactly one Human/UI-gated external-validation observation and establish whether client task `ENUM(0)` completes before the stable wait and whether service 29 follows.
 
 ## Starting Evidence
 
-The 2026-08-17 dedicated internal/default Oracle reached character select. It recorded `world_controller` task `ENUM(0)` completion 16 ms before its first accepted, one-way service-29 request; nine service-29 requests and later service-10 traffic were observed.
-
-The external stable wait is confirmed authenticated but has no observed service 29 before its recurring `250 -> 251` traffic. Its available evidence lacks timestamped retail-task metadata, so a missing task-0 transition remains unproven.
+The dedicated trace source commit `d025f3d` emits only timestamped numeric `retail_task` completion metadata and no formatted retail text. Its Windows CI artifact is documented in `docs/experiments/2026-08-17-external-task-trace-preflight.md`. The internal/default Oracle observed `ENUM(0)` completion 16 ms before first service 29. No external task-timed observation exists.
 
 ## Required Work
 
-1. Preserve the known-good external-validation runtime and use a dedicated trace copy only.
-2. Add only the existing metadata-only correlation instrumentation; do not retain BAP bodies, identities, or new raw client data.
-3. Before launch, verify the trace DLL/settings, Internet isolation, and absence of conflicting listeners.
-4. Run at most one Human/UI-gated external observation.
-5. Compare the external task-0/service-29 result with the documented Oracle ordering.
-6. Do not add a service-29 reply, Queuez service 123, account state, or speculative notifications.
-7. Restore changed trace files, re-verify the external-validation copy, document, validate, commit, push, and open a PR.
+1. Before modifying anything, record hashes/timestamps for the known-good Windows external-validation DLL and settings, then create a dedicated trace copy only.
+2. Install only the documented trace artifact in that copy; enable only required metadata/server informational logging. Confirm the trace copy and settings while re-verifying that the external-validation baseline hashes are unchanged.
+3. Before launch, verify Legion Internet isolation, disabled IPv4/IPv6 forwarding, no NAT/proxy/tunnel/WAN route, and absence of conflicting listeners.
+4. Establish verified Windows interactive visual/input control. If it is unavailable, do not launch or interpret a run; state `READY FOR GAME TEST` with the exact minimum title-screen action.
+5. Run at most one bounded observation after the title-screen action. Retain only sanitized task/service metadata or hashes; no BAP bodies, retail text, identities, or raw client data.
+6. Compare the external task-0/service-29 ordering with the internal Oracle. Do not add a service-29 reply, Queuez service 123, account state, or speculative notifications.
+7. Restore/remove changed trace files, re-verify the external-validation copy, document, validate, commit, push, and open a PR.
 
 ## PASS Criteria
 
-- The external observation establishes whether task `ENUM(0)` completes before the stable wait and whether service 29 follows.
-- Any instrumentation is metadata-only and regression-covered.
-- The external-validation baseline remains unchanged, tests pass, documentation is updated, and a session PR is opened.
+- The single external observation establishes whether task `ENUM(0)` completes before stable wait and whether service 29 follows.
+- The baseline external-validation copy remains unchanged and the trace records only the allowed metadata.
+- Tests pass, documentation is updated, and a session PR is opened.

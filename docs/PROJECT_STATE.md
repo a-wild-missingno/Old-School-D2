@@ -100,7 +100,7 @@ Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local eviden
 
 ## Next Experiment
 
-Use the dedicated internal/default oracle to instrument the client-side trigger/state boundary that precedes its first service-`29` notification, then compare that trigger with the external client. Do not add a service-`29` reply or emit Queuez service `123`.
+Deploy the dedicated payload-free external trace artifact to a separate Windows runtime copy, prove the known-good external-validation copy unchanged, and run one Human/UI-gated external observation. Determine whether `ENUM(0)` completes before stable wait and whether service 29 follows. Do not add a service-29 reply or emit Queuez service `123`.
 
 ## Things That Must Not Be Reopened Without New Evidence
 
@@ -114,3 +114,11 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 **LIMIT:** This is a temporal correlation, not proof that `ENUM(0)` causes service 29. External stable wait still has no equivalent client task timing, so its first missing semantic condition remains unresolved.
 
 **NEXT:** Instrument the external-validation observation with the same timestamped retail-task metadata and compare the task-0/service-29 boundary.
+
+## 2026-08-17 external task-trace preflight
+
+**CONFIRMED:** inspection found the prior dedicated trace source wrote formatted retail-log text, so it could not meet the payload-free external-observation constraint. The dedicated trace branch now emits only timestamped numeric task-completion metadata; Windows CI build `32069461540` succeeded for source commit `d025f3d`, producing the documented artifact digest.
+
+**CONFIRMED:** immediately before any client launch, the replacement listener and capture were stopped, relevant local listener ports were unoccupied, and the OptiPlex reported IPv4/IPv6 forwarding disabled.
+
+**NOT OBSERVED:** no external client run occurred. The Windows validation baseline's DLL/settings hashes, trace-copy deployment, client isolation, task `ENUM(0)`, and service 29 status remain unverified because this session had no configured Windows target or verified Legion interactive control. This is procedurally inconclusive.

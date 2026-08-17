@@ -34,3 +34,5 @@ Do not wire `BapConnectionState.build_notification()` into the external runtime.
 ## 2026-08-17 timestamped task/service-29 correlation
 
 Dedicated-Oracle metadata correlates the first accepted service-29 request to the immediately prior client transition: `world_controller` task `ENUM(0)` completed 16 ms earlier. The Oracle accepted nine one-way service-29 requests with no reply and later observed service 10 while the client reached character select. This supports only ordered correlation; task `ENUM(0)` semantics and causal role are still unknown. External stable-wait evidence has no timestamped retail-task trace yet, so it cannot be equated with a missing task-0 transition.
+
+**Superseded instrumentation privacy interpretation:** the prior dedicated trace source logged formatted retail text locally even though its BAP route tracing omitted packet bodies. It remains evidence for the documented Oracle ordering, but it is not acceptable for the payload-free external observation. The replacement trace artifact records only timestamped numeric task-completion metadata; see `docs/experiments/2026-08-17-external-task-trace-preflight.md`.

@@ -69,3 +69,22 @@ def test_status_keeps_process_and_interactive_desktop_claims_separate(tmp_path: 
     assert "DESTINY_RUNNING=" in result.stdout
     assert "INTERACTIVE_CONTROL_VERIFIED=NO" in result.stdout
     assert "UI_STATE=unknown" in result.stdout
+
+
+def test_start_destiny_targets_the_actual_interactive_windows_session() -> None:
+    script = (WINDOWS / "start-destiny.sh").read_text()
+    assert "-LogonType Interactive " in script
+    assert "GetOwner" in script
+    assert "Register-ScheduledTask" in script
+    assert "LAUNCH_CONTEXT=interactive-task" in script
+
+
+def test_status_normalizes_windows_path_separators_for_runtime_inference() -> None:
+    script = (WINDOWS / "status.sh").read_text()
+    assert "Replace([char]92,[char]47)" in script
+
+
+def test_cleanup_removes_only_managed_interactive_launch_tasks() -> None:
+    script = (WINDOWS / "cleanup-test.sh").read_text()
+    assert "OldSchoolD2Lab-" in script
+    assert "Unregister-ScheduledTask" in script

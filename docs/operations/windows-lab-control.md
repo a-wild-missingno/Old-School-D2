@@ -7,6 +7,21 @@ isolated Windows Legion from the repository. It replaces per-session ad-hoc
 SSH/PowerShell snippets and does not alter protocol behavior or network
 isolation.
 
+## Install the Hermes skill
+
+The checked-in `.hermes/skills/windows-lab/SKILL.md` is source-controlled project
+documentation; Hermes does **not** auto-discover repository-local skills by name.
+Install it once on the machine running Hermes (the MacBook, not the Ubuntu SSH
+backend), then begin a fresh Hermes session:
+
+```bash
+hermes skills install https://raw.githubusercontent.com/a-wild-missingno/Old-School-D2/main/.hermes/skills/windows-lab/SKILL.md --name windows-lab
+```
+
+Verify with `hermes skills list` or `/skill windows-lab`. Updating the repository
+does not automatically update an installed profile skill; explicitly run the same
+installation command again after a skill update.
+
 ## Private configuration
 
 Copy `.hermes/windows-lab.local.env.example` to the ignored
@@ -66,6 +81,19 @@ INTERACTIVE_CONTROL_VERIFIED=NO
 READY_FOR_PROCESS_LAUNCH=YES
 READY_FOR_AUTOMATED_UI_TEST=NO
 ```
+
+## Interactive-session launch
+
+`start-destiny.sh` does not use SSH's Session 0 process context. It discovers the
+currently logged-in Windows Explorer session, resolves its owner dynamically, and
+creates a uniquely named one-shot Scheduled Task with the Windows `Interactive`
+logon type. The script waits for a `destiny2.exe` process whose Session ID and
+executable path match that target, then reports the PID and interactive-session ID.
+If no interactive Explorer session exists, task registration fails, or the process
+exits before verification, it returns failure rather than claiming success.
+
+The temporary task and launch-state record are owned by the project and removed by
+`cleanup-test.sh`; task cleanup does not stop a still-running Destiny process.
 
 ## Process control versus desktop control
 

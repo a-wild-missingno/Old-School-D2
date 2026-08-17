@@ -23,8 +23,7 @@ dedicated trace/oracle runtime explicitly authorized by private configuration.
 - `status.sh` — SSH/process/listener status. It reports `process_running` facts
   independently from desktop facts.
 - `preflight.sh <runtime>` — ordinary experiment readiness. Run this first.
-- `start-destiny.sh <runtime>` — starts the configured executable only; it does
-  not start a game test.
+- `start-destiny.sh <runtime>` — launches through a one-shot Windows Task Scheduler task bound to the current interactive Explorer session. It verifies the process persists in that session; it does not start a game test.
 - `stop-destiny.sh` — stops only `destiny2.exe`; idempotent when none exists.
 - `hash-runtime.sh <runtime>` — comparable SHA-256 values for DLL/settings and
   optional movement state.
@@ -54,7 +53,7 @@ Action:
 ```
 
 This is a required human gate, not a PARTIAL result and not a reason to end the
-session. SSH, PowerShell, and Session-0 process creation do not verify visual
+session. SSH, PowerShell, and a Task Scheduler launch into the interactive session do not verify visual
 or input access to the actual Windows interactive desktop.
 
 ## Standard workflow

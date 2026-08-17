@@ -192,35 +192,26 @@ Human attention needed:
 
 ## Objective
 
-Use the dedicated internal/default oracle to identify the client-side state transition or configuration condition that immediately precedes its first encrypted service-`29` notification, then compare that condition with the external stable-wait client.
+Instrument the external-validation client with the same payload-free timestamped retail-task metadata used by the internal/default Oracle, then determine whether client task `ENUM(0)` completes before the external stable wait and whether any service 29 follows.
 
 ## Starting Evidence
 
-`docs/PROJECT_STATE.md` is authoritative. `docs/experiments/2026-08-17-pre-service10-route-ledger.md` confirms that the internal and external authenticated BAP ledgers share the bootstrap through the second `302 -> 303`; internal then sends five `29 -> no reply` routes before keepalive and later service `10`, while external proceeds directly to recurring `250 -> 251` and has no observed service `29`.
+The 2026-08-17 dedicated internal/default Oracle reached character select. It recorded `world_controller` task `ENUM(0)` completion 16 ms before its first accepted, one-way service-29 request; nine service-29 requests and later service-10 traffic were observed.
 
-The pinned public Sunrise source routes `notification29` with `ResponseMode::none` and an empty body codec. A server reply is therefore contradicted by the oracle and is not a candidate implementation.
+The external stable wait is confirmed authenticated but has no observed service 29 before its recurring `250 -> 251` traffic. Its available evidence lacks timestamped retail-task metadata, so a missing task-0 transition remains unproven.
 
 ## Required Work
 
-1. Inspect the dedicated oracle’s ignored local handoff/evidence and public source call paths for client service `29`; do not use later service-123 payloads as evidence.
-2. Add metadata-only instrumentation in the dedicated oracle only at the client-side transition/call path that produces service `29`. Do not retain payloads, identities, addresses, keys, tokens, or assets.
-3. Before any launch, verify the dedicated trace DLL/settings, original external-validation DLL/settings hashes, Internet isolation, and absence of conflicting Old-School-D2 listeners.
-4. Run one input-gated internal/default oracle observation only if the instrumentation is ready. Establish title-screen progression before beginning the bounded window.
-5. Compare the recorded service-29 trigger/state with the external client’s documented stable wait and identify one falsifiable external semantic candidate.
-6. Restore oracle files, re-check the untouched external-validation DLL/settings, document the result, validate, commit, push, and open a PR. Do not run an external replacement-server experiment unless the candidate requires exactly one safe controlled test.
+1. Preserve the known-good external-validation runtime and use a dedicated trace copy only.
+2. Add only the existing metadata-only correlation instrumentation; do not retain BAP bodies, identities, or new raw client data.
+3. Before launch, verify the trace DLL/settings, Internet isolation, and absence of conflicting listeners.
+4. Run at most one Human/UI-gated external observation.
+5. Compare the external task-0/service-29 result with the documented Oracle ordering.
+6. Do not add a service-29 reply, Queuez service 123, account state, or speculative notifications.
+7. Restore changed trace files, re-verify the external-validation copy, document, validate, commit, push, and open a PR.
 
 ## PASS Criteria
 
-- Metadata-only evidence identifies the internal client-side trigger/state immediately preceding service `29`.
-- The external comparison produces one falsifiable semantic candidate without inventing a service-29 reply or Queuez notification.
-- Any controlled run satisfies the Human/UI Interaction Gate; tests pass; documentation and this next TODO are updated; and a session PR is opened.
-
-## Non-Goals
-
-Do not:
-- modify the external-validation installation in place;
-- change proven external BAP crypto, framing, or accepted replies;
-- add a service-29 response;
-- emit Queuez service `123`, account/character state, activity, or speculative notifications;
-- alter client Internet isolation or contact public/Bungie services;
-- continue into the next discovered boundary.
+- The external observation establishes whether task `ENUM(0)` completes before the stable wait and whether service 29 follows.
+- Any instrumentation is metadata-only and regression-covered.
+- The external-validation baseline remains unchanged, tests pass, documentation is updated, and a session PR is opened.

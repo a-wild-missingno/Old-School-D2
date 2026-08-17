@@ -19,3 +19,5 @@ The early SignOn-only and capture-only BAP observations are historical steps emb
 ## Adding an Experiment
 
 Start from `docs/experiments/template.md`. Link the record here only after recording its question, isolation pre-check, evidence, result, confidence, and follow-up. Store raw captures and local machine paths only in ignored local state.
+
+| 2026-08-17 | [service-29 trigger oracle](experiments/2026-08-17-service29-trigger-oracle.md) | Internal/default task-0 to service-29 correlation | PARTIAL: task `ENUM(0)` completion precedes service 29 by 16 ms; no causal/external equivalence claim |

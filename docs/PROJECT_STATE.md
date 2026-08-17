@@ -8,7 +8,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 **CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. No later client request was observed during the documented window.
 
-**CURRENT FRONTIER:** the controlled internal/default oracle reached character select and captured authenticated BAP ordering. The internal and external ledgers share the accepted bootstrap through the second `302 -> 303`. The first observed divergence before internal client service `10` is then five internal encrypted client service-`29` requests, each accepted with no correlated reply; the external client instead next emits `250 -> 251` keepalives and never emits service `29` in the documented window. Source routing names service `29` `notification29` and explicitly assigns `ResponseMode::none` with an empty body codec. The missing condition that makes the external client emit service `29` remains UNKNOWN.
+**CURRENT FRONTIER:** the internal/default oracle now proves that client task `ENUM(0)` completion is immediately followed (16 ms) by one-way service 29; external stable wait lacks both observed service 29 and equivalent task-timed evidence.
 
 ## Confirmed Protocol Progress
 
@@ -105,3 +105,12 @@ Use the dedicated internal/default oracle to instrument the client-side trigger/
 ## Things That Must Not Be Reopened Without New Evidence
 
 Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the accepted `121/122`, `302/303`, `304/305`, and `250/251` behavior. Do not add Queuez bootstrap/account state as part of repository maintenance.
+
+
+## 2026-08-17 service-29 trigger oracle
+
+**CONFIRMED:** The dedicated internal/default Oracle reached character select after task `ENUM(0)` completed and then emitted nine accepted one-way service-29 requests. The first request was observed 16 ms after the completion. The same bounded run emitted service 10 afterward. Service 29 needs no reply; adding one remains contraindicated.
+
+**LIMIT:** This is a temporal correlation, not proof that `ENUM(0)` causes service 29. External stable wait still has no equivalent client task timing, so its first missing semantic condition remains unresolved.
+
+**NEXT:** Instrument the external-validation observation with the same timestamped retail-task metadata and compare the task-0/service-29 boundary.

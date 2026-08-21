@@ -6,9 +6,9 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 ## Current Client Frontier
 
-**CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. No later client request was observed during the documented window.
+**CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection, emits no-reply service `29` notifications, and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. Client service `10` was not observed during the documented windows.
 
-**CURRENT FRONTIER:** the complete-baseline trace run reached local SignOn and ContentConfig but produced no BAP connection. The client reported a configuration-download error after the local ContentConfig response. The first missing boundary is client acceptance of ContentConfig, not discovery, transport, BAP, task 0, or service 29.
+**CURRENT FRONTIER:** repeated trace-only runs after the privacy-safe SignOn bootstrap handoff reach authenticated BAP and no-reply service 29, but not client service 10 or Queuez service 123. A metadata-only retail callback marker confirms that the task observer receives native callbacks, yet it does not observe the internal-oracle `ENUM(0)` completion diagnostic. The next missing boundary is post-service-29/local-content state, not discovery, ContentConfig acceptance, BAP acknowledgement, task-observer installation, or a service-29 reply.
 
 ## Confirmed Protocol Progress
 
@@ -27,7 +27,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 ## Current Missing Behavior
 
-Account/character state, Queuez subscription/publication state, and the semantic condition that causes the client to issue its first no-reply service `29` notification are absent. A Queuez encoder and generic notification framing are foundations only; they are not authority to send a notification. Reference-source review confirms that Queuez service `123` requires a completed subscription/selection/change outcome or previously armed deferred state; it is not an automatic consequence of BAP authentication.
+Account/character state, Queuez subscription/publication state, and the semantic condition that advances the client from its no-reply service `29` notifications to client service `10` are absent. A Queuez encoder and generic notification framing are foundations only; they are not authority to send a notification. Reference-source review confirms that Queuez service `123` requires a completed subscription/selection/change outcome or previously armed deferred state; it is not an automatic consequence of BAP authentication.
 
 ## Confirmed Network Architecture
 
@@ -62,15 +62,15 @@ The runtime logs state-before/event/state-after metadata. An unhandled route is 
 
 **CONFIRMED:** the first new uncorrelated publication in the complete internal/default run is encrypted service `123` (`queuez_update`), immediately after client service `10` and its correlated service `11` reply. This comes from metadata-only trace evidence, not captured payloads.
 
-**SUPERSEDED interpretation:** the historical ledger made absent external service 29 the earliest *recorded route* difference before client service 10. It cannot establish the earliest semantic differential without a successful task-timed external observation.
+**SUPERSEDED interpretation:** absent external service 29 was once the earliest recorded route difference. Repeated external observations now reach service 29, but not service 10.
 
-**UNKNOWN:** which pre-service-`29` semantic condition in the internal/default configuration or client state causes the client to send that no-reply notification. The source route proves only that a response is not the missing behavior.
+**UNKNOWN:** which post-service-`29` semantic condition in the internal/default configuration or client state causes the client to emit service `10`. The source route proves only that a service-29 response is not the missing behavior.
 
 ## Failed Hypotheses / Dead Ends
 
 - The black screen is **not** evidence that an earlier `121`, `302`, or `250` acknowledgement should change; each is accepted in the confirmed run.
 - An empty or invented Queuez frame is **not** a valid next step.
-- No later client request was observed; implementing a guessed client-response route cannot advance this frontier.
+- Client service `10` was not observed after service 29; implementing a guessed reply or Queuez publication cannot advance this frontier.
 - Service `29` is not a missing acknowledgement: the reference routes `notification29` as `ResponseMode::none` with an empty body codec, and the internal oracle progresses after five such no-reply requests. Adding a synthetic service-`29` reply would contradict the oracle.
 - Service `123` must not be sent during the external stable wait: its first observed internal emission followed client service `10`, which is absent externally.
 
@@ -100,7 +100,7 @@ Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local eviden
 
 ## Next Experiment
 
-Audit ContentConfig acceptance without launching Destiny: compare only structural metadata and manifest/cache-derived field classes from the local clean-room response against authorized known-good external baseline/source evidence. Identify the first validated mismatch or prove the response-equivalence claim. Do not retain bodies/config values, alter BAP, or add speculative responses.
+Compare metadata-only post-service-29 state/trigger conditions between the internal oracle and the external trace. Identify the first evidence-backed condition required for client service 10; do not add a service-29 reply, Queuez service 123, package content, account state, or speculative response.
 
 ## Things That Must Not Be Reopened Without New Evidence
 
@@ -181,3 +181,11 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 **CONFIRMED:** after the cache-derived ContentConfig identity was reconciled, the client passed the prior `turkey` boundary and reached the known authenticated encrypted-BAP stable black-screen wait. Metadata recorded `30 -> 31`, `25 -> 26`, `121 -> 122`, `302 -> 303`, `304 -> 305`, and recurring `250 -> 251`.
 
 **LIMIT:** no retail-task completion marker or later client route was observed in this bounded window. Do not change later service behavior without new evidence.
+
+## 2026-08-21 external bootstrap-handoff boundary
+
+**CONFIRMED:** the external trace run carried a SignOn query (value not logged), completed the existing BAP bootstrap, then sent nine service-29 notifications with no listener reply before stable keepalives. This is the first direct external service-29 observation.
+
+**LIMIT:** the user-visible result remained a black screen; client service 10 and server Queuez service 123 were not observed. Local package-load assertions were observed but do not justify copying package data or changing server behavior.
+
+**NEXT:** use the now-aligned service-29 boundary for a metadata-only post-29 differential; preserve the listener's no-reply behavior.

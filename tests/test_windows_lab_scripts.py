@@ -144,3 +144,16 @@ def test_transport_probe_uses_windows_lab_transport_for_natprobe_and_https_conne
     assert "TcpClient" in script
     assert "HTTPS_CONNECT=PASS" in script
     assert "TRANSPORT_BASELINE=PASS" in script
+
+
+def test_contentconfig_identity_guard_uses_derived_cache_identity_without_emitting_values() -> None:
+    script = (ROOT / "scripts" / "verify-contentconfig-identity.sh").read_text()
+    assert "derive_content_manifest_guid" in script
+    assert "CONTENTCONFIG_IDENTITY=PASS" in script
+    assert "print(config_guid)" not in script
+
+
+def test_lab_start_requires_contentconfig_identity_guard_before_listener_launch() -> None:
+    script = (ROOT / "scripts" / "lab-start.sh").read_text()
+    assert 'verify-contentconfig-identity.sh' in script
+    assert script.index('verify-contentconfig-identity.sh') < script.index('sudo -n --preserve-env')

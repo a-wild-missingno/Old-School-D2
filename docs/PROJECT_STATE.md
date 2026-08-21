@@ -8,7 +8,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 **CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. No later client request was observed during the documented window.
 
-**CURRENT FRONTIER:** the complete-baseline trace run reached local SignOn and ContentConfig but produced no BAP connection. The client reported a configuration-download error after the local ContentConfig response. The first missing boundary is client acceptance of ContentConfig, not discovery, transport, BAP, task 0, or service 29.
+**CURRENT FRONTIER:** after the cache-derived ContentConfig identity reconciliation and a trace-only privacy-safe SignOn bootstrap handoff, the external client reaches authenticated BAP and emits nine one-way service-29 requests before stable `250 -> 251` keepalives. It does not emit client service 10 or receive Queuez service 123 in the bounded observation. The next missing boundary is the post-service-29 condition, not discovery, ContentConfig acceptance, BAP acknowledgement, or a service-29 reply.
 
 ## Confirmed Protocol Progress
 
@@ -100,7 +100,7 @@ Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local eviden
 
 ## Next Experiment
 
-Audit ContentConfig acceptance without launching Destiny: compare only structural metadata and manifest/cache-derived field classes from the local clean-room response against authorized known-good external baseline/source evidence. Identify the first validated mismatch or prove the response-equivalence claim. Do not retain bodies/config values, alter BAP, or add speculative responses.
+Compare metadata-only post-service-29 state/trigger conditions between the internal oracle and the external trace. Identify the first evidence-backed condition required for client service 10; do not add a service-29 reply, Queuez service 123, package content, account state, or speculative response.
 
 ## Things That Must Not Be Reopened Without New Evidence
 
@@ -181,3 +181,11 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 **CONFIRMED:** after the cache-derived ContentConfig identity was reconciled, the client passed the prior `turkey` boundary and reached the known authenticated encrypted-BAP stable black-screen wait. Metadata recorded `30 -> 31`, `25 -> 26`, `121 -> 122`, `302 -> 303`, `304 -> 305`, and recurring `250 -> 251`.
 
 **LIMIT:** no retail-task completion marker or later client route was observed in this bounded window. Do not change later service behavior without new evidence.
+
+## 2026-08-21 external bootstrap-handoff boundary
+
+**CONFIRMED:** the external trace run carried a SignOn query (value not logged), completed the existing BAP bootstrap, then sent nine service-29 notifications with no listener reply before stable keepalives. This is the first direct external service-29 observation.
+
+**LIMIT:** the user-visible result remained a black screen; client service 10 and server Queuez service 123 were not observed. Local package-load assertions were observed but do not justify copying package data or changing server behavior.
+
+**NEXT:** use the now-aligned service-29 boundary for a metadata-only post-29 differential; preserve the listener's no-reply behavior.

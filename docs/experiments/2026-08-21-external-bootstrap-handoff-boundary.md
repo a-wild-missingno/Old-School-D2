@@ -1,7 +1,7 @@
 # External bootstrap-handoff boundary
 
 Date: 2026-08-21
-Status: PARTIAL — external route advanced to one-way service 29, then stable wait
+Status: PARTIAL — repeated external service-29 route; no task-completion marker or service 10
 
 ## Question
 
@@ -40,6 +40,12 @@ The client assertion observer also reported local patchable-bootstrap and invest
 
 **UNKNOWN:** why this external run does not continue to client service 10 after service 29, despite the internal oracle's later progression.
 
+## Follow-up diagnostic
+
+A second isolated run used a CI-built trace artifact with a once-only, metadata-only retail callback-presence marker. The marker was observed, which confirms that the retail observer received native callbacks. No numeric `retail_task` completion event was emitted, while the client again reached service 29 and did not emit service 10. The internal oracle's `ENUM(0)` completion is therefore not a universal prerequisite demonstrated by this external route; the external observer did not observe that diagnostic before or during service 29.
+
+The client again showed the same local patchable-bootstrap and investment-globals package-load assertions. Those assertions remain evidence for a local content/loading boundary, not authority to copy package data, alter package identity, or fabricate protocol state.
+
 ## Follow-up
 
-Compare the post-service-29 trigger/state conditions with the internal oracle using metadata-only instrumentation. Do not add a service-29 response, Queuez service 123, package content, account state, or another client launch until a new source-backed boundary is identified.
+Do not schedule another client launch from the current evidence. Preserve no-reply service 29 and no unsolicited Queuez behavior. The next offline work, if resumed, is a source-backed audit of the local bootstrap/package-loading boundary and its relation to the absent service-10 route, using only structural metadata and no package-content retention.

@@ -209,30 +209,23 @@ Human attention needed:
 
 ## Objective
 
-Run exactly one new isolated `external-trace` observation against the now-proven complete local discovery/HTTPS/BAP transport baseline. Establish the earliest metadata-supported client boundary after the Human/UI gate without adding protocol behavior.
+Audit why the historical client does not accept/proceed after the clean-room ContentConfig response, without launching Destiny or changing service behavior.
 
 ## Starting Evidence
 
-- A no-game Legion-facing probe directly proved NatProbe request/reply on both configured discovery ports and HTTPS SYN/SYN-ACK.
-- Isolation remains fail-closed and the protected external-validation runtime hashes are unchanged.
-- The prior game observation reported immediate Marionberry and emitted no fresh trace metadata; that result is not attributable to a task/service semantic boundary because the preceding transport baseline was incomplete.
+- Complete discovery and HTTPS transport baseline was directly proven from Legion.
+- A fresh trace observation reached local SignOn and `/config/`; the runtime recorded `content_config_served`.
+- The operator then reported configuration-download error `turkey`; no BAP connection occurred.
+- Trace metadata recorded config lookup `success_class` and first outbound transport `pending_class`; no task completion was reached.
 
 ## Required Work
 
-1. Re-run baseline preflight, isolation checks, and protected-runtime hashes.
-2. Start only the owned discovery/HTTPS/BAP baseline and filtered capture; verify their PID/socket status.
-3. Verify the trace DLL matches the documented fresh CI artifact and the trace runtime remains isolated from external-validation.
-4. Start the trace runtime. If interactive UI control remains unverified, pause in this same session at the Human/UI gate and request the minimum exact user action.
-5. After confirmed UI progression, collect a bounded metadata-only timeline: trace module/config/transport marker presence and outcome classes; packet direction/flag/port metadata only; runtime application-event kinds/counts only; authenticated BAP, `ENUM(0)`, service 29, service 10, and `250 -> 251` if reached.
-6. Stop only the session-owned client, capture, and listeners. Re-hash external-validation.
-7. Do not add service responses, alter discovery/BAP framing, change runtime settings, emit Queuez, or start a second game observation.
-
-## PASS Criteria
-
-- One Human/UI-gated isolated trace observation is completed against the proven transport baseline.
-- The first reached/failing client boundary is recorded with metadata-only evidence.
-- Protected runtime hashes, isolation, cleanup, tests, documentation, and a single next TODO are verified.
+1. Inspect the local ContentConfig encoder/cache parser and authorized known-good external baseline/source evidence.
+2. Compare response structure, field-presence classes, lengths/hashes, manifest-cache validation, and config-GUID handling only. Do not retain or commit response bodies, config values, manifests, identities, or secrets.
+3. Establish the first validated mismatch, or document evidence that local response equivalence remains unproven.
+4. Add narrowly scoped regression coverage for the validated structural invariant only; do not launch Destiny or add speculative server behavior.
+5. Validate, document, commit/push the focused PR update, and leave exactly one next TODO.
 
 ## Non-Goals
 
-Do not use this session to implement a response or repeat an observation after the bounded run.
+Do not modify discovery, SignOn, BAP, service 29, Queuez, account/world state, or conduct another client observation in this session.

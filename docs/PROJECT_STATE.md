@@ -8,7 +8,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 **CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. No later client request was observed during the documented window.
 
-**CURRENT FRONTIER:** the local discovery/HTTPS/BAP transport baseline is now directly proven from the Legion-facing interface. The next controlled trace run must determine why trace metadata was absent and whether the client reaches authenticated application behavior when that complete baseline is running. No task/service semantic result has yet been established.
+**CURRENT FRONTIER:** the complete-baseline trace run reached local SignOn and ContentConfig but produced no BAP connection. The client reported a configuration-download error after the local ContentConfig response. The first missing boundary is client acceptance of ContentConfig, not discovery, transport, BAP, task 0, or service 29.
 
 ## Confirmed Protocol Progress
 
@@ -100,7 +100,7 @@ Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local eviden
 
 ## Next Experiment
 
-Run exactly one new isolated external-trace observation against the proven complete discovery/HTTPS/BAP baseline. Preserve the protected external-validation runtime; do not add protocol behavior. After the Human/UI gate, capture only metadata necessary to determine trace marker output, external config/transport outcome classes, authenticated BAP, task `ENUM(0)`, service 29, and service 10. Stop all session-owned processes afterward.
+Audit ContentConfig acceptance without launching Destiny: compare only structural metadata and manifest/cache-derived field classes from the local clean-room response against authorized known-good external baseline/source evidence. Identify the first validated mismatch or prove the response-equivalence claim. Do not retain bodies/config values, alter BAP, or add speculative responses.
 
 ## Things That Must Not Be Reopened Without New Evidence
 
@@ -157,3 +157,11 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 **CONFIRMED hygiene:** forwarding remained disabled, public HTTPS remained blocked from Legion, protected external-validation hashes remained unchanged, and all session-owned listeners/capture were stopped.
 
 **LIMIT:** this proves transport baseline only. It does not establish the missing trace metadata, any authenticated route, task completion, or task/service divergence.
+
+## 2026-08-21 complete-baseline external trace observation
+
+**PARTIAL:** after the Human/UI gate, the operator reported configuration-download error `turkey`. The complete local baseline recorded two HTTPS requests, successful SignOn issuance, and a locally served ContentConfig response, but no BAP-port traffic or authenticated application event.
+
+**CONFIRMED trace metadata:** config lookup emitted `success_class`; first outbound transport emitted `pending_class`; module-init and retail-task markers were absent. This absence is not proof of non-execution.
+
+**NEXT:** audit ContentConfig response acceptance structurally against authorized known-good external evidence before another game run.

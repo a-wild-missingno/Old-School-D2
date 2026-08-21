@@ -8,7 +8,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 **CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. No later client request was observed during the documented window.
 
-**CURRENT FRONTIER:** binary identity is the first directly evidenced trace-vs-baseline startup divergence: the trace artifact digest differs from the known-good external-validation DLL. Marionberry occurred before listener application traffic with that different DLL, but causality, the responsible hook, and the external semantic differential remain UNKNOWN.
+**CURRENT FRONTIER:** a fresh provenance-controlled trace observation reached no authenticated application boundary. The local test baseline was incomplete: only HTTPS/BAP listeners were started; the separately owned UDP discovery responder was absent. The bounded capture recorded discovery-port UDP and HTTPS SYN traffic but no TCP SYN-ACK, BAP, or runtime application event. Trace metadata was absent, so no trace-vs-baseline semantic attribution is valid.
 
 ## Confirmed Protocol Progress
 
@@ -100,7 +100,7 @@ Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local eviden
 
 ## Next Experiment
 
-Diagnose why the dedicated external trace runtime reaches a client-visible Marionberry error before it produces an authenticated application event. First establish, with metadata-only trace/source evidence, whether the trace DLL changes the external transport/startup path relative to the known-good external-validation runtime. Do not add a service-29 reply or emit Queuez service `123`.
+Restore and prove the known-good external transport baseline *without launching the game*: start the existing independently implemented UDP NatProbe responder together with HTTPS/BAP, then use controlled off-client probes/capture to show the expected UDP reply and TCP SYN-ACK leave the lab interface. Diagnose any host firewall/interface/socket-namespace mismatch if either response is absent. Do not alter BAP behavior, add service-29 replies, or emit Queuez service `123`.
 
 ## Things That Must Not Be Reopened Without New Evidence
 
@@ -139,3 +139,13 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 **LIMIT:** the trace copy is correctly absent after cleanup. The documented trace source commit is unavailable in this repository and its CI run was not retrievable through either recorded remote, so source-level hook and installed-trace-settings comparison are unavailable. This does not prove the trace DLL caused Marionberry.
 
 **NEXT:** recover an authorized source/build record and require a Windows-CI rebuild to reproduce the documented trace DLL digest before adding metadata-only startup/transport stage markers.
+
+## 2026-08-21 fresh external trace observation
+
+**PARTIAL / pre-semantic failure:** a new trace DLL built by controlled Windows CI was installed only into the dedicated trace runtime. After the required Human/UI gate, the operator reported an immediate Marionberry error. The protected external-validation DLL and settings hashes were unchanged after cleanup.
+
+**CONFIRMED:** the bounded filtered capture contains ten UDP packets at the discovery port and nine TCP SYN packets at the HTTPS port; it contains no TCP SYN-ACK flags, no BAP-port packet, and no runtime HTTPS/BAP JSONL event. At launch, HTTPS/BAP were listening, but the project lab-start command had not started the separately owned UDP discovery responder.
+
+**LIMIT:** the fresh trace log contains no expected trace metadata markers (module, config-lookup, transport, or numeric retail-task completion). Therefore its absence is an instrumentation-observability result, not proof that module initialization or a lookup did not execute. The run cannot establish ENUM(0), service 29, service 10, or an external semantic differential.
+
+**NEXT:** prove the complete, known-good transport baseline (discovery UDP reply and TCP SYN-ACK) before another game observation.

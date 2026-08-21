@@ -9,6 +9,6 @@ ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 export OLD_SCHOOL_D2_LOG_PATH="${OLD_SCHOOL_D2_LOG_PATH:-$ROOT/var/runtime-events.jsonl}"
 mkdir -p "$ROOT/var"
 if [ -f "$ROOT/var/lab-server.pid" ] && kill -0 "$(cat "$ROOT/var/lab-server.pid")" 2>/dev/null; then echo 'lab listener already running'; exit 1; fi
-"$ROOT/.venv/bin/python" -m old_school_d2_service.runtime.app >"$ROOT/var/lab-server.stdout.log" 2>&1 &
+sudo -n --preserve-env=OLD_SCHOOL_D2_BIND_HOST,OLD_SCHOOL_D2_HTTPS_PORT,OLD_SCHOOL_D2_BAP_PORT,OLD_SCHOOL_D2_MANIFEST_CACHE,OLD_SCHOOL_D2_CONFIG_GUID,OLD_SCHOOL_D2_TLS_CERT,OLD_SCHOOL_D2_TLS_KEY,OLD_SCHOOL_D2_LOG_PATH "$ROOT/.venv/bin/python" -m old_school_d2_service.runtime.app >"$ROOT/var/lab-server.stdout.log" 2>&1 &
 echo $! > "$ROOT/var/lab-server.pid"
 echo "started HTTPS/BAP listener pid $(cat "$ROOT/var/lab-server.pid")"

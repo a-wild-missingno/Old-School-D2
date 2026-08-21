@@ -42,12 +42,16 @@ scripts/windows/preflight.sh <runtime>
 scripts/windows/start-destiny.sh <runtime>
 scripts/windows/stop-destiny.sh
 scripts/windows/hash-runtime.sh <runtime>
+scripts/windows/create-trace-runtime.sh external-validation external-trace
 scripts/windows/deploy-trace.sh <runtime> <prepared-artifact>
 scripts/windows/restore-runtime.sh <runtime>
 scripts/windows/tail-sunrise-log.sh <runtime> [1..500]
+scripts/windows/screenshot.sh <runtime> [local-png-path]
 scripts/windows/verify-isolation.sh
 scripts/windows/cleanup-test.sh [--destiny]
 ```
+
+`create-trace-runtime.sh external-validation external-trace` makes a fresh dedicated copy only when the trace target is absent and no Destiny process is running. It hashes the source/target DLL and settings and removes the target on a mismatch; it never changes the protected source.
 
 `deploy-trace` hashes the local artifact, backs up the managed target DLL,
 deploys, requires remote SHA-256 equality, and records a restore manifest under
@@ -94,6 +98,21 @@ exits before verification, it returns failure rather than claiming success.
 
 The temporary task and launch-state record are owned by the project and removed by
 `cleanup-test.sh`; task cleanup does not stop a still-running Destiny process.
+
+## Screenshots
+
+`screenshot.sh` runs a short-lived Windows Scheduled Task in the currently
+logged-in Explorer session, captures the virtual desktop, verifies the downloaded
+file has a PNG signature, and removes both the temporary task and remote image.
+By default it writes a timestamped PNG under `artifacts/screenshots/`, which is
+ignored by Git. It requires an active interactive Explorer session and supplies
+visual evidence only; it does not provide keyboard or mouse control.
+
+Example:
+
+```bash
+scripts/windows/screenshot.sh external-validation
+```
 
 ## Process control versus desktop control
 

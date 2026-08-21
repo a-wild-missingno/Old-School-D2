@@ -175,3 +175,9 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 **LIMIT:** this is a source-backed explanation for the observed `turkey` failure, not proof of sole causality. No post-reconciliation game observation has run and BAP/later services remain out of scope.
 
 **NEXT:** reconcile the external runtime's fetch token and listener field-5 UUID to the same verified cache-derived identity, add a preflight identity guard, then perform one new bounded observation. Do not change BAP or later services absent new evidence.
+
+## 2026-08-21 reconciled ContentConfig observation
+
+**CONFIRMED:** after the cache-derived ContentConfig identity was reconciled, the client passed the prior `turkey` boundary and reached the known authenticated encrypted-BAP stable black-screen wait. Metadata recorded `30 -> 31`, `25 -> 26`, `121 -> 122`, `302 -> 303`, `304 -> 305`, and recurring `250 -> 251`.
+
+**LIMIT:** no retail-task completion marker or later client route was observed in this bounded window. Do not change later service behavior without new evidence.

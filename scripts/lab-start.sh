@@ -10,6 +10,7 @@ export OLD_SCHOOL_D2_LOG_PATH="${OLD_SCHOOL_D2_LOG_PATH:-$ROOT/var/runtime-event
 DISCOVERY_PORTS=${OLD_SCHOOL_D2_DISCOVERY_PORTS:-"3074 3075"}
 DISCOVERY_ENV_FILE=${OLD_SCHOOL_D2_DISCOVERY_ENV_FILE:-/etc/old-school-d2/discovery.env}
 mkdir -p "$ROOT/var"
+"$ROOT/scripts/verify-contentconfig-identity.sh"
 
 if [ -f "$ROOT/var/lab-server.pid" ] && kill -0 "$(cat "$ROOT/var/lab-server.pid")" 2>/dev/null; then
   echo 'lab listener already running' >&2

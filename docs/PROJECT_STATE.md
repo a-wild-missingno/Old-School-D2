@@ -8,7 +8,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 **CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. No later client request was observed during the documented window.
 
-**CURRENT FRONTIER:** the internal/default Oracle proves task `ENUM(0)` completion is followed 16 ms later by one-way service 29. The sole dedicated external task-trace observation ended at a client-visible Marionberry error before an authenticated BAP application event; external task `ENUM(0)`, external service 29 after task 0, and the earliest semantic differential remain UNKNOWN.
+**CURRENT FRONTIER:** binary identity is the first directly evidenced trace-vs-baseline startup divergence: the trace artifact digest differs from the known-good external-validation DLL. Marionberry occurred before listener application traffic with that different DLL, but causality, the responsible hook, and the external semantic differential remain UNKNOWN.
 
 ## Confirmed Protocol Progress
 
@@ -130,3 +130,12 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 **LIMIT:** this does not demonstrate absent task 0 or absent service 29. The run failed before the task/service boundary. The historical non-task external ledger remains evidence of its own capture but does not establish the earliest semantic divergence.
 
 **CONFIRMED hygiene:** the dedicated trace copy was removed, its client process was stopped after the observation, and the known-good external-validation DLL/settings hashes remained unchanged. The bounded raw capture was discarded because it included SSH control traffic; only sanitized metadata is documented.
+
+
+## 2026-08-21 external trace provenance comparison
+
+**CONFIRMED:** current metadata shows the known-good external-validation DLL SHA-256 is 9f2fd0ef85b818eeb74e92a4dc33d151e242499cfccef08fa2e96fa45dc5c9ae, while the trace artifact recorded for the failed observation has SHA-256 3b72bbe0c18b466c8e39743fbb1ed7caa053acaf7ad041d5cc4b94b26380b65e. This binary-identity difference precedes configuration lookup, transport, and listener application traffic.
+
+**LIMIT:** the trace copy is correctly absent after cleanup. The documented trace source commit is unavailable in this repository and its CI run was not retrievable through either recorded remote, so source-level hook and installed-trace-settings comparison are unavailable. This does not prove the trace DLL caused Marionberry.
+
+**NEXT:** recover an authorized source/build record and require a Windows-CI rebuild to reproduce the documented trace DLL digest before adding metadata-only startup/transport stage markers.

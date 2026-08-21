@@ -193,22 +193,22 @@ Human attention needed:
 
 ## Objective
 
-Diagnose why the dedicated payload-free external trace runtime reaches a client-visible Marionberry error before it produces an HTTP or BAP application event at the isolated replacement listener.
+Recover the dedicated payload-free trace artifact source/build provenance and reproduce its recorded DLL digest in Windows CI before any deployment or client observation.
 
 ## Starting Evidence
 
-The sole authorized external task-trace observation completed its Human/UI gate but ended immediately at Marionberry. The trace log confirmed egress-hook and config-getter installation and recorded zero `retail_task` completions. The listener recorded no HTTP or BAP application event. The baseline external-validation runtime was unchanged after trace-copy cleanup. Therefore external task `ENUM(0)`, external service 29 after task 0, and the earliest semantic differential are UNKNOWN.
+The known-good external-validation DLL SHA-256 is 9f2fd0ef85b818eeb74e92a4dc33d151e242499cfccef08fa2e96fa45dc5c9ae. It differs from the trace artifact digest 3b72bbe0c18b466c8e39743fbb1ed7caa053acaf7ad041d5cc4b94b26380b65e recorded for the Marionberry observation. The trace copy is absent after cleanup. The documented source commit is not in this repository and the documented CI run was not retrievable through either recorded remote. Binary identity is therefore the first evidenced pre-transport divergence, but causality and the external task/service differential remain UNKNOWN.
 
 ## Required Work
 
-1. Do not repeat the game observation or add any protocol response.
-2. Compare the dedicated trace source/build provenance and startup/transport behavior with the known-good external-validation artifact using only metadata and source evidence.
-3. Identify the first evidenced trace-vs-baseline startup or external-transport divergence that can explain Marionberry before listener application traffic.
-4. If necessary, add only narrowly scoped payload-free startup/transport metadata to the dedicated trace branch, with Windows CI validation; do not retain retail text, BAP bodies, identities, endpoints, or raw client data.
-5. Preserve the baseline runtime and client isolation. Document the result, validate, commit, push, and update the existing PR.
+1. Do not deploy a trace runtime, launch Destiny, repeat a game observation, or add a protocol response.
+2. Obtain the authorized source revision and build workflow record through an authorized source repository or retained local build evidence.
+3. Rebuild in Windows CI and require DLL SHA-256 to equal 3b72bbe0c18b466c8e39743fbb1ed7caa053acaf7ad041d5cc4b94b26380b65e. On mismatch, document a provenance break and stop.
+4. Only on a matching rebuild, inspect trace-only startup/transport hooks and add payload-free, value-free stage metadata for module initialization, external-config lookup outcome class, and first outbound transport result class. Validate in Windows CI only.
+5. Preserve baseline runtime and isolation. Document, validate, commit, push, and update the active session PR.
 
 ## PASS Criteria
 
-- The first trace-vs-baseline startup/transport divergence before listener application traffic is directly evidenced, or a specific falsifiable next diagnostic is recorded.
-- No additional game observation or speculative protocol behavior is introduced.
-- Tests pass, documentation is updated, and the existing session PR is updated.
+- The trace artifact is reproducibly attributed to an authorized source/build record, or a documented digest mismatch falsifies that provenance.
+- Any instrumentation is payload-free, value-free, Windows-CI validated, and no runtime deployment, game observation, or speculative protocol behavior occurs.
+- Tests pass, documentation is updated, and the active session PR is updated.

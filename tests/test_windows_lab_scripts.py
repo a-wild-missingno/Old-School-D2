@@ -126,3 +126,21 @@ def test_capture_start_detaches_the_reviewed_local_command() -> None:
     script = (ROOT / "scripts" / "start-capture.sh").read_text()
     assert 'nohup sh -c "$OLD_SCHOOL_D2_CAPTURE_COMMAND"' in script
     assert '< /dev/null' in script
+
+
+def test_lab_start_manages_existing_discovery_lifecycle_without_putting_database_url_in_process_args() -> None:
+    script = (ROOT / "scripts" / "lab-start.sh").read_text()
+    assert "DISCOVERY_ENV_FILE" in script
+    assert "lab-discovery-$port.pid" in script
+    assert "-m old_school_d2_service" in script
+    assert "runuser -u syzygy -- env" not in script
+
+
+def test_transport_probe_uses_windows_lab_transport_for_natprobe_and_https_connectivity() -> None:
+    script = (WINDOWS / "probe-transport-baseline.sh").read_text()
+    assert "win_ps" in script
+    assert "UdpClient" in script
+    assert "NAT_PROBE_REPLY=PASS" in script
+    assert "TcpClient" in script
+    assert "HTTPS_CONNECT=PASS" in script
+    assert "TRANSPORT_BASELINE=PASS" in script

@@ -209,36 +209,30 @@ Human attention needed:
 
 ## Objective
 
-Restore and prove the complete **known-good external transport baseline without launching Destiny**. The next game observation is invalid until the independently implemented UDP NatProbe responder, HTTPS listener, and BAP listener are all demonstrably reachable and responsive from the Legion-facing interface.
+Run exactly one new isolated `external-trace` observation against the now-proven complete local discovery/HTTPS/BAP transport baseline. Establish the earliest metadata-supported client boundary after the Human/UI gate without adding protocol behavior.
 
 ## Starting Evidence
 
-- The fresh dedicated trace build was attributable to a controlled source delta and Windows CI artifact.
-- After the Human/UI gate, the operator reported immediate Marionberry.
-- The bounded filtered capture recorded discovery-port UDP packets and HTTPS SYN packets, but no TCP SYN-ACK, BAP traffic, or runtime application event.
-- `scripts/lab-start.sh` started HTTPS/BAP only; the repository's existing UDP discovery component is separately owned and was not started.
-- Fresh trace metadata did not emit; this is an observability failure, not proof of a client semantic boundary.
-- Protected external-validation DLL/settings hashes remained unchanged.
+- A no-game Legion-facing probe directly proved NatProbe request/reply on both configured discovery ports and HTTPS SYN/SYN-ACK.
+- Isolation remains fail-closed and the protected external-validation runtime hashes are unchanged.
+- The prior game observation reported immediate Marionberry and emitted no fresh trace metadata; that result is not attributable to a task/service semantic boundary because the preceding transport baseline was incomplete.
 
 ## Required Work
 
-1. Inspect the existing discovery component, its documented configuration, and its lifecycle controls. Do not reimplement NatProbe or change its proven reply framing.
-2. Add or repair only the minimal lab lifecycle/preflight support needed to start and stop the existing discovery responder alongside HTTPS/BAP, with explicit ownership and cleanup.
-3. Run automated tests and a controlled no-game network preflight from the Legion-facing interface:
-   - prove UDP NatProbe request/reply;
-   - prove an HTTPS TCP SYN receives a SYN-ACK;
-   - prove HTTPS/BAP/discovery listeners are the only intended ones;
-   - prove forwarding and Legion public-HTTPS isolation remain disabled.
-4. Record only metadata, hashes, and generic result classes. Keep raw captures ignored/local.
-5. If the responders cannot emit those responses, identify the first host firewall/interface/socket-namespace/process-ownership divergence and make that the next TODO.
-6. Do not launch Destiny, deploy another DLL, change external-validation, add protocol behavior, or implement service 29/Queuez/account/world behavior in this session.
+1. Re-run baseline preflight, isolation checks, and protected-runtime hashes.
+2. Start only the owned discovery/HTTPS/BAP baseline and filtered capture; verify their PID/socket status.
+3. Verify the trace DLL matches the documented fresh CI artifact and the trace runtime remains isolated from external-validation.
+4. Start the trace runtime. If interactive UI control remains unverified, pause in this same session at the Human/UI gate and request the minimum exact user action.
+5. After confirmed UI progression, collect a bounded metadata-only timeline: trace module/config/transport marker presence and outcome classes; packet direction/flag/port metadata only; runtime application-event kinds/counts only; authenticated BAP, `ENUM(0)`, service 29, service 10, and `250 -> 251` if reached.
+6. Stop only the session-owned client, capture, and listeners. Re-hash external-validation.
+7. Do not add service responses, alter discovery/BAP framing, change runtime settings, emit Queuez, or start a second game observation.
 
 ## PASS Criteria
 
-- The full known-good transport baseline is running with explicit lifecycle ownership.
-- A no-game preflight directly demonstrates NatProbe reply and HTTPS SYN-ACK on the lab interface while isolation remains intact.
-- Tests and documentation are updated, raw evidence remains local/ignored, one focused PR is opened, and exactly one next TODO is written.
+- One Human/UI-gated isolated trace observation is completed against the proven transport baseline.
+- The first reached/failing client boundary is recorded with metadata-only evidence.
+- Protected runtime hashes, isolation, cleanup, tests, documentation, and a single next TODO are verified.
 
 ## Non-Goals
 
-Do not conduct another game observation or infer any task/service semantic result until the transport baseline is proven.
+Do not use this session to implement a response or repeat an observation after the bounded run.

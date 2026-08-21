@@ -48,6 +48,7 @@ scripts/windows/restore-runtime.sh <runtime>
 scripts/windows/tail-sunrise-log.sh <runtime> [1..500]
 scripts/windows/screenshot.sh <runtime> [local-png-path]
 scripts/windows/verify-isolation.sh
+scripts/windows/probe-transport-baseline.sh
 scripts/windows/cleanup-test.sh [--destiny]
 ```
 
@@ -137,3 +138,7 @@ the `READY FOR GAME TEST` gate in the Windows-lab skill.
   files; investigate the dedicated runtime.
 - Isolation failure: do not launch the client. Repair the lab outside these
   scripts, then re-run the read-only verification.
+
+## No-game transport baseline probe
+
+Start the session-owned local listeners and filtered capture, then run `scripts/windows/probe-transport-baseline.sh`. It sends recognized NatProbe requests from Legion and makes one bounded HTTPS TCP connection. Pair its PASS output with capture metadata showing UDP request/reply and TCP SYN/SYN-ACK before a game observation. Stop the capture and listeners afterward. This probe is transport-only; it does not launch Destiny or make an HTTP request.

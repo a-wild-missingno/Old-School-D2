@@ -8,7 +8,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 **CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. No later client request was observed during the documented window.
 
-**CURRENT FRONTIER:** a fresh provenance-controlled trace observation reached no authenticated application boundary. The local test baseline was incomplete: only HTTPS/BAP listeners were started; the separately owned UDP discovery responder was absent. The bounded capture recorded discovery-port UDP and HTTPS SYN traffic but no TCP SYN-ACK, BAP, or runtime application event. Trace metadata was absent, so no trace-vs-baseline semantic attribution is valid.
+**CURRENT FRONTIER:** the local discovery/HTTPS/BAP transport baseline is now directly proven from the Legion-facing interface. The next controlled trace run must determine why trace metadata was absent and whether the client reaches authenticated application behavior when that complete baseline is running. No task/service semantic result has yet been established.
 
 ## Confirmed Protocol Progress
 
@@ -100,7 +100,7 @@ Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local eviden
 
 ## Next Experiment
 
-Restore and prove the known-good external transport baseline *without launching the game*: start the existing independently implemented UDP NatProbe responder together with HTTPS/BAP, then use controlled off-client probes/capture to show the expected UDP reply and TCP SYN-ACK leave the lab interface. Diagnose any host firewall/interface/socket-namespace mismatch if either response is absent. Do not alter BAP behavior, add service-29 replies, or emit Queuez service `123`.
+Run exactly one new isolated external-trace observation against the proven complete discovery/HTTPS/BAP baseline. Preserve the protected external-validation runtime; do not add protocol behavior. After the Human/UI gate, capture only metadata necessary to determine trace marker output, external config/transport outcome classes, authenticated BAP, task `ENUM(0)`, service 29, and service 10. Stop all session-owned processes afterward.
 
 ## Things That Must Not Be Reopened Without New Evidence
 
@@ -149,3 +149,11 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 **LIMIT:** the fresh trace log contains no expected trace metadata markers (module, config-lookup, transport, or numeric retail-task completion). Therefore its absence is an instrumentation-observability result, not proof that module initialization or a lookup did not execute. The run cannot establish ENUM(0), service 29, service 10, or an external semantic differential.
 
 **NEXT:** prove the complete, known-good transport baseline (discovery UDP reply and TCP SYN-ACK) before another game observation.
+
+## 2026-08-21 full external transport preflight
+
+**CONFIRMED:** the existing discovery responder was restored to the lab lifecycle beside HTTPS/BAP. A bounded no-game Legion probe directly received recognized NatProbe replies on both configured discovery ports and completed HTTPS TCP connection. The filtered capture recorded two inbound discovery datagrams, two outbound replies, one HTTPS SYN, and one HTTPS SYN-ACK.
+
+**CONFIRMED hygiene:** forwarding remained disabled, public HTTPS remained blocked from Legion, protected external-validation hashes remained unchanged, and all session-owned listeners/capture were stopped.
+
+**LIMIT:** this proves transport baseline only. It does not establish the missing trace metadata, any authenticated route, task completion, or task/service divergence.

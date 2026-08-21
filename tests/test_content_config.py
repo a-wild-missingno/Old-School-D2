@@ -111,3 +111,14 @@ def test_builds_content_config_with_matching_guid_and_package_rows() -> None:
 def test_rejects_noncanonical_config_guid(guid: str) -> None:
     with pytest.raises(ValueError):
         build_content_config_response((), guid)
+
+
+def test_derives_source_compatible_guid_from_canonical_rows() -> None:
+    from old_school_d2_service.content_config import derive_content_manifest_guid
+
+    guid = derive_content_manifest_guid((
+        ContentManifestRow("w64_test_001", 0x100, 99),
+        ContentManifestRow("w64_test_002", 0x101, 100),
+    ))
+
+    assert guid == "f30a2e2d-7a57-8c84-b927-5bb290d22b18"

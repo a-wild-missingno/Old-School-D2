@@ -42,12 +42,17 @@ scripts/windows/preflight.sh <runtime>
 scripts/windows/start-destiny.sh <runtime>
 scripts/windows/stop-destiny.sh
 scripts/windows/hash-runtime.sh <runtime>
+scripts/windows/create-trace-runtime.sh external-validation external-trace
 scripts/windows/deploy-trace.sh <runtime> <prepared-artifact>
 scripts/windows/restore-runtime.sh <runtime>
 scripts/windows/tail-sunrise-log.sh <runtime> [1..500]
+scripts/windows/screenshot.sh <runtime> [local-png-path]
 scripts/windows/verify-isolation.sh
+scripts/windows/probe-transport-baseline.sh
 scripts/windows/cleanup-test.sh [--destiny]
 ```
+
+`create-trace-runtime.sh external-validation external-trace` makes a fresh dedicated copy only when the trace target is absent and no Destiny process is running. It hashes the source/target DLL and settings and removes the target on a mismatch; it never changes the protected source.
 
 `deploy-trace` hashes the local artifact, backs up the managed target DLL,
 deploys, requires remote SHA-256 equality, and records a restore manifest under
@@ -95,6 +100,21 @@ exits before verification, it returns failure rather than claiming success.
 The temporary task and launch-state record are owned by the project and removed by
 `cleanup-test.sh`; task cleanup does not stop a still-running Destiny process.
 
+## Screenshots
+
+`screenshot.sh` runs a short-lived Windows Scheduled Task in the currently
+logged-in Explorer session, captures the virtual desktop, verifies the downloaded
+file has a PNG signature, and removes both the temporary task and remote image.
+By default it writes a timestamped PNG under `artifacts/screenshots/`, which is
+ignored by Git. It requires an active interactive Explorer session and supplies
+visual evidence only; it does not provide keyboard or mouse control.
+
+Example:
+
+```bash
+scripts/windows/screenshot.sh external-validation
+```
+
 ## Process control versus desktop control
 
 A running `destiny2.exe` proves only that a process exists. It does not prove a
@@ -118,3 +138,7 @@ the `READY FOR GAME TEST` gate in the Windows-lab skill.
   files; investigate the dedicated runtime.
 - Isolation failure: do not launch the client. Repair the lab outside these
   scripts, then re-run the read-only verification.
+
+## No-game transport baseline probe
+
+Start the session-owned local listeners and filtered capture, then run `scripts/windows/probe-transport-baseline.sh`. It sends recognized NatProbe requests from Legion and makes one bounded HTTPS TCP connection. Pair its PASS output with capture metadata showing UDP request/reply and TCP SYN/SYN-ACK before a game observation. Stop the capture and listeners afterward. This probe is transport-only; it does not launch Destiny or make an HTTP request.

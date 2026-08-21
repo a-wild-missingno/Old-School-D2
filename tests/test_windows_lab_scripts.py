@@ -88,3 +88,59 @@ def test_cleanup_removes_only_managed_interactive_launch_tasks() -> None:
     script = (WINDOWS / "cleanup-test.sh").read_text()
     assert "OldSchoolD2Lab-" in script
     assert "Unregister-ScheduledTask" in script
+
+
+def test_screenshot_capture_uses_the_interactive_windows_session_and_retrieves_png() -> None:
+    script = (WINDOWS / "screenshot.sh").read_text()
+    common = (WINDOWS / "common.sh").read_text()
+    assert "GetOwner" in script
+    assert "-LogonType Interactive" in script
+    assert "CopyFromScreen" in script
+    assert "SCREENSHOT_CAPTURE=PASS" in script
+    assert "win_scp_from" in script
+    assert "win_scp_from" in common
+
+
+def test_scp_download_normalizes_windows_paths_for_openssh() -> None:
+    common = (WINDOWS / "common.sh").read_text()
+    assert 'source=${source//' + chr(92) * 2 + '//}' in common
+
+
+def test_trace_runtime_creation_is_copy_only_and_rejects_any_non_dedicated_alias() -> None:
+    script = (WINDOWS / "create-trace-runtime.sh").read_text()
+    assert 'source_alias" = external-validation' in script
+    assert 'target_alias" = external-trace' in script
+    assert 'TRACE_TARGET_RUNTIME=EXISTS' in script
+    assert r'Copy-Item -LiteralPath \$source -Destination \$target -Recurse' in script
+    assert 'Get-FileHash -Algorithm SHA256' in script
+    assert 'DESTINY_RUNNING=YES' in script
+
+
+def test_lab_start_uses_noninteractive_privilege_for_default_https_port() -> None:
+    script = (ROOT / "scripts" / "lab-start.sh").read_text()
+    assert 'sudo -n --preserve-env=OLD_SCHOOL_D2_BIND_HOST' in script
+    assert 'OLD_SCHOOL_D2_LOG_PATH' in script
+
+
+def test_capture_start_detaches_the_reviewed_local_command() -> None:
+    script = (ROOT / "scripts" / "start-capture.sh").read_text()
+    assert 'nohup sh -c "$OLD_SCHOOL_D2_CAPTURE_COMMAND"' in script
+    assert '< /dev/null' in script
+
+
+def test_lab_start_manages_existing_discovery_lifecycle_without_putting_database_url_in_process_args() -> None:
+    script = (ROOT / "scripts" / "lab-start.sh").read_text()
+    assert "DISCOVERY_ENV_FILE" in script
+    assert "lab-discovery-$port.pid" in script
+    assert "-m old_school_d2_service" in script
+    assert "runuser -u syzygy -- env" not in script
+
+
+def test_transport_probe_uses_windows_lab_transport_for_natprobe_and_https_connectivity() -> None:
+    script = (WINDOWS / "probe-transport-baseline.sh").read_text()
+    assert "win_ps" in script
+    assert "UdpClient" in script
+    assert "NAT_PROBE_REPLY=PASS" in script
+    assert "TcpClient" in script
+    assert "HTTPS_CONNECT=PASS" in script
+    assert "TRANSPORT_BASELINE=PASS" in script

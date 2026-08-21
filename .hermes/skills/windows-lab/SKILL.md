@@ -31,6 +31,7 @@ dedicated trace/oracle runtime explicitly authorized by private configuration.
   SHA-256 equality, and records a managed restore manifest.
 - `restore-runtime.sh <runtime>` — restores only a DLL backup made by deploy.
 - `tail-sunrise-log.sh <runtime> [lines]` — bounded tail (1–500 lines).
+- `screenshot.sh <runtime> [local-png-path]` — captures the logged-in Windows desktop with a short-lived Interactive Task Scheduler task, retrieves a verified PNG locally, then removes the remote capture. It is visual evidence, not input control.
 - `verify-isolation.sh` — confirms gateway forwarding is disabled and public
   HTTPS probes are blocked from Legion; it never changes isolation.
 - `cleanup-test.sh [--destiny]` — cleans only configured project processes and,

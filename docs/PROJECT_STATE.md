@@ -8,7 +8,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 **CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. No later client request was observed during the documented window.
 
-**CURRENT FRONTIER:** binary identity is the first directly evidenced trace-vs-baseline startup divergence: the trace artifact digest differs from the known-good external-validation DLL. Marionberry occurred before listener application traffic with that different DLL, but causality, the responsible hook, and the external semantic differential remain UNKNOWN.
+**CURRENT FRONTIER:** the complete-baseline trace run reached local SignOn and ContentConfig but produced no BAP connection. The client reported a configuration-download error after the local ContentConfig response. The first missing boundary is client acceptance of ContentConfig, not discovery, transport, BAP, task 0, or service 29.
 
 ## Confirmed Protocol Progress
 
@@ -100,7 +100,7 @@ Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local eviden
 
 ## Next Experiment
 
-Diagnose why the dedicated external trace runtime reaches a client-visible Marionberry error before it produces an authenticated application event. First establish, with metadata-only trace/source evidence, whether the trace DLL changes the external transport/startup path relative to the known-good external-validation runtime. Do not add a service-29 reply or emit Queuez service `123`.
+Audit ContentConfig acceptance without launching Destiny: compare only structural metadata and manifest/cache-derived field classes from the local clean-room response against authorized known-good external baseline/source evidence. Identify the first validated mismatch or prove the response-equivalence claim. Do not retain bodies/config values, alter BAP, or add speculative responses.
 
 ## Things That Must Not Be Reopened Without New Evidence
 
@@ -139,3 +139,39 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 **LIMIT:** the trace copy is correctly absent after cleanup. The documented trace source commit is unavailable in this repository and its CI run was not retrievable through either recorded remote, so source-level hook and installed-trace-settings comparison are unavailable. This does not prove the trace DLL caused Marionberry.
 
 **NEXT:** recover an authorized source/build record and require a Windows-CI rebuild to reproduce the documented trace DLL digest before adding metadata-only startup/transport stage markers.
+
+## 2026-08-21 fresh external trace observation
+
+**PARTIAL / pre-semantic failure:** a new trace DLL built by controlled Windows CI was installed only into the dedicated trace runtime. After the required Human/UI gate, the operator reported an immediate Marionberry error. The protected external-validation DLL and settings hashes were unchanged after cleanup.
+
+**CONFIRMED:** the bounded filtered capture contains ten UDP packets at the discovery port and nine TCP SYN packets at the HTTPS port; it contains no TCP SYN-ACK flags, no BAP-port packet, and no runtime HTTPS/BAP JSONL event. At launch, HTTPS/BAP were listening, but the project lab-start command had not started the separately owned UDP discovery responder.
+
+**LIMIT:** the fresh trace log contains no expected trace metadata markers (module, config-lookup, transport, or numeric retail-task completion). Therefore its absence is an instrumentation-observability result, not proof that module initialization or a lookup did not execute. The run cannot establish ENUM(0), service 29, service 10, or an external semantic differential.
+
+**NEXT:** prove the complete, known-good transport baseline (discovery UDP reply and TCP SYN-ACK) before another game observation.
+
+## 2026-08-21 full external transport preflight
+
+**CONFIRMED:** the existing discovery responder was restored to the lab lifecycle beside HTTPS/BAP. A bounded no-game Legion probe directly received recognized NatProbe replies on both configured discovery ports and completed HTTPS TCP connection. The filtered capture recorded two inbound discovery datagrams, two outbound replies, one HTTPS SYN, and one HTTPS SYN-ACK.
+
+**CONFIRMED hygiene:** forwarding remained disabled, public HTTPS remained blocked from Legion, protected external-validation hashes remained unchanged, and all session-owned listeners/capture were stopped.
+
+**LIMIT:** this proves transport baseline only. It does not establish the missing trace metadata, any authenticated route, task completion, or task/service divergence.
+
+## 2026-08-21 complete-baseline external trace observation
+
+**PARTIAL:** after the Human/UI gate, the operator reported configuration-download error `turkey`. The complete local baseline recorded two HTTPS requests, successful SignOn issuance, and a locally served ContentConfig response, but no BAP-port traffic or authenticated application event.
+
+**CONFIRMED trace metadata:** config lookup emitted `success_class`; first outbound transport emitted `pending_class`; module-init and retail-task markers were absent. This absence is not proof of non-execution.
+
+**NEXT:** audit ContentConfig response acceptance structurally against authorized known-good external evidence before another game run.
+
+## 2026-08-21 ContentConfig acceptance audit
+
+**CONFIRMED:** the version-2 local manifest cache's stored build fingerprint matches its complete canonical row set under Sunrise's published fingerprint and UUID derivation. The cache itself is therefore not the first structural mismatch.
+
+**FIRST MISMATCH:** the ContentConfig UUID derived from that verified cache does not equal the separately configured external listener response UUID. The reference encoder writes the cache-derived UUID into top-level field 5, while the Python listener served the configured value. Values and payload bodies are intentionally omitted.
+
+**LIMIT:** this is a source-backed explanation for the observed `turkey` failure, not proof of sole causality. No post-reconciliation game observation has run and BAP/later services remain out of scope.
+
+**NEXT:** reconcile the external runtime's fetch token and listener field-5 UUID to the same verified cache-derived identity, add a preflight identity guard, then perform one new bounded observation. Do not change BAP or later services absent new evidence.

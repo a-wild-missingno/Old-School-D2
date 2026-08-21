@@ -28,6 +28,14 @@ win_scp_to() {
   [ -n "${LEGION_SSH_KEY:-}" ] && cmd+=(-i "$LEGION_SSH_KEY")
   "${cmd[@]}" "$source" "$(win_target):$destination"
 }
+win_scp_from() {
+  local source=$1 destination=$2
+  # Windows OpenSSH's scp endpoint accepts drive-qualified paths with forward slashes.
+  source=${source//\\//}
+  local -a cmd=("$WINDOWS_LAB_SCP_BIN" -o BatchMode=yes -o LogLevel=ERROR -o ConnectTimeout=20 -P "$LEGION_SSH_PORT")
+  [ -n "${LEGION_SSH_KEY:-}" ] && cmd+=(-i "$LEGION_SSH_KEY")
+  "${cmd[@]}" "$(win_target):$source" "$destination"
+}
 win_ps() {
   local script=$1 encoded
   script="\$ProgressPreference='SilentlyContinue'; $script"

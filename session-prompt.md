@@ -209,134 +209,23 @@ Human attention needed:
 
 ## Objective
 
-Create a **fresh provenance-controlled external trace build from the current known-good external-validation source baseline**, then run one controlled external observation to identify the earliest evidenced divergence that prevents the replacement-server path from progressing toward character selection.
-
-The observation must determine, at minimum, whether external task `ENUM(0)` completes, whether service `29` follows, whether service `10` follows, and where the first meaningful internal/default-vs-external divergence occurs.
+Audit why the historical client does not accept/proceed after the clean-room ContentConfig response, without launching Destiny or changing service behavior.
 
 ## Starting Evidence
 
-Use `docs/PROJECT_STATE.md` and the relevant experiment records as authoritative state.
-
-Confirmed evidence includes:
-
-- The current known-good external-validation DLL SHA-256 is `9f2fd0ef85b818eeb74e92a4dc33d151e242499cfccef08fa2e96fa45dc5c9ae`.
-- The earlier failed external trace observation used a different instrumented DLL, recorded as `3b72bbe0c18b466c8e39743fbb1ed7caa053acaf7ad041d5cc4b94b26380b65e`.
-- A differing DLL digest is expected for an instrumented build. **The problem is not that the hashes differ; the problem is that source/build equivalence between that historical trace artifact and the known-good external-validation baseline was not established.** Therefore the Marionberry result from that trace cannot be attributed to the listener, config lookup, transport, or any specific hook.
-- The historical trace source/build provenance is incomplete. Exact byte-for-byte reproduction of that obsolete artifact is useful only if readily available; it is **not** required to move forward.
-- The internal/default Oracle reached character select. It recorded `world_controller` task `ENUM(0)` completion 16 ms before the first accepted one-way service-29 request; nine service-29 requests required no synthetic reply, and service `10` followed.
-- The known-good external path reaches stable authenticated encrypted BAP with recurring `250 -> 251` traffic but does not reach character selection; service `29`/`10` have not been established on that stable external path.
-
-The project needs a comparable external timeline produced by a trace whose provenance and instrumentation delta are controlled.
+- Complete discovery and HTTPS transport baseline was directly proven from Legion.
+- A fresh trace observation reached local SignOn and `/config/`; the runtime recorded `content_config_served`.
+- The operator then reported configuration-download error `turkey`; no BAP connection occurred.
+- Trace metadata recorded config lookup `success_class` and first outbound transport `pending_class`; no task completion was reached.
 
 ## Required Work
 
-1. **Anchor the trace to the known-good baseline.**
-   - Identify the exact authorized source revision/build inputs corresponding to the current known-good external-validation runtime as far as repository/local evidence permits.
-   - If the historical trace source is readily recoverable, inspect it for useful prior hooks, but do not make recovery or exact old-digest reproduction a prerequisite.
-   - If exact historical provenance cannot be recovered promptly, create a new dedicated trace branch directly from the verified current known-good source baseline.
-
-2. **Keep the instrumentation delta minimal and reviewable.**
-   Add only metadata needed to locate the first divergence, such as:
-   - module initialization reached/not reached;
-   - external-config lookup outcome **class** without endpoint/config values;
-   - first outbound transport result **class** without endpoint/payload values;
-   - timestamped numeric retail-task completion metadata sufficient to detect `ENUM(0)`;
-   - service number/timing metadata already available from the lab/server path for services such as `29`, `10`, and recurring `250/251`.
-
-   Do **not** retain formatted retail-log text, packet/BAP bodies, identities, account values, endpoint values, secrets, or unrelated client data.
-
-3. **Prove the source delta, not historical binary identity.**
-   - Review and document the source diff from the known-good baseline to the trace build.
-   - The trace should differ only by the narrowly required observability changes and unavoidable build metadata.
-   - Build in controlled Windows CI.
-   - Record source commit, base commit, workflow/run identity, compiler/build context where practical, artifact SHA-256, and the reviewed instrumentation diff.
-   - Exact reproduction of `3b72...b65e` is **not required**. If it reproduces naturally, record that fact; otherwise continue with the fresh provenance-known artifact.
-
-4. **Preserve the known-good runtime.**
-   - Use the installed `windows-lab` skill and `scripts/windows/` for routine Legion operations.
-   - Record hashes of the original `external-validation` DLL/settings before the experiment.
-   - Deploy instrumentation only to an approved dedicated `external-trace` copy.
-   - Never instrument or overwrite `external-validation` in place.
-
-5. **Preflight the controlled external experiment.**
-   Verify before launch:
-   - trace artifact hash matches the freshly built artifact;
-   - trace settings match the intended external configuration except for controlled trace-only differences;
-   - Legion Internet isolation passes;
-   - OptiPlex IPv4/IPv6 forwarding remains disabled;
-   - only the intended replacement-server listeners/capture are running;
-   - no conflicting Destiny process is running;
-   - original external-validation hashes remain unchanged.
-
-6. **Run exactly one controlled external observation.**
-   - Start the known-good replacement-server baseline behavior; do not add speculative protocol responses.
-   - Start the dedicated trace runtime.
-   - If interactive automation is not verified, use the Human / UI Interaction Gate above and **wait in the same session** for the user to start/advance the game.
-   - Do not interpret absence of traffic until expected UI/bootflow progression is confirmed.
-
-7. **Produce an aligned timeline.**
-   Determine with evidence:
-
-   ```text
-   MODULE INITIALIZATION:       YES / NO
-   EXTERNAL CONFIG LOOKUP:      success-class / failure-class / not reached
-   FIRST OUTBOUND TRANSPORT:    success-class / failure-class / not reached
-   AUTHENTICATED BAP:           YES / NO
-   ENUM(0) COMPLETE:            YES / NO
-   FIRST SERVICE 29:            timestamp / NONE
-   SERVICE 29 COUNT:            value / NONE
-   FIRST SERVICE 10:            timestamp / NONE
-   SERVICE 10 COUNT:            value / NONE
-   RECURRING 250 -> 251:        YES / NO
-   FINAL OBSERVED CLIENT STATE: ...
-   FIRST EVIDENCED DIVERGENCE:  ...
-   ```
-
-   Align this against the internal/default Oracle and the known-good external baseline. Do not force `ENUM(0)` to be the answer; if an earlier startup/config/transport/state divergence appears, that earlier boundary becomes authoritative.
-
-8. **Interpret conservatively but move the frontier.**
-   - If the fresh trace itself fails before the known-good external baseline, identify the earliest trace-vs-baseline startup/transport divergence and make the next TODO about that controlled instrumentation delta—not about resurrecting the old artifact hash.
-   - If external never completes `ENUM(0)`, move the frontier to the nearest preceding semantic/task-state difference.
-   - If external completes `ENUM(0)` but emits no service `29`, narrow the frontier to the condition between task completion and service `29`.
-   - If service `29` occurs but service `10` does not, move the frontier between `29` and `10`.
-   - If service `10` occurs, advance to the next first divergence toward character selection.
-
-9. **Do not implement speculative server behavior in this observation session.**
-   In particular, do not add:
-   - service-29 acknowledgements;
-   - Queuez service `123`;
-   - guessed account/character state;
-   - activity/world state;
-   - speculative notifications.
-
-   The purpose of this session is to establish the next semantic boundary the replacement server must implement.
-
-10. After the observation:
-    - stop only processes/captures/listeners started by this session;
-    - restore the dedicated trace copy as appropriate;
-    - verify original external-validation DLL/settings hashes are unchanged;
-    - preserve raw evidence only in ignored/local form with hashes/references;
-    - update project state/experiment documentation;
-    - validate, commit, push, and open/update one PR;
-    - write exactly one next TODO at the newly evidenced boundary;
-    - do **not** begin implementing that next boundary in the same session.
-
-## PASS Criteria
-
-- A fresh external trace artifact is attributable to a known-good authorized source baseline with a reviewed minimal instrumentation diff and recorded CI artifact digest.
-- One correctly started, isolated external observation is completed unless a deterministic earlier trace-vs-baseline failure itself establishes the first controlled divergence.
-- The session establishes the earliest evidenced divergence relevant to advancing the replacement server toward character selection, including explicit `ENUM(0)`, service `29`, and service `10` results when those stages are reached.
-- The original external-validation runtime remains unchanged.
-- No speculative server behavior is introduced.
-- Tests pass, documentation is updated, exactly one next TODO is written, and one session PR is opened/updated.
+1. Inspect the local ContentConfig encoder/cache parser and authorized known-good external baseline/source evidence.
+2. Compare response structure, field-presence classes, lengths/hashes, manifest-cache validation, and config-GUID handling only. Do not retain or commit response bodies, config values, manifests, identities, or secrets.
+3. Establish the first validated mismatch, or document evidence that local response equivalence remains unproven.
+4. Add narrowly scoped regression coverage for the validated structural invariant only; do not launch Destiny or add speculative server behavior.
+5. Validate, document, commit/push the focused PR update, and leave exactly one next TODO.
 
 ## Non-Goals
 
-Do not:
-
-- spend the session trying to reproduce an obsolete experimental DLL byte-for-byte unless that happens naturally from the recovered authorized build;
-- treat a trace-vs-baseline hash difference by itself as a causal protocol divergence;
-- contact or depend on Bungie/public production services;
-- modify the known-good external-validation installation in place;
-- implement Queuez/account/character/activity behavior without first evidencing that boundary;
-- continue into the next discovered protocol boundary after this session completes.
+Do not modify discovery, SignOn, BAP, service 29, Queuez, account/world state, or conduct another client observation in this session.

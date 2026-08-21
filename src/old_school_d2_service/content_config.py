@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import hashlib
 import re
 import struct
 
@@ -29,6 +30,23 @@ class ContentManifestRow:
     name: str
     package_id: int
     build_signature: int
+
+
+def derive_content_manifest_guid(rows: tuple[ContentManifestRow, ...]) -> str:
+    """Derive Sunrise's public version-8 UUID from canonical manifest rows."""
+    digest = hashlib.sha256()
+    digest.update(b"SunriseContentRows\0\1")
+    digest.update(len(rows).to_bytes(4, "little"))
+    for row in rows:
+        name = row.name.encode("ascii")
+        digest.update(len(name).to_bytes(2, "little"))
+        digest.update(name)
+        digest.update(row.package_id.to_bytes(2, "little"))
+        digest.update(row.build_signature.to_bytes(8, "little"))
+    value = bytearray(digest.digest()[:16])
+    value[6] = (value[6] & 0x0F) | 0x80
+    value[8] = (value[8] & 0x3F) | 0x80
+    return f"{value.hex()[:8]}-{value.hex()[8:12]}-{value.hex()[12:16]}-{value.hex()[16:20]}-{value.hex()[20:]}"
 
 
 def _varint(value: int) -> bytes:

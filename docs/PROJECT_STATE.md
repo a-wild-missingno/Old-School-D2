@@ -165,3 +165,13 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 **CONFIRMED trace metadata:** config lookup emitted `success_class`; first outbound transport emitted `pending_class`; module-init and retail-task markers were absent. This absence is not proof of non-execution.
 
 **NEXT:** audit ContentConfig response acceptance structurally against authorized known-good external evidence before another game run.
+
+## 2026-08-21 ContentConfig acceptance audit
+
+**CONFIRMED:** the version-2 local manifest cache's stored build fingerprint matches its complete canonical row set under Sunrise's published fingerprint and UUID derivation. The cache itself is therefore not the first structural mismatch.
+
+**FIRST MISMATCH:** the ContentConfig UUID derived from that verified cache does not equal the separately configured external listener response UUID. The reference encoder writes the cache-derived UUID into top-level field 5, while the Python listener served the configured value. Values and payload bodies are intentionally omitted.
+
+**LIMIT:** this is a source-backed explanation for the observed `turkey` failure, not proof of sole causality. No post-reconciliation game observation has run and BAP/later services remain out of scope.
+
+**NEXT:** reconcile the external runtime's fetch token and listener field-5 UUID to the same verified cache-derived identity, add a preflight identity guard, then perform one new bounded observation. Do not change BAP or later services absent new evidence.

@@ -1,6 +1,6 @@
 # Complete build-data readiness metadata probe
 
-Status: READY FOR CONTROLLED DEPLOYMENT — source-backed, metadata-only; no client run in this investigation
+Status: PARTIAL — all eleven local readiness domains complete; black screen and absent service 10 remain
 
 ## Question
 
@@ -23,15 +23,21 @@ Commit `8506f35d45a90d4ca35f0f89cdf940c579f2bbf8` changes only the existing once
 - preserves no package names, package data, assertion text, identities, payloads, or protocol fields;
 - does not change the investment worker, refresh order, persistence, assertions, BAP, service 29, Queuez, account state, or replacement service behavior.
 
-Windows validation build `32575906197` completed successfully with MSBuild and artifact upload. No artifact is deployed and no game was launched during the source-only investigation.
+Windows validation build `32575906197` completed successfully with MSBuild and artifact upload. The artifact was hash-verified and deployed only to the dedicated trace runtime for one bounded observation.
 
-## Falsifiable next observation
+## Observation result
 
-After the Windows build has passed and the probe is deployed only to the dedicated trace runtime, run one bounded external observation.
+The operator again observed a persistent black screen with no visible error. The trace log recorded exactly one complete readiness state before external SignOn and ContentConfig:
 
-- If `all_ready=0` persists before the black screen, the next investigation is the first omitted false domain and remains local/content-readiness-only.
-- If `all_ready=1` occurs before the black screen with no client service 10, full build-data readiness is ruled out as the missing pre-service-10 condition for this run.
-- Any result preserves the existing no-reply service-29, no-Queuez, and no-package-data constraints.
+`ev=build_data stage=domains named=1 items=1 details=1 buckets=1 sockets=1 abilities=1 progressions=1 scenarios=1 spawns=1 hash_names=1 constants=1 all_ready=1`
+
+The listener then recorded the established authenticated BAP prefix, nine no-reply service-29 notifications, and recurring `250 -> 251` keepalives; it did not record client service 10. The same local patchable-bootstrap and investment-globals assertions recurred with `result_code=0`, not `-87`.
+
+**Conclusion:** complete build-data readiness is not the missing pre-service-10 condition in this external run. This does not prove the local package assertions are causal or authorize changes to packages, Queuez, account state, service 29, or the replacement service.
+
+## Next falsifiable step
+
+Use source-only review to find the earliest metadata-safe native readiness/transition after the all-ready state and before the service-10 branch. The next candidate must differentiate the internal/default oracle from this external trace without recording package data or changing behavior.
 
 ## Validation
 

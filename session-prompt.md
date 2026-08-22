@@ -209,22 +209,22 @@ Human attention needed:
 
 ## Objective
 
-Use source-only comparison to identify the first evidence-backed post-service-29/local-content readiness or ordering condition that precedes client service 10 in the internal/default oracle but is unobserved in the external trace.
+Identify, from authorized source and sanitized ledgers only, the earliest native readiness/transition after complete local build-data readiness that could differentiate the internal/default service-10 route from the external black-screen route.
 
 ## Starting Evidence
 
-- External trace now completes SignOn, ContentConfig, authenticated BAP, nine no-reply service-29 notifications, and recurring `250 -> 251` keepalives, but not client service 10.
-- Metadata-only local assertion classification observed patchable-bootstrap and investment-globals failures after service 29; neither event carried `-87`, and no registration-class assertion occurred in the bounded run.
-- Those assertions are local observations only; they do not establish a server/protocol response requirement.
+- A CI-built trace probe recorded all eleven investment-worker readiness domains as true and `all_ready=1` before external SignOn and ContentConfig.
+- The same run completed authenticated BAP, sent nine no-reply service-29 notifications, and continued recurring `250 -> 251` keepalives with no client service 10.
+- Patchable-bootstrap and investment-globals assertions recurred with result code 0, but temporal co-occurrence does not establish causality.
 
 ## Required Work
 
-1. Compare only authorized source and existing metadata ledgers for the internal/default oracle and external trace around post-service-29 local-content/bootstrap readiness.
-2. Identify the earliest concrete ordering/readiness difference that can be observed without retaining package data, raw assertion text, identities, or encrypted payloads.
-3. Add a narrowly scoped metadata-only probe and regression coverage only if that difference is source-backed.
+1. Compare the internal/default oracle and external trace source/metadata around the first native state transition after the all-ready report.
+2. Identify one falsifiable, metadata-only observation point that is source-backed and omits package names/data, assertion text, identities, and encrypted payloads.
+3. Add the narrow probe and a regression guard only if the observation point distinguishes a real branch/order condition.
 4. Do not launch Destiny, modify the replacement service, alter package data, add a service-29 reply, send Queuez service 123, or add account/world state.
-5. Validate, document, commit/push a focused update, and leave exactly one next TODO.
+5. Validate, document, commit/push the focused result, and leave exactly one next TODO.
 
 ## Non-Goals
 
-Do not infer that a package assertion is causal solely because it occurs in the same run as the absent service-10 route. Do not rerun the client until the next probe is source-backed and reviewable.
+Do not treat complete build-data readiness as a solution: it has now been observed in the persistent-black-screen external run. Do not infer causality from the package assertions without a source-backed branch or ordering differential.

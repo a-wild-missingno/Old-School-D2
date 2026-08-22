@@ -190,6 +190,12 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 
 **NEXT:** use the now-aligned service-29 boundary for a metadata-only post-29 differential; preserve the listener's no-reply behavior.
 
+## 2026-08-22 in-process character-signin probe design
+
+**DESIGN ONLY:** a proposed once-only metadata event reuses the existing signature in Sunrise's own executable-range view. It would report match cardinality (0/1/2plus) and, only for one target, up to four direct `E8 rel32` caller RVAs. It serializes no bytes, target/module addresses, arguments, strings, package/account/payload data, or behavior.
+
+**NOT IMPLEMENTED:** no source code, build, deployment, or game run is authorized by this design review. Implementation/deployment each require their own review decision.
+
 ## 2026-08-22 character-signin loaded-module scan
 
 **CONFIRMED:** the explicitly authorized external read-only scanner read eleven loaded main-module sections (145,070,000 bytes) and found zero exact target-signature matches, despite 11,632 generic-prefix candidates and Sunrise's own hook-install log. No target RVA/caller was derived.

@@ -209,15 +209,16 @@ Human attention needed:
 
 ## Objective
 
-Await separate approval before designing any in-process, metadata-only self-observation of the character-sign-in signature/caller. The completed external process-memory view cannot recover that target.
+Await approval to implement (but not deploy) the reviewed in-process character-sign-in metadata probe.
 
-## Established Facts
+## Approved Design Boundary
 
-- Static on-disk scan: zero signature matches.
-- Approved external loaded-module scan: 11 sections / 145,070,000 bytes read, 11,632 generic prefix candidates, zero exact matches.
-- Sunrise's own trace log reports character-select hook installation; the discrepancy is unexplained, not a caller result.
-- Destiny stopped, isolation enabled, protected baseline hashes unchanged.
+- Reuse the existing signature and Sunrise's own executable-image ranges.
+- Once-only event: match cardinality 0/1/2plus; if unique, max four direct `E8 rel32` caller RVAs.
+- No bytes, target/module addresses, arguments, strings, payloads, package/account data, or behavior changes.
+- No implementation, CI build, deployment, or game run has happened for this design.
 
-## Required Safety if Scope Expands
+## Required Next Gates
 
-Review a precise in-process observation design first. It must be read-only, bounded to target-match/caller metadata, retain no code bytes/payload/account/package data, patch nothing, and not include title-screen input or a game test without another human gate.
+1. Explicit approval to implement source + tests only.
+2. After validation, separate approval to deploy/run; retain human title-screen gate for any game test.

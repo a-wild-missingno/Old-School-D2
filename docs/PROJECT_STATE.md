@@ -190,6 +190,12 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 
 **NEXT:** use the now-aligned service-29 boundary for a metadata-only post-29 differential; preserve the listener's no-reply behavior.
 
+## 2026-08-22 character-signin loaded-module scan
+
+**CONFIRMED:** the explicitly authorized external read-only scanner read eleven loaded main-module sections (145,070,000 bytes) and found zero exact target-signature matches, despite 11,632 generic-prefix candidates and Sunrise's own hook-install log. No target RVA/caller was derived.
+
+**LIMIT:** the source hook's in-process image view and external reader differ or otherwise cannot be correlated from this evidence. Moving to in-process self-observation is a separate scope and must be reviewed explicitly.
+
 ## 2026-08-22 character-signin static call-site scan
 
 **CONFIRMED:** the user-authorized read-only scan of every PE section in the configured on-disk executable found zero occurrences of the source-defined character-sign-in signature. No static target RVA or direct caller exists to instrument from that image.

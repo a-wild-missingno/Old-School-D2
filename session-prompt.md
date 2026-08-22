@@ -209,14 +209,15 @@ Human attention needed:
 
 ## Objective
 
-Await separate authorization before any loaded-process observation or symbol/disassembly work. The completed offline-only executable scan found no static copy of the source-defined character-sign-in target signature.
+Await separate approval before designing any in-process, metadata-only self-observation of the character-sign-in signature/caller. The completed external process-memory view cannot recover that target.
 
-## Evidence
+## Established Facts
 
-- Game not running; isolation remains enabled.
-- Offline scan of every PE section yielded `TARGET_SIGNATURE_MATCHES=0` for the source hook signature.
-- Therefore no static target RVA or direct caller can be derived; no marker was added.
+- Static on-disk scan: zero signature matches.
+- Approved external loaded-module scan: 11 sections / 145,070,000 bytes read, 11,632 generic prefix candidates, zero exact matches.
+- Sunrise's own trace log reports character-select hook installation; the discrepancy is unexplained, not a caller result.
+- Destiny stopped, isolation enabled, protected baseline hashes unchanged.
 
-## Scope Required To Advance
+## Required Safety if Scope Expands
 
-If authorized, use bounded read-only observation of the loaded Destiny main module solely to check target/caller metadata. Do not patch, modify, inject new behavior, record bytes/payloads/package/account data, change service behavior, or run a game test without a separate human interaction gate.
+Review a precise in-process observation design first. It must be read-only, bounded to target-match/caller metadata, retain no code bytes/payload/account/package data, patch nothing, and not include title-screen input or a game test without another human gate.

@@ -22,6 +22,6 @@ Write-Output ('TARGET_SIGNATURE_MATCHES='+$matches.Count)
 if($matches.Count -ne 1){exit 0}
 $target=Rva $matches[0];Write-Output ('TARGET_RVA=0x{0:X}' -f $target)
 $callers=[Collections.Generic.List[uint32]]::new()
-foreach($s in $sections){$start=[int]$s.Raw;$end=[Math]::Min([int64]$b.Length,[int64]$s.Raw+[int64]$s.Size);for($o=$start;$o -le $end-5;$o++){if($b[$o]-ne 0xE8){continue};$r=Rva $o;$dst=[int64]$r+5+(I32 $b ($o+1));if($dst -eq [int64]$target){$callers.Add($r)}}}
+foreach($s in $sections){$start=[int]$s.Raw;$end=[Math]::Min([int64]$b.Length,[int64]$s.Raw+[int64]$s.Size);for($o=$start;$o -le $end-5;$o++){if($b[$o] -ne 0xE8){continue};$r=Rva $o;$dst=[int64]$r+5+(I32 $b ($o+1));if($dst -eq [int64]$target){$callers.Add($r)}}}
 Write-Output ('DIRECT_REL32_CALLERS='+$callers.Count)
 if($callers.Count -eq 0){Write-Output 'NO_DIRECT_CALLER=YES'}else{$xs=$callers|select -First 16|%{'0x{0:X}' -f $_};Write-Output ('CALLER_RVAS='+($xs -join ','));if($callers.Count -gt 16){Write-Output 'CALLER_RVAS_TRUNCATED=YES'}}

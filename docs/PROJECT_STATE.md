@@ -190,6 +190,12 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 
 **NEXT:** use the now-aligned service-29 boundary for a metadata-only post-29 differential; preserve the listener's no-reply behavior.
 
+## 2026-08-22 character-signin static call-site scan
+
+**CONFIRMED:** the user-authorized read-only scan of every PE section in the configured on-disk executable found zero occurrences of the source-defined character-sign-in signature. No static target RVA or direct caller exists to instrument from that image.
+
+**LIMIT:** the hook's runtime target can differ from the on-disk representation. Resolving that needs separately authorized loaded-process observation or independently matched symbols/disassembly; no inference is made from the zero static match.
+
 ## 2026-08-22 character-signin predecessor source limit
 
 **CONFIRMED:** Sunrise source resolves the character-sign-in enter handler only via a unique target signature and supplies no caller, call-site, or predecessor state-machine target. The external trace cannot source-safely instrument an earlier native branch without guessing.

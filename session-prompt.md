@@ -209,14 +209,14 @@ Human attention needed:
 
 ## Objective
 
-Await explicit scope authorization before performing any static call-site analysis of the locally installed game executable to locate a predecessor of the character-sign-in enter handler.
+Await separate authorization before any loaded-process observation or symbol/disassembly work. The completed offline-only executable scan found no static copy of the source-defined character-sign-in target signature.
 
-## Established Boundary
+## Evidence
 
-- Authorized Sunrise source contains a unique signature for the handler target but no caller/call-site, predecessor state, or symbolic game-native call graph.
-- The external trace has reached completed investment refresh and service 29, but not the existing character-select entry marker.
-- No source-backed earlier target remains; guessing one would violate the observation-only constraint.
+- Game not running; isolation remains enabled.
+- Offline scan of every PE section yielded `TARGET_SIGNATURE_MATCHES=0` for the source hook signature.
+- Therefore no static target RVA or direct caller can be derived; no marker was added.
 
-## If Explicitly Authorized
+## Scope Required To Advance
 
-Use offline/static local executable analysis only. Do not run Destiny, execute/patch the binary, retain package/payload/account data, change the replacement service, reply to service 29, emit Queuez 123, or modify account/world state. First produce a unique static call-site candidate and a bounded metadata-only observation plan for review.
+If authorized, use bounded read-only observation of the loaded Destiny main module solely to check target/caller metadata. Do not patch, modify, inject new behavior, record bytes/payloads/package/account data, change service behavior, or run a game test without a separate human interaction gate.

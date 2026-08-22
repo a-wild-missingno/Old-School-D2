@@ -209,23 +209,22 @@ Human attention needed:
 
 ## Objective
 
-Audit why the historical client does not accept/proceed after the clean-room ContentConfig response, without launching Destiny or changing service behavior.
+Use source-only comparison to identify the first evidence-backed post-service-29/local-content readiness or ordering condition that precedes client service 10 in the internal/default oracle but is unobserved in the external trace.
 
 ## Starting Evidence
 
-- Complete discovery and HTTPS transport baseline was directly proven from Legion.
-- A fresh trace observation reached local SignOn and `/config/`; the runtime recorded `content_config_served`.
-- The operator then reported configuration-download error `turkey`; no BAP connection occurred.
-- Trace metadata recorded config lookup `success_class` and first outbound transport `pending_class`; no task completion was reached.
+- External trace now completes SignOn, ContentConfig, authenticated BAP, nine no-reply service-29 notifications, and recurring `250 -> 251` keepalives, but not client service 10.
+- Metadata-only local assertion classification observed patchable-bootstrap and investment-globals failures after service 29; neither event carried `-87`, and no registration-class assertion occurred in the bounded run.
+- Those assertions are local observations only; they do not establish a server/protocol response requirement.
 
 ## Required Work
 
-1. Inspect the local ContentConfig encoder/cache parser and authorized known-good external baseline/source evidence.
-2. Compare response structure, field-presence classes, lengths/hashes, manifest-cache validation, and config-GUID handling only. Do not retain or commit response bodies, config values, manifests, identities, or secrets.
-3. Establish the first validated mismatch, or document evidence that local response equivalence remains unproven.
-4. Add narrowly scoped regression coverage for the validated structural invariant only; do not launch Destiny or add speculative server behavior.
-5. Validate, document, commit/push the focused PR update, and leave exactly one next TODO.
+1. Compare only authorized source and existing metadata ledgers for the internal/default oracle and external trace around post-service-29 local-content/bootstrap readiness.
+2. Identify the earliest concrete ordering/readiness difference that can be observed without retaining package data, raw assertion text, identities, or encrypted payloads.
+3. Add a narrowly scoped metadata-only probe and regression coverage only if that difference is source-backed.
+4. Do not launch Destiny, modify the replacement service, alter package data, add a service-29 reply, send Queuez service 123, or add account/world state.
+5. Validate, document, commit/push a focused update, and leave exactly one next TODO.
 
 ## Non-Goals
 
-Do not modify discovery, SignOn, BAP, service 29, Queuez, account/world state, or conduct another client observation in this session.
+Do not infer that a package assertion is causal solely because it occurs in the same run as the absent service-10 route. Do not rerun the client until the next probe is source-backed and reviewable.

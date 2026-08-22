@@ -8,7 +8,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 **CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection, emits no-reply service `29` notifications, and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. Client service `10` was not observed during the documented windows.
 
-**CURRENT FRONTIER:** repeated trace-only runs after the privacy-safe SignOn bootstrap handoff reach authenticated BAP and no-reply service 29, but not client service 10 or Queuez service 123. A metadata-only retail callback marker confirms that the task observer receives native callbacks, yet it does not observe the internal-oracle `ENUM(0)` completion diagnostic. The next missing boundary is post-service-29/local-content state, not discovery, ContentConfig acceptance, BAP acknowledgement, task-observer installation, or a service-29 reply.
+**CURRENT FRONTIER:** repeated trace-only runs after the privacy-safe SignOn bootstrap handoff reach authenticated BAP and no-reply service 29, but not client service 10 or Queuez service 123. A metadata-only retail callback marker confirms that the task observer receives native callbacks, yet it does not observe the internal-oracle `ENUM(0)` completion diagnostic. A later metadata-only assert classifier observed patchable-bootstrap and investment-globals local load failures after service 29, neither carrying `-87`; it did not observe the registration class. The next missing boundary is post-service-29/local-content state, not discovery, ContentConfig acceptance, BAP acknowledgement, task-observer installation, or a service-29 reply.
 
 ## Confirmed Protocol Progress
 
@@ -189,3 +189,11 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 **LIMIT:** the user-visible result remained a black screen; client service 10 and server Queuez service 123 were not observed. Local package-load assertions were observed but do not justify copying package data or changing server behavior.
 
 **NEXT:** use the now-aligned service-29 boundary for a metadata-only post-29 differential; preserve the listener's no-reply behavior.
+
+## 2026-08-22 external package-assert classifier observation
+
+**CONFIRMED:** a Windows-CI-built metadata-only assert classifier ran only in the dedicated external trace runtime. After successful SignOn, ContentConfig, authenticated BAP, and nine no-reply service-29 requests, it classified local `patchable_bootstrap` and `investment_globals` failures. Neither event carried the observed `-87` marker; no registration-class assertion appeared in the bounded run. Client service 10 remained absent.
+
+**LIMIT:** these local assertions are temporally post-bootstrap observations, not proof of a causal service-10 prerequisite. They do not justify package data, server replies, Queuez, or account state.
+
+**NEXT:** source-only compare the post-service-29/local-content ordering between the internal/default oracle and external trace to select one metadata-only readiness/ordering probe before another game run.

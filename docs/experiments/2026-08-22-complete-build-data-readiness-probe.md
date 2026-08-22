@@ -1,6 +1,6 @@
 # Complete build-data readiness metadata probe
 
-Status: PARTIAL — all eleven local readiness domains complete; black screen and absent service 10 remain
+Status: PARTIAL — all eleven readiness domains are true; persistence completion was not yet observed
 
 ## Question
 
@@ -33,11 +33,13 @@ The operator again observed a persistent black screen with no visible error. The
 
 The listener then recorded the established authenticated BAP prefix, nine no-reply service-29 notifications, and recurring `250 -> 251` keepalives; it did not record client service 10. The same local patchable-bootstrap and investment-globals assertions recurred with `result_code=0`, not `-87`.
 
-**Conclusion:** complete build-data readiness is not the missing pre-service-10 condition in this external run. This does not prove the local package assertions are causal or authorize changes to packages, Queuez, account state, service 29, or the replacement service.
+**Corrected conclusion:** all eleven in-memory readiness predicates were true, but source review found that the worker reaches its terminal `g_complete` state only if the subsequent `persist()` call returns true. The existing readiness event is emitted after `refresh()` but does not expose that boolean. Therefore the run rules out an incomplete in-memory domain, but it does **not** yet rule out persistence completion as the missing condition.
+
+This does not prove the local package assertions are causal or authorize changes to packages, Queuez, account state, service 29, or the replacement service.
 
 ## Next falsifiable step
 
-Use source-only review to find the earliest metadata-safe native readiness/transition after the all-ready state and before the service-10 branch. The next candidate must differentiate the internal/default oracle from this external trace without recording package data or changing behavior.
+A source-backed trace-only probe now emits one bounded `ev=build_data stage=persist result=complete|pending` event per worker lifecycle, immediately after the native `refresh()` return. A complete result before the same black screen rules out persistence completion; a pending result identifies the first remaining local completion boundary. No package data or behavior changes are involved.
 
 ## Validation
 

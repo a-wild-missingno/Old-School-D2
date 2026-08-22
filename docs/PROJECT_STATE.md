@@ -8,7 +8,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 **CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection, emits no-reply service `29` notifications, and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. Client service `10` was not observed during the documented windows.
 
-**CURRENT FRONTIER:** repeated trace-only runs after the privacy-safe SignOn bootstrap handoff reach authenticated BAP and no-reply service 29, but not client service 10 or Queuez service 123. A metadata-only retail callback marker confirms that the task observer receives native callbacks, yet it does not observe the internal-oracle `ENUM(0)` completion diagnostic. A later metadata-only assert classifier observed patchable-bootstrap and investment-globals local load failures after service 29, neither carrying `-87`; it did not observe the registration class. Source review then found that the existing build-data report exposes only eight of eleven prerequisites used by the investment worker completion predicate. The completed eleven-domain probe recorded `all_ready=1` before the same external black-screen/service-10 absence, ruling out incomplete local build-data readiness for that run. Discovery, ContentConfig acceptance, BAP acknowledgement, task-observer installation, and service-29 no-reply behavior remain unchanged.
+**CURRENT FRONTIER:** repeated trace-only runs after the privacy-safe SignOn bootstrap handoff reach authenticated BAP and no-reply service 29, but not client service 10 or Queuez service 123. A metadata-only retail callback marker confirms that the task observer receives native callbacks, yet it does not observe the internal-oracle `ENUM(0)` completion diagnostic. A later metadata-only assert classifier observed patchable-bootstrap and investment-globals local load failures after service 29, neither carrying `-87`; it did not observe the registration class. Source review then found that the existing build-data report exposes only eight of eleven prerequisites used by the investment worker completion predicate. The completed eleven-domain probe recorded `all_ready=1` before the same external black-screen/service-10 absence, ruling out an incomplete in-memory domain mask but not the following native `persist()` return, which the first report did not expose. Discovery, ContentConfig acceptance, BAP acknowledgement, task-observer installation, and service-29 no-reply behavior remain unchanged.
 
 ## Confirmed Protocol Progress
 
@@ -196,9 +196,9 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 
 **PROBE RESULT:** the trace-only reporter emitted all eleven bounded booleans and `all_ready=1` before the same service-29/keepalive black-screen route. The CI-built probe changed no refresh, persistence, package handling, or protocol state.
 
-**CONCLUSION:** incomplete investment-worker build-data readiness is ruled out for this run. The result is not evidence that package assertions are causal and does not authorize package or server changes.
+**CORRECTED LIMIT:** `all_ready=1` proves only the eleven domain predicates. The worker marks its refresh complete only when its immediately preceding persistence call succeeds, and the earlier report omitted that return.
 
-**NEXT:** source-only inspect the first native readiness/transition after all-ready that differentiates the internal/default oracle from the external service-10 absence; select one metadata-only probe before another game run.
+**NEXT:** the source-backed trace probe reports that bounded persistence outcome immediately after `refresh()`. Build/validate it, then use one external observation to rule out or isolate the final investment-worker completion boundary before investigating a later native transition.
 
 ## 2026-08-22 external package-assert classifier observation
 

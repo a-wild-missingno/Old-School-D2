@@ -209,22 +209,22 @@ Human attention needed:
 
 ## Objective
 
-Identify, from authorized source and sanitized ledgers only, the earliest native readiness/transition after complete local build-data readiness that could differentiate the internal/default service-10 route from the external black-screen route.
+Determine, with one metadata-only trace point, whether the external investment worker reaches its native persistence-complete state after all eleven in-memory build-data domains become ready.
 
 ## Starting Evidence
 
-- A CI-built trace probe recorded all eleven investment-worker readiness domains as true and `all_ready=1` before external SignOn and ContentConfig.
-- The same run completed authenticated BAP, sent nine no-reply service-29 notifications, and continued recurring `250 -> 251` keepalives with no client service 10.
-- Patchable-bootstrap and investment-globals assertions recurred with result code 0, but temporal co-occurrence does not establish causality.
+- The latest external black-screen run recorded all eleven in-memory readiness fields as true (`all_ready=1`) before SignOn/ContentConfig and the normal authenticated service-29 route.
+- Source review shows the worker sets `g_complete` from `refresh()`, whose ready branch returns `state::build_data::persist()`.
+- The prior readiness report ran after that call but did not retain its boolean return, so `all_ready=1` does not prove worker completion.
 
 ## Required Work
 
-1. Compare the internal/default oracle and external trace source/metadata around the first native state transition after the all-ready report.
-2. Identify one falsifiable, metadata-only observation point that is source-backed and omits package names/data, assertion text, identities, and encrypted payloads.
-3. Add the narrow probe and a regression guard only if the observation point distinguishes a real branch/order condition.
-4. Do not launch Destiny, modify the replacement service, alter package data, add a service-29 reply, send Queuez service 123, or add account/world state.
+1. Build and CI-validate the trace-only `persist result=complete|pending` metadata probe already added immediately after `refresh()`.
+2. Deploy only after artifact hash verification and protected-runtime checks.
+3. Run one bounded external observation; do not change any service behavior.
+4. Record whether persistence completion occurs before the black screen/service-10 absence.
 5. Validate, document, commit/push the focused result, and leave exactly one next TODO.
 
 ## Non-Goals
 
-Do not treat complete build-data readiness as a solution: it has now been observed in the persistent-black-screen external run. Do not infer causality from the package assertions without a source-backed branch or ordering differential.
+Do not add package data, change persistence behavior, alter replacement-service responses, reply to service 29, emit Queuez service 123, or infer package-assertion causality from temporal proximity.

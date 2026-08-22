@@ -209,22 +209,21 @@ Human attention needed:
 
 ## Objective
 
-Identify, from authorized source and sanitized ledgers only, the earliest native transition after completed investment refresh that differs between the internal/default service-10 route and the external black-screen route.
+Use source-only signature/call-site review to identify a unique, privacy-safe predecessor of the native character-sign-in enter handler that the internal/default oracle reaches but the external black-screen run does not.
 
 ## Starting Evidence
 
-- The latest external trace reported `persist result=complete` followed by all eleven readiness domains true.
-- It then completed the same authenticated BAP prefix, nine no-reply service-29 notifications, and recurring `250 -> 251` keepalives, but no client service 10.
-- The worker completion boundary is now ruled out for that run; package assertions remain correlation only.
+- External trace and reference have identical bootflow and callback-dispatch source.
+- The external route completes investment persistence, authenticated BAP, and service 29, but does not emit the existing `character_select result=held` entry marker or later bootflow runtime markers.
+- The internal/default oracle reached character select; source shows its enter handler emits that marker only after the original native enter handler runs.
 
 ## Required Work
 
-1. Trace source call ordering after `client::content::investment::worker::service()` completes and compare it to the internal/default oracle's recorded route.
-2. Identify one source-backed, metadata-only native state/branch transition that can distinguish the paths without retaining text, package data, identity, or payloads.
-3. Add a narrow regression guard and probe only if the observation point has a concrete source basis.
-4. Do not launch Destiny, modify the replacement service, alter package data, reply to service 29, send Queuez service 123, or add account/world state.
-5. Validate, document, commit/push the focused result, and leave exactly one next TODO.
+1. Review authorized source signatures and call-site relationships for a unique predecessor of character-sign-in entry.
+2. Add one bounded metadata-only entry/order marker only if the target is unique and the marker carries no arguments, text, package data, identity, or payloads.
+3. Do not launch Destiny, modify replacement-service behavior, alter packages, reply to service 29, emit Queuez 123, or change account/world state.
+4. Validate, document, commit/push the focused result, leaving one next TODO.
 
 ## Non-Goals
 
-Do not revisit incomplete build-data readiness or persistence as a cause for this run. Do not infer causal package behavior from the two local assertions alone.
+Do not re-instrument the character-select enter hook itself: its existing `result=held` runtime marker already distinguishes the route. Do not infer package assertion causality.

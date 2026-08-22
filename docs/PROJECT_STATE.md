@@ -8,7 +8,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 **CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection, emits no-reply service `29` notifications, and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. Client service `10` was not observed during the documented windows.
 
-**CURRENT FRONTIER:** repeated trace-only runs after the privacy-safe SignOn bootstrap handoff reach authenticated BAP and no-reply service 29, but not client service 10 or Queuez service 123. A metadata-only retail callback marker confirms that the task observer receives native callbacks, yet it does not observe the internal-oracle `ENUM(0)` completion diagnostic. A later metadata-only assert classifier observed patchable-bootstrap and investment-globals local load failures after service 29, neither carrying `-87`; it did not observe the registration class. Source review then found that the existing build-data report exposes only eight of eleven prerequisites used by the investment worker completion predicate. The completed eleven-domain probe recorded `all_ready=1` before the same external black-screen/service-10 absence. A follow-up metadata probe then recorded the immediately preceding `persist result=complete`, ruling out both incomplete domains and failed build-data persistence for that run. Discovery, ContentConfig acceptance, BAP acknowledgement, task-observer installation, and service-29 no-reply behavior remain unchanged.
+**CURRENT FRONTIER:** repeated trace-only runs after the privacy-safe SignOn bootstrap handoff reach authenticated BAP and no-reply service 29, but not client service 10 or Queuez service 123. A metadata-only retail callback marker confirms that the task observer receives native callbacks, yet it does not observe the internal-oracle `ENUM(0)` completion diagnostic. A later metadata-only assert classifier observed patchable-bootstrap and investment-globals local load failures after service 29, neither carrying `-87`; it did not observe the registration class. The eleven-domain readiness and immediate persistence-completion probes both passed before the same external black-screen/service-10 absence. Source comparison then showed the external run does not enter the existing native character-select handler that the internal/default oracle reaches; external trace does not alter that bootflow path. Discovery, ContentConfig acceptance, BAP acknowledgement, task-observer installation, and service-29 no-reply behavior remain unchanged.
 
 ## Confirmed Protocol Progress
 
@@ -189,6 +189,14 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 **LIMIT:** the user-visible result remained a black screen; client service 10 and server Queuez service 123 were not observed. Local package-load assertions were observed but do not justify copying package data or changing server behavior.
 
 **NEXT:** use the now-aligned service-29 boundary for a metadata-only post-29 differential; preserve the listener's no-reply behavior.
+
+## 2026-08-22 post-investment bootflow boundary
+
+**CONFIRMED:** external-trace and reference bootflow/callback source are identical. After completed investment refresh, the external trace has only bootflow installation events, not the existing character-select enter marker (`result=held`) nor later bootflow runtime markers. The internal/default oracle reached character select.
+
+**CONCLUSION:** the next observed divergence is before native character-sign-in entry, not the local investment worker. A duplicate marker at that already instrumented entry would add no evidence.
+
+**NEXT:** source-only locate one unique predecessor of the character-sign-in enter path; add a bounded metadata marker only if the predecessor is source-backed and privacy-safe.
 
 ## 2026-08-22 complete build-data readiness probe
 

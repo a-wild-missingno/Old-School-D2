@@ -37,3 +37,5 @@ Start from `docs/experiments/template.md`. Link the record here only after recor
 | 2026-08-22 | [character-signin static call-site scan](experiments/2026-08-22-character-signin-static-callsite-scan.md) | User-authorized offline PE scan | COMPLETE: source target signature absent from on-disk executable; no caller inferred |
 | 2026-08-22 | [character-signin loaded-module scan](experiments/2026-08-22-character-signin-loaded-module-scan.md) | User-authorized external read-only process-memory scan | COMPLETE: 145 MB / 11 sections read, but no target signature/caller recovered |
 | 2026-08-22 | [in-process character-signin probe design](experiments/2026-08-22-in-process-character-signin-probe-design.md) | Bounded metadata probe | IMPLEMENTED/source-tested only; no Windows build, deploy, or run |
+
+| 2026-08-22 | [in-process character-signin probe result](experiments/2026-08-22-in-process-character-signin-probe-result.md) | Built trace-only live observation | COMPLETE: unique target / zero direct callers; black screen unchanged |

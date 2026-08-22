@@ -207,18 +207,8 @@ Human attention needed:
 
 # CURRENT TODO
 
-## Objective
+## Session closure
 
-Await approval to implement (but not deploy) the reviewed in-process character-sign-in metadata probe.
+Latest probe: Sunrise in-process scan found `matches=1 direct_callers=0` for character-signin entry, while the live external run remained a black screen. This excludes only direct rel32 callers; it does not establish a cause. All runtime processes/listeners/capture are stopped and isolation is verified.
 
-## Approved Design Boundary
-
-- Reuse the existing signature and Sunrise's own executable-image ranges.
-- Once-only event: match cardinality 0/1/2plus; if unique, max four direct `E8 rel32` caller RVAs.
-- No bytes, target/module addresses, arguments, strings, payloads, package/account data, or behavior changes.
-- No implementation, CI build, deployment, or game run has happened for this design.
-
-## Required Next Gates
-
-1. Explicit approval to implement source + tests only.
-2. After validation, separate approval to deploy/run; retain human title-screen gate for any game test.
+Next work requires a newly scoped hypothesis; do not launch again by default.

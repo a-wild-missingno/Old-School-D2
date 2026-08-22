@@ -1,6 +1,6 @@
 # Complete build-data readiness metadata probe
 
-Status: PARTIAL — all eleven readiness domains are true; persistence completion was not yet observed
+Status: PARTIAL — all eleven readiness domains and persistence completion observed; black screen/service-10 absence remains
 
 ## Question
 
@@ -33,17 +33,18 @@ The operator again observed a persistent black screen with no visible error. The
 
 The listener then recorded the established authenticated BAP prefix, nine no-reply service-29 notifications, and recurring `250 -> 251` keepalives; it did not record client service 10. The same local patchable-bootstrap and investment-globals assertions recurred with `result_code=0`, not `-87`.
 
-**Corrected conclusion:** all eleven in-memory readiness predicates were true, but source review found that the worker reaches its terminal `g_complete` state only if the subsequent `persist()` call returns true. The existing readiness event is emitted after `refresh()` but does not expose that boolean. Therefore the run rules out an incomplete in-memory domain, but it does **not** yet rule out persistence completion as the missing condition.
+**Conclusion:** the follow-up CI-built trace emitted `ev=build_data stage=persist result=complete` immediately before the all-eleven-domain readiness event, then followed the same black-screen route without client service 10. The investment worker reached its native terminal completion state in this run.
 
-This does not prove the local package assertions are causal or authorize changes to packages, Queuez, account state, service 29, or the replacement service.
+Therefore both incomplete in-memory build data and failed build-data persistence are ruled out as the missing pre-service-10 condition for this external run. This does not prove the local package assertions are causal or authorize changes to packages, Queuez, account state, service 29, or the replacement service.
 
 ## Next falsifiable step
 
-A source-backed trace-only probe now emits one bounded `ev=build_data stage=persist result=complete|pending` event per worker lifecycle, immediately after the native `refresh()` return. A complete result before the same black screen rules out persistence completion; a pending result identifies the first remaining local completion boundary. No package data or behavior changes are involved.
+Use source-only review to select the earliest metadata-safe native transition after investment worker completion that differentiates the internal/default service-10 route from this external trace. No package data or behavior changes are involved.
 
 ## Validation
 
 - Red test first: the new source guard failed because the report omitted `spawn_sets_ready`.
 - Focused and complete trace source suite: `6` tests passed.
 - `git diff --check` passed.
-- Windows CI `32575906197`: passed (MSBuild and artifact upload).
+- Windows CI `32575906197`: passed (expanded readiness fields).
+- Windows CI `32576432022`: passed (persistence-completion metadata).

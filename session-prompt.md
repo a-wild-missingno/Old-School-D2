@@ -209,22 +209,22 @@ Human attention needed:
 
 ## Objective
 
-Determine, with one metadata-only trace point, whether the external investment worker reaches its native persistence-complete state after all eleven in-memory build-data domains become ready.
+Identify, from authorized source and sanitized ledgers only, the earliest native transition after completed investment refresh that differs between the internal/default service-10 route and the external black-screen route.
 
 ## Starting Evidence
 
-- The latest external black-screen run recorded all eleven in-memory readiness fields as true (`all_ready=1`) before SignOn/ContentConfig and the normal authenticated service-29 route.
-- Source review shows the worker sets `g_complete` from `refresh()`, whose ready branch returns `state::build_data::persist()`.
-- The prior readiness report ran after that call but did not retain its boolean return, so `all_ready=1` does not prove worker completion.
+- The latest external trace reported `persist result=complete` followed by all eleven readiness domains true.
+- It then completed the same authenticated BAP prefix, nine no-reply service-29 notifications, and recurring `250 -> 251` keepalives, but no client service 10.
+- The worker completion boundary is now ruled out for that run; package assertions remain correlation only.
 
 ## Required Work
 
-1. Build and CI-validate the trace-only `persist result=complete|pending` metadata probe already added immediately after `refresh()`.
-2. Deploy only after artifact hash verification and protected-runtime checks.
-3. Run one bounded external observation; do not change any service behavior.
-4. Record whether persistence completion occurs before the black screen/service-10 absence.
+1. Trace source call ordering after `client::content::investment::worker::service()` completes and compare it to the internal/default oracle's recorded route.
+2. Identify one source-backed, metadata-only native state/branch transition that can distinguish the paths without retaining text, package data, identity, or payloads.
+3. Add a narrow regression guard and probe only if the observation point has a concrete source basis.
+4. Do not launch Destiny, modify the replacement service, alter package data, reply to service 29, send Queuez service 123, or add account/world state.
 5. Validate, document, commit/push the focused result, and leave exactly one next TODO.
 
 ## Non-Goals
 
-Do not add package data, change persistence behavior, alter replacement-service responses, reply to service 29, emit Queuez service 123, or infer package-assertion causality from temporal proximity.
+Do not revisit incomplete build-data readiness or persistence as a cause for this run. Do not infer causal package behavior from the two local assertions alone.

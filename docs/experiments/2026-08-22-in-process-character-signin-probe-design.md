@@ -1,6 +1,6 @@
 # In-process character-sign-in probe design
 
-Status: DESIGN REVIEW — not implemented, built, deployed, or run
+Status: IMPLEMENTED / NOT BUILT OR DEPLOYED — source and regression tests only
 
 ## Purpose
 
@@ -22,6 +22,10 @@ In `character_select_hold.cpp`, during `install_character_select_hold` and immed
 3. If and only if there is exactly one target, locally inspect executable ranges for direct `E8 rel32` instructions whose destination equals that target. Retain at most four caller RVAs relative to the current main-module base, and serialize `direct_callers=0|1|2|3|4plus` plus only the collected RVAs.
 4. Emit once, before attaching the existing detour. Do not retain bytes, disassembly text, target address, module base, arguments, native strings, package data, identities, payloads, or account data.
 5. Continue to call the existing `scan_main_image_unique` and detour installation unmodified. The probe must not change its success/failure, the handler, bootflow state, package handling, services, or network behavior.
+
+## Implementation result
+
+The approved source-only implementation is in `Sunrise/src/client/hooks/bootflow/character_select_hold.cpp` with `tests/test_inprocess_character_signin_metadata.py`. It runs once before the existing resolver/attach, uses the existing signature, scans only Sunrise's in-process executable ranges, and preserves resolver/detour control flow. The source test suite passed 10 tests. No Windows build, deployment, or game run was performed for this implementation.
 
 ## Explicit exclusions
 

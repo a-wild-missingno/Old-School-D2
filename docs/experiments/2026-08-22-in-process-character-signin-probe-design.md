@@ -25,7 +25,7 @@ In `character_select_hold.cpp`, during `install_character_select_hold` and immed
 
 ## Implementation result
 
-The approved source-only implementation is in `Sunrise/src/client/hooks/bootflow/character_select_hold.cpp` with `tests/test_inprocess_character_signin_metadata.py`. It runs once before the existing resolver/attach, uses the existing signature, scans only Sunrise's in-process executable ranges, and preserves resolver/detour control flow. The source test suite passed 10 tests. No Windows build, deployment, or game run was performed for this implementation.
+The approved source-only implementation is in `Sunrise/src/client/hooks/bootflow/character_select_hold.cpp` with `tests/test_inprocess_character_signin_metadata.py`. It runs once before the existing resolver/attach, uses the existing signature, scans only Sunrise's in-process executable ranges, and preserves resolver/detour control flow. The source test suite passed 10 tests. No Windows build, deployment, or game run was performed for this implementation. The source commit is local only: pushing its configured upstream was denied, and the available lab remote can trigger a Windows build, which is outside the approved source-and-tests scope.
 
 ## Explicit exclusions
 

@@ -207,25 +207,8 @@ Human attention needed:
 
 # CURRENT TODO
 
-## Objective
+## Session closure
 
-Audit why the historical client does not accept/proceed after the clean-room ContentConfig response, without launching Destiny or changing service behavior.
+Latest probe: Sunrise in-process scan found `matches=1 direct_callers=0` for character-signin entry, while the live external run remained a black screen. This excludes only direct rel32 callers; it does not establish a cause. All runtime processes/listeners/capture are stopped and isolation is verified.
 
-## Starting Evidence
-
-- Complete discovery and HTTPS transport baseline was directly proven from Legion.
-- A fresh trace observation reached local SignOn and `/config/`; the runtime recorded `content_config_served`.
-- The operator then reported configuration-download error `turkey`; no BAP connection occurred.
-- Trace metadata recorded config lookup `success_class` and first outbound transport `pending_class`; no task completion was reached.
-
-## Required Work
-
-1. Inspect the local ContentConfig encoder/cache parser and authorized known-good external baseline/source evidence.
-2. Compare response structure, field-presence classes, lengths/hashes, manifest-cache validation, and config-GUID handling only. Do not retain or commit response bodies, config values, manifests, identities, or secrets.
-3. Establish the first validated mismatch, or document evidence that local response equivalence remains unproven.
-4. Add narrowly scoped regression coverage for the validated structural invariant only; do not launch Destiny or add speculative server behavior.
-5. Validate, document, commit/push the focused PR update, and leave exactly one next TODO.
-
-## Non-Goals
-
-Do not modify discovery, SignOn, BAP, service 29, Queuez, account/world state, or conduct another client observation in this session.
+Next work requires a newly scoped hypothesis; do not launch again by default.

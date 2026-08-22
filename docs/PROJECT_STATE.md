@@ -8,7 +8,7 @@ Build a clean-room, isolated-lab replacement service that documents and reproduc
 
 **CONFIRMED:** The isolated external client reaches an authenticated encrypted BAP connection, emits no-reply service `29` notifications, and remains in a stable black-screen wait while service `250 -> 251` keepalives continue. Client service `10` was not observed during the documented windows.
 
-**CURRENT FRONTIER:** repeated trace-only runs after the privacy-safe SignOn bootstrap handoff reach authenticated BAP and no-reply service 29, but not client service 10 or Queuez service 123. A metadata-only retail callback marker confirms that the task observer receives native callbacks, yet it does not observe the internal-oracle `ENUM(0)` completion diagnostic. The next missing boundary is post-service-29/local-content state, not discovery, ContentConfig acceptance, BAP acknowledgement, task-observer installation, or a service-29 reply.
+**CURRENT FRONTIER:** repeated trace-only runs after the privacy-safe SignOn bootstrap handoff reach authenticated BAP and no-reply service 29, but not client service 10 or Queuez service 123. A metadata-only retail callback marker confirms that the task observer receives native callbacks, yet it does not observe the internal-oracle `ENUM(0)` completion diagnostic. A later metadata-only assert classifier observed patchable-bootstrap and investment-globals local load failures after service 29, neither carrying `-87`; it did not observe the registration class. The eleven-domain readiness and immediate persistence-completion probes both passed before the same external black-screen/service-10 absence. Source comparison then showed the external run does not enter the existing native character-select handler that the internal/default oracle reaches; external trace does not alter that bootflow path. Discovery, ContentConfig acceptance, BAP acknowledgement, task-observer installation, and service-29 no-reply behavior remain unchanged.
 
 ## Confirmed Protocol Progress
 
@@ -189,3 +189,55 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 **LIMIT:** the user-visible result remained a black screen; client service 10 and server Queuez service 123 were not observed. Local package-load assertions were observed but do not justify copying package data or changing server behavior.
 
 **NEXT:** use the now-aligned service-29 boundary for a metadata-only post-29 differential; preserve the listener's no-reply behavior.
+
+## 2026-08-22 in-process character-signin probe design
+
+**DESIGN ONLY:** a proposed once-only metadata event reuses the existing signature in Sunrise's own executable-range view. It would report match cardinality (0/1/2plus) and, only for one target, up to four direct `E8 rel32` caller RVAs. It serializes no bytes, target/module addresses, arguments, strings, package/account/payload data, or behavior.
+
+**NOT IMPLEMENTED:** no source code, build, deployment, or game run is authorized by this design review. Implementation/deployment each require their own review decision.
+
+## 2026-08-22 character-signin loaded-module scan
+
+**CONFIRMED:** the explicitly authorized external read-only scanner read eleven loaded main-module sections (145,070,000 bytes) and found zero exact target-signature matches, despite 11,632 generic-prefix candidates and Sunrise's own hook-install log. No target RVA/caller was derived.
+
+**LIMIT:** the source hook's in-process image view and external reader differ or otherwise cannot be correlated from this evidence. Moving to in-process self-observation is a separate scope and must be reviewed explicitly.
+
+## 2026-08-22 character-signin static call-site scan
+
+**CONFIRMED:** the user-authorized read-only scan of every PE section in the configured on-disk executable found zero occurrences of the source-defined character-sign-in signature. No static target RVA or direct caller exists to instrument from that image.
+
+**LIMIT:** the hook's runtime target can differ from the on-disk representation. Resolving that needs separately authorized loaded-process observation or independently matched symbols/disassembly; no inference is made from the zero static match.
+
+## 2026-08-22 character-signin predecessor source limit
+
+**CONFIRMED:** Sunrise source resolves the character-sign-in enter handler only via a unique target signature and supplies no caller, call-site, or predecessor state-machine target. The external trace cannot source-safely instrument an earlier native branch without guessing.
+
+**LIMIT:** predecessor discovery now requires separately scoped static analysis of the locally installed game executable or other authorized disassembly/symbol evidence. That work is outside the source-only boundary and requires explicit authorization.
+
+## 2026-08-22 post-investment bootflow boundary
+
+**CONFIRMED:** external-trace and reference bootflow/callback source are identical. After completed investment refresh, the external trace has only bootflow installation events, not the existing character-select enter marker (`result=held`) nor later bootflow runtime markers. The internal/default oracle reached character select.
+
+**CONCLUSION:** the next observed divergence is before native character-sign-in entry, not the local investment worker. A duplicate marker at that already instrumented entry would add no evidence.
+
+**NEXT:** source-only locate one unique predecessor of the character-sign-in enter path; add a bounded metadata marker only if the predecessor is source-backed and privacy-safe.
+
+## 2026-08-22 complete build-data readiness probe
+
+**CONFIRMED:** before the probe, external, reference, and upstream-clean source share the same eight-field readiness reporter. The investment worker's actual completion predicate requires three additional flags: spawn sets, hash names, and investment constants. An all-one eight-field log therefore does not prove the worker is complete.
+
+**PROBE RESULT:** the trace-only reporter emitted all eleven bounded booleans and `all_ready=1` before the same service-29/keepalive black-screen route. The CI-built probe changed no refresh, persistence, package handling, or protocol state.
+
+**CONFIRMED:** the source-backed trace probe reported `persist result=complete` before the all-eleven-domain line, after which the black-screen/service-10 absence still recurred. The worker completed its local investment refresh.
+
+**CONCLUSION:** the full investment-worker completion boundary is ruled out for this external run. This is still not evidence that local package assertions are causal.
+
+**NEXT:** source-only identify the earliest native transition after completed investment refresh that differentiates the internal/default service-10 route from this external trace; select one metadata-only probe before another game run.
+
+## 2026-08-22 external package-assert classifier observation
+
+**CONFIRMED:** a Windows-CI-built metadata-only assert classifier ran only in the dedicated external trace runtime. After successful SignOn, ContentConfig, authenticated BAP, and nine no-reply service-29 requests, it classified local `patchable_bootstrap` and `investment_globals` failures. Neither event carried the observed `-87` marker; no registration-class assertion appeared in the bounded run. Client service 10 remained absent.
+
+**LIMIT:** these local assertions are temporally post-bootstrap observations, not proof of a causal service-10 prerequisite. They do not justify package data, server replies, Queuez, or account state.
+
+**NEXT:** source-only compare the post-service-29/local-content ordering between the internal/default oracle and external trace to select one metadata-only readiness/ordering probe before another game run.

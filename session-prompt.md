@@ -209,21 +209,14 @@ Human attention needed:
 
 ## Objective
 
-Use source-only signature/call-site review to identify a unique, privacy-safe predecessor of the native character-sign-in enter handler that the internal/default oracle reaches but the external black-screen run does not.
+Await explicit scope authorization before performing any static call-site analysis of the locally installed game executable to locate a predecessor of the character-sign-in enter handler.
 
-## Starting Evidence
+## Established Boundary
 
-- External trace and reference have identical bootflow and callback-dispatch source.
-- The external route completes investment persistence, authenticated BAP, and service 29, but does not emit the existing `character_select result=held` entry marker or later bootflow runtime markers.
-- The internal/default oracle reached character select; source shows its enter handler emits that marker only after the original native enter handler runs.
+- Authorized Sunrise source contains a unique signature for the handler target but no caller/call-site, predecessor state, or symbolic game-native call graph.
+- The external trace has reached completed investment refresh and service 29, but not the existing character-select entry marker.
+- No source-backed earlier target remains; guessing one would violate the observation-only constraint.
 
-## Required Work
+## If Explicitly Authorized
 
-1. Review authorized source signatures and call-site relationships for a unique predecessor of character-sign-in entry.
-2. Add one bounded metadata-only entry/order marker only if the target is unique and the marker carries no arguments, text, package data, identity, or payloads.
-3. Do not launch Destiny, modify replacement-service behavior, alter packages, reply to service 29, emit Queuez 123, or change account/world state.
-4. Validate, document, commit/push the focused result, leaving one next TODO.
-
-## Non-Goals
-
-Do not re-instrument the character-select enter hook itself: its existing `result=held` runtime marker already distinguishes the route. Do not infer package assertion causality.
+Use offline/static local executable analysis only. Do not run Destiny, execute/patch the binary, retain package/payload/account data, change the replacement service, reply to service 29, emit Queuez 123, or modify account/world state. First produce a unique static call-site candidate and a bounded metadata-only observation plan for review.

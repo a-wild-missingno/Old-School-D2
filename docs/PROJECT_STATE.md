@@ -190,6 +190,12 @@ Do not change discovery, SignOn, ContentConfig, BAP nonce ownership, or the acce
 
 **NEXT:** use the now-aligned service-29 boundary for a metadata-only post-29 differential; preserve the listener's no-reply behavior.
 
+## 2026-08-22 character-signin predecessor source limit
+
+**CONFIRMED:** Sunrise source resolves the character-sign-in enter handler only via a unique target signature and supplies no caller, call-site, or predecessor state-machine target. The external trace cannot source-safely instrument an earlier native branch without guessing.
+
+**LIMIT:** predecessor discovery now requires separately scoped static analysis of the locally installed game executable or other authorized disassembly/symbol evidence. That work is outside the source-only boundary and requires explicit authorization.
+
 ## 2026-08-22 post-investment bootflow boundary
 
 **CONFIRMED:** external-trace and reference bootflow/callback source are identical. After completed investment refresh, the external trace has only bootflow installation events, not the existing character-select enter marker (`result=held`) nor later bootflow runtime markers. The internal/default oracle reached character select.

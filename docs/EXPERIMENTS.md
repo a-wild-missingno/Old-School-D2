@@ -39,3 +39,4 @@ Start from `docs/experiments/template.md`. Link the record here only after recor
 | 2026-08-22 | [in-process character-signin probe design](experiments/2026-08-22-in-process-character-signin-probe-design.md) | Bounded metadata probe | IMPLEMENTED/source-tested only; no Windows build, deploy, or run |
 
 | 2026-08-22 | [in-process character-signin probe result](experiments/2026-08-22-in-process-character-signin-probe-result.md) | Built trace-only live observation | COMPLETE: unique target / zero direct callers; black screen unchanged |
+| 2026-08-23 | [character-signin indirect-reference probe result](experiments/2026-08-23-character-signin-indirect-reference.md) | Built trace-only live observation | COMPLETE: one bounded image-local pointer reference; black screen unchanged |

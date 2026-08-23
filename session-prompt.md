@@ -207,8 +207,10 @@ Human attention needed:
 
 # CURRENT TODO
 
-## Session closure
+## Classify the one character-signin image reference
 
-Latest probe: Sunrise in-process scan found `matches=1 direct_callers=0` for character-signin entry, while the live external run remained a black screen. This excludes only direct rel32 callers; it does not establish a cause. All runtime processes/listeners/capture are stopped and isolation is verified.
+Latest probe: a Windows-CI-built trace-only in-process scan found `matches=1 direct_callers=0 indirect_references=1 reference_rva0=0x1C29788` for the character-signin target. The Human/UI-gated external run again reached authenticated BAP, nine no-reply service-29 notifications, and keepalives without service 10, ending on the same black screen.
 
-Next work requires a newly scoped hypothesis; do not launch again by default.
+The pointer-sized occurrence is not a proven caller, table role, or causal condition. All runtime processes/listeners/capture are stopped and isolation is verified.
+
+Next: source-only classify that one mapped-image reference by PE section and determine whether a bounded executable indirect-branch association can be observed without serializing bytes, disassembly, addresses, arguments, text, package data, identities, or payloads. Select at most one metadata-only probe only if the association is unambiguous; do not launch again by default.

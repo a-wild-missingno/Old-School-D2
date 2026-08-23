@@ -213,4 +213,6 @@ Latest probe: a Windows-CI-built trace-only classifier found `matches=1 direct_c
 
 The reference is now confirmed table/vtable-like, but its table type, dispatch predicate, and causal role remain unknown. The run is complete: Destiny, listeners, capture, and trace deployment were cleaned up; isolation was reverified and the protected baseline hash was unchanged. See `docs/experiments/2026-08-23-character-signin-vtable-role.md`.
 
-Next: design one separately scoped, source-only bounded probe that distinguishes table-entry reachability from target-method entry. Add no game run until it has an unambiguous observation criterion; do not add speculative server behavior.
+The follow-up guarded table-slot probe installed successfully but emitted neither `table_dispatch=seen` nor `target_entry=seen` during the same isolated external path. It rules out the one verified slot as the missing route. Service 10 remained absent. The run was cleaned up and baseline/isolation verification passed. See `docs/experiments/2026-08-23-character-signin-table-dispatch.md`.
+
+Next: do not probe additional table entries by guesswork. Identify an upstream client-local precondition using a working/offline comparator and an independently bounded observation criterion before any new game run; do not add speculative server behavior.

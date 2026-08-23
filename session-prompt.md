@@ -209,8 +209,10 @@ Human attention needed:
 
 ## Select the next character-signin hypothesis
 
-Latest probe: a Windows-CI-built trace-only classifier found `matches=1 direct_callers=0 indirect_references=1 reference_section=readonly rip_indirect_calls=0 rip_indirect_jumps=0` for the character-signin target. The Human/UI-gated external run again reached authenticated BAP, nine no-reply service-29 notifications, and keepalives without service 10, ending on the same black screen.
+Latest source audit: current public Sunrise master does not include `profile_setup_completed`; open upstream PR #75 adds it only through a WS-701 server path. Because the external client has not emitted service 10, that path is downstream of the frontier and no external account/profile adapter was added. See `docs/client-analysis/account-profile-bootflow-contract.md`.
+
+Latest client probe: a Windows-CI-built trace-only classifier found `matches=1 direct_callers=0 indirect_references=1 reference_section=readonly rip_indirect_calls=0 rip_indirect_jumps=0` for the character-signin target. The Human/UI-gated external run again reached authenticated BAP, nine no-reply service-29 notifications, and keepalives without service 10, ending on the same black screen.
 
 The read-only pointer-sized occurrence is not a proven caller, table role, or causal condition; only canonical `FF 15`/`FF 25` RIP-relative branches are excluded. All runtime processes/listeners/capture are stopped and isolation is verified.
 
-Next: select one separately scoped, source-backed hypothesis for a non-canonical reference use. Add at most one bounded metadata-only probe only when it has an unambiguous observation criterion; do not launch again by default.
+Next: select one separately scoped, source-backed hypothesis for a non-canonical reference use or a different unique predecessor from public source. Add at most one bounded metadata-only probe only when it has an unambiguous observation criterion; do not launch again by default.

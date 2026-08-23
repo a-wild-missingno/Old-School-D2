@@ -106,9 +106,13 @@ Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local eviden
 
 **COMPLETE:** The isolated external-trace run confirmed the unique read-only character-signin reference is a base-relocation target followed by `4plus` executable-pointer slots. It is therefore table/vtable-like, while the target's handler still did not enter and client service 10 remained absent. The normal external BAP prefix—including nine one-way service-29 notifications—was otherwise preserved. See `docs/experiments/2026-08-23-character-signin-vtable-role.md`.
 
+## 2026-08-23 character-signin table-dispatch observation
+
+**COMPLETE:** A guarded wrapper successfully installed around the uniquely verified relocation-backed table slot. During the isolated external path, neither the table wrapper nor the character-signin target entered; service 10 remained absent while the known BAP prefix and nine one-way service-29 notifications persisted. This rules out that specific slot as the missing route. See `docs/experiments/2026-08-23-character-signin-table-dispatch.md`.
+
 ## Next Experiment
 
-Before another launch, design one source-only bounded probe that distinguishes table-entry reachability from the target method's entry without logging pointers, object state, bytes, or client data. Do not add a service-29 reply, Queuez service 123, package content, account state, or speculative response.
+Do not add another table-slot probe by guesswork. First identify a client-local precondition upstream of character-signin with an independent working/offline comparator and an unambiguous bounded observation criterion. Do not add a service-29 reply, Queuez service 123, package content, account state, or speculative response.
 
 ## Things That Must Not Be Reopened Without New Evidence
 

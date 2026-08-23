@@ -207,10 +207,10 @@ Human attention needed:
 
 # CURRENT TODO
 
-## Classify the one character-signin image reference
+## Select the next character-signin hypothesis
 
-Latest probe: a Windows-CI-built trace-only in-process scan found `matches=1 direct_callers=0 indirect_references=1 reference_rva0=0x1C29788` for the character-signin target. The Human/UI-gated external run again reached authenticated BAP, nine no-reply service-29 notifications, and keepalives without service 10, ending on the same black screen.
+Latest probe: a Windows-CI-built trace-only classifier found `matches=1 direct_callers=0 indirect_references=1 reference_section=readonly rip_indirect_calls=0 rip_indirect_jumps=0` for the character-signin target. The Human/UI-gated external run again reached authenticated BAP, nine no-reply service-29 notifications, and keepalives without service 10, ending on the same black screen.
 
-The pointer-sized occurrence is not a proven caller, table role, or causal condition. All runtime processes/listeners/capture are stopped and isolation is verified.
+The read-only pointer-sized occurrence is not a proven caller, table role, or causal condition; only canonical `FF 15`/`FF 25` RIP-relative branches are excluded. All runtime processes/listeners/capture are stopped and isolation is verified.
 
-Next: source-only classify that one mapped-image reference by PE section and determine whether a bounded executable indirect-branch association can be observed without serializing bytes, disassembly, addresses, arguments, text, package data, identities, or payloads. Select at most one metadata-only probe only if the association is unambiguous; do not launch again by default.
+Next: select one separately scoped, source-backed hypothesis for a non-canonical reference use. Add at most one bounded metadata-only probe only when it has an unambiguous observation criterion; do not launch again by default.

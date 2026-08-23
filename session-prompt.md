@@ -207,8 +207,10 @@ Human attention needed:
 
 # CURRENT TODO
 
-## Session closure
+## Select the next character-signin hypothesis
 
-Latest probe: Sunrise in-process scan found `matches=1 direct_callers=0` for character-signin entry, while the live external run remained a black screen. This excludes only direct rel32 callers; it does not establish a cause. All runtime processes/listeners/capture are stopped and isolation is verified.
+Latest probe: a Windows-CI-built trace-only classifier found `matches=1 direct_callers=0 indirect_references=1 reference_section=readonly rip_indirect_calls=0 rip_indirect_jumps=0` for the character-signin target. The Human/UI-gated external run again reached authenticated BAP, nine no-reply service-29 notifications, and keepalives without service 10, ending on the same black screen.
 
-Next work requires a newly scoped hypothesis; do not launch again by default.
+The read-only pointer-sized occurrence is not a proven caller, table role, or causal condition; only canonical `FF 15`/`FF 25` RIP-relative branches are excluded. All runtime processes/listeners/capture are stopped and isolation is verified.
+
+Next: select one separately scoped, source-backed hypothesis for a non-canonical reference use. Add at most one bounded metadata-only probe only when it has an unambiguous observation criterion; do not launch again by default.

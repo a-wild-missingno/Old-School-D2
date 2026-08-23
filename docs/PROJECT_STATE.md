@@ -102,9 +102,17 @@ Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local eviden
 
 **COMPLETE / NEGATIVE RESULT:** Current public Sunrise `master` has no `profile_setup_completed` account field. Open upstream PR #75 adds that field and consumes WS opcode 701 only after a web-service request is received. Because the external client has not emitted service 10, the reviewed source establishes no pre-service-10 path for an external WS-701/profile adapter. No runtime behavior changed. See `docs/client-analysis/account-profile-bootflow-contract.md`.
 
+## 2026-08-23 character-signin table-role observation
+
+**COMPLETE:** The isolated external-trace run confirmed the unique read-only character-signin reference is a base-relocation target followed by `4plus` executable-pointer slots. It is therefore table/vtable-like, while the target's handler still did not enter and client service 10 remained absent. The normal external BAP prefix—including nine one-way service-29 notifications—was otherwise preserved. See `docs/experiments/2026-08-23-character-signin-vtable-role.md`.
+
+## 2026-08-23 character-signin table-dispatch observation
+
+**COMPLETE:** A guarded wrapper successfully installed around the uniquely verified relocation-backed table slot. During the isolated external path, neither the table wrapper nor the character-signin target entered; service 10 remained absent while the known BAP prefix and nine one-way service-29 notifications persisted. This rules out that specific slot as the missing route. See `docs/experiments/2026-08-23-character-signin-table-dispatch.md`.
+
 ## Next Experiment
 
-Select one separately scoped, source-backed metadata-only hypothesis for a non-canonical use of the read-only character-signin reference, or identify a different unique predecessor from public source. Do not launch by default and do not add a service-29 reply, Queuez service 123, package content, account state, or speculative response.
+Do not add another table-slot probe by guesswork. First identify a client-local precondition upstream of character-signin with an independent working/offline comparator and an unambiguous bounded observation criterion. Do not add a service-29 reply, Queuez service 123, package content, account state, or speculative response.
 
 ## Things That Must Not Be Reopened Without New Evidence
 

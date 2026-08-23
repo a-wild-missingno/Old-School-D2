@@ -102,9 +102,13 @@ Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local eviden
 
 **COMPLETE / NEGATIVE RESULT:** Current public Sunrise `master` has no `profile_setup_completed` account field. Open upstream PR #75 adds that field and consumes WS opcode 701 only after a web-service request is received. Because the external client has not emitted service 10, the reviewed source establishes no pre-service-10 path for an external WS-701/profile adapter. No runtime behavior changed. See `docs/client-analysis/account-profile-bootflow-contract.md`.
 
+## 2026-08-23 character-signin table-role observation
+
+**COMPLETE:** The isolated external-trace run confirmed the unique read-only character-signin reference is a base-relocation target followed by `4plus` executable-pointer slots. It is therefore table/vtable-like, while the target's handler still did not enter and client service 10 remained absent. The normal external BAP prefix—including nine one-way service-29 notifications—was otherwise preserved. See `docs/experiments/2026-08-23-character-signin-vtable-role.md`.
+
 ## Next Experiment
 
-Select one separately scoped, source-backed metadata-only hypothesis for a non-canonical use of the read-only character-signin reference, or identify a different unique predecessor from public source. Do not launch by default and do not add a service-29 reply, Queuez service 123, package content, account state, or speculative response.
+Before another launch, design one source-only bounded probe that distinguishes table-entry reachability from the target method's entry without logging pointers, object state, bytes, or client data. Do not add a service-29 reply, Queuez service 123, package content, account state, or speculative response.
 
 ## Things That Must Not Be Reopened Without New Evidence
 

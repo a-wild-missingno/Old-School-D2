@@ -98,9 +98,13 @@ See `git log --oneline --decorate -30`. Historical commits record each confirmed
 
 Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local evidence locations belong only in `.hermes/HANDOFF.local.md`; capture files are never committed.
 
+## 2026-08-23 account/profile contract audit
+
+**COMPLETE / NEGATIVE RESULT:** Current public Sunrise `master` has no `profile_setup_completed` account field. Open upstream PR #75 adds that field and consumes WS opcode 701 only after a web-service request is received. Because the external client has not emitted service 10, the reviewed source establishes no pre-service-10 path for an external WS-701/profile adapter. No runtime behavior changed. See `docs/client-analysis/account-profile-bootflow-contract.md`.
+
 ## Next Experiment
 
-Select one separately scoped, source-backed hypothesis for a non-canonical use of the read-only character-sign-in reference. Do not launch by default and do not add a service-29 reply, Queuez service 123, package content, account state, or speculative response.
+Select one separately scoped, source-backed metadata-only hypothesis for a non-canonical use of the read-only character-signin reference, or identify a different unique predecessor from public source. Do not launch by default and do not add a service-29 reply, Queuez service 123, package content, account state, or speculative response.
 
 ## Things That Must Not Be Reopened Without New Evidence
 

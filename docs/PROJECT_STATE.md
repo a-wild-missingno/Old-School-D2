@@ -98,9 +98,13 @@ See `git log --oneline --decorate -30`. Historical commits record each confirmed
 
 Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local evidence locations belong only in `.hermes/HANDOFF.local.md`; capture files are never committed.
 
+## 2026-08-23 character-signin table-role observation
+
+**COMPLETE:** The isolated external-trace run confirmed the unique read-only character-signin reference is a base-relocation target followed by `4plus` executable-pointer slots. It is therefore table/vtable-like, while the target's handler still did not enter and client service 10 remained absent. The normal external BAP prefix—including nine one-way service-29 notifications—was otherwise preserved. See `docs/experiments/2026-08-23-character-signin-vtable-role.md`.
+
 ## Next Experiment
 
-Select one separately scoped, source-backed hypothesis for a non-canonical use of the read-only character-sign-in reference. Do not launch by default and do not add a service-29 reply, Queuez service 123, package content, account state, or speculative response.
+Before another launch, design one source-only bounded probe that distinguishes table-entry reachability from the target method's entry without logging pointers, object state, bytes, or client data. Do not add a service-29 reply, Queuez service 123, package content, account state, or speculative response.
 
 ## Things That Must Not Be Reopened Without New Evidence
 

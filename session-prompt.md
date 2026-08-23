@@ -209,8 +209,8 @@ Human attention needed:
 
 ## Select the next character-signin hypothesis
 
-Latest probe: a Windows-CI-built trace-only classifier found `matches=1 direct_callers=0 indirect_references=1 reference_section=readonly rip_indirect_calls=0 rip_indirect_jumps=0` for the character-signin target. The Human/UI-gated external run again reached authenticated BAP, nine no-reply service-29 notifications, and keepalives without service 10, ending on the same black screen.
+Latest probe: a Windows-CI-built trace-only classifier found `matches=1 direct_callers=0 indirect_references=1 reference_section=readonly reference_relocation=1 reference_table_code_slots=4plus rip_indirect_calls=0 rip_indirect_jumps=0` for the character-signin target. The Human/UI-gated external run again reached authenticated BAP, nine no-reply service-29 notifications, and keepalives without service 10. The target handler still did not enter.
 
-The read-only pointer-sized occurrence is not a proven caller, table role, or causal condition; only canonical `FF 15`/`FF 25` RIP-relative branches are excluded. All runtime processes/listeners/capture are stopped and isolation is verified.
+The reference is now confirmed table/vtable-like, but its table type, dispatch predicate, and causal role remain unknown. The run is complete: Destiny, listeners, capture, and trace deployment were cleaned up; isolation was reverified and the protected baseline hash was unchanged. See `docs/experiments/2026-08-23-character-signin-vtable-role.md`.
 
-Next: select one separately scoped, source-backed hypothesis for a non-canonical reference use. Add at most one bounded metadata-only probe only when it has an unambiguous observation criterion; do not launch again by default.
+Next: design one separately scoped, source-only bounded probe that distinguishes table-entry reachability from target-method entry. Add no game run until it has an unambiguous observation criterion; do not add speculative server behavior.

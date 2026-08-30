@@ -207,10 +207,10 @@ Human attention needed:
 
 # CURRENT TODO
 
-## Family-zero seed state-affordance observation design
+## Family-zero seed-affordance controlled observation
 
-The post-service-29 source comparison is complete. The current reference's family-zero Queuez source seed uses the checked runtime account identity when its live manager-key capture is not yet available; external trace's older seed returns without seeding in that condition. The external compatibility run installed the hooks but did not emit the seed-completion event, while client service 10 remained absent. This is a source-backed prerequisite candidate, not causal proof. See `docs/client-analysis/post-service29-family0-source-seed-audit.md`.
+The aggregate-only family-zero observer is implemented and source-tested in the dedicated external-trace tree. It reports only manager-key availability, runtime-account availability, and the existing seed-completion state immediately after the pre-existing seed call. It does not write the source list, alter a return value, add a detour, change protocol/listener behavior, or log identity/address/byte data. Dedicated source tests passed and Windows CI run `33320289289` is pending. See `docs/experiments/2026-08-30-family0-seed-affordance-observer.md`.
 
-Do not port, deploy, activate, bypass, disable, or otherwise change package-integrity behavior. Do not change SignOn, ContentConfig, BAP, service 29, Queuez publication, package data, account state, or character-signin behavior based on this result.
+Do not port the current-reference source-seed fallback. Do not change package-integrity behavior, SignOn, ContentConfig, BAP, service 29, Queuez publication, package data, account state, or character-signin behavior.
 
-Next: design and source-test at most one aggregate-only, read-only observation of the existing family-zero path. It may report only booleans for manager-key availability, runtime-account availability, and whether seed completion was already observed; it must not write the source list, alter a return value, add a protocol/listener change, or log identities/addresses/bytes. Do not build, deploy, or launch it until the design and source tests establish a unique no-write criterion. If the existing hook cannot supply that criterion without modifying its behavior, stop with that source limit.
+Next: after CI succeeds, verify the artifact's identity, stage it only in `external-trace`, run ContentConfig/Windows/isolation preflight and baseline hashes, then request one Human/UI-gated 60-second observation. Record the three aggregate booleans, service-10 presence/absence, and visible outcome. Restore the trace runtime and verify hashes/isolation before drawing conclusions.

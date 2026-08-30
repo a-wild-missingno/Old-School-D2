@@ -207,14 +207,10 @@ Human attention needed:
 
 # CURRENT TODO
 
-## Select the next character-signin hypothesis
+## Read-only package-trust compatibility classification
 
-Latest source audit: current public Sunrise master does not include `profile_setup_completed`; open upstream PR #75 adds it only through a WS-701 server path. Because the external client has not emitted service 10, that path is downstream of the frontier and no external account/profile adapter was added. See `docs/client-analysis/account-profile-bootflow-contract.md`.
+Latest source audit: current official Sunrise installs package-integrity handling at Steam initialization, explicitly before base-package registration. The external trace lineage predates that component. This is an independently sourced client-local differential upstream of the missing character-signin entry, not evidence for a server response. See `docs/client-analysis/package-trust-comparator-audit.md`.
 
-Latest probe: a Windows-CI-built trace-only classifier found `matches=1 direct_callers=0 indirect_references=1 reference_section=readonly reference_relocation=1 reference_table_code_slots=4plus rip_indirect_calls=0 rip_indirect_jumps=0` for the character-signin target. The Human/UI-gated external run again reached authenticated BAP, nine no-reply service-29 notifications, and keepalives without service 10. The target handler still did not enter.
+The component alters package-integrity acceptance and must not be ported, deployed, or activated from this audit. No client/server behavior changed. The last external result remains authenticated BAP -> nine no-reply service-29 notifications -> keepalives, with no service 10 or character-signin entry. The run was cleaned up and baseline/isolation verification passed.
 
-The reference is now confirmed table/vtable-like, but its table type, dispatch predicate, and causal role remain unknown. The run is complete: Destiny, listeners, capture, and trace deployment were cleaned up; isolation was reverified and the protected baseline hash was unchanged. See `docs/experiments/2026-08-23-character-signin-vtable-role.md`.
-
-The follow-up guarded table-slot probe installed successfully but emitted neither `table_dispatch=seen` nor `target_entry=seen` during the same isolated external path. It rules out the one verified slot as the missing route. Service 10 remained absent. The run was cleaned up and baseline/isolation verification passed. See `docs/experiments/2026-08-23-character-signin-table-dispatch.md`.
-
-Next: do not probe additional table entries by guesswork. Identify an upstream client-local precondition using a working/offline comparator and an independently bounded observation criterion before any new game run; do not add speculative server behavior.
+Next: add at most one bounded, read-only compatibility probe that resolves the three current-comparator target classes and reports aggregate booleans only. It must make no detour, memory/code write, return-value override, content/package change, or protocol/listener change. Do not launch until source tests, Windows CI, staging, and normal isolation preflight are verified.

@@ -207,10 +207,10 @@ Human attention needed:
 
 # CURRENT TODO
 
-## Family-zero loaded-process predecessor analysis (authorization required)
+## Family-zero second-hop tail-jump source analysis
 
-The separately authorized offline static caller analysis is complete. The exact family-zero signature resolved by the live hook matched zero bytes in both protected validation and dedicated external executable files. Therefore no target or caller could be resolved from the files. This is a file-to-mapped-image representation limit, not proof that the runtime target is absent. See `docs/experiments/2026-08-30-family0-static-caller-analysis.md`.
+The authorized loaded-process analysis is complete. A standalone scanner could not match the target after its own detour rewrote the prologue. A CI-built pre-detour aggregate observer then found exactly one direct tail jump, zero direct calls, and zero absolute pointer references to the family-zero sweep. This identifies a unique tail-jump wrapper as the immediate predecessor category, but not its own caller or eligibility condition. See `docs/experiments/2026-08-30-family0-loaded-predecessor-analysis.md`.
 
-Do not loosen the signature, scan unrelated file regions, repeat the offline scan, port the source-list fallback, or change package-integrity behavior, SignOn, ContentConfig, BAP, service 29, Queuez publication, package data, account state, or character-signin behavior.
+Do not repeat the old scanners, port the source-list fallback, hook the wrapper, emit addresses/bytes/identities/package data, or change package-integrity behavior, SignOn, ContentConfig, BAP, service 29, Queuez publication, package data, account state, or character-signin behavior.
 
-Next: do not proceed automatically. A bounded read-only loaded-process static-caller scan is a separate task that requires explicit user authorization. If authorized, it may inspect only the loaded main module while the isolated historical client is running and report only target-match cardinality plus aggregate direct-call/tail-jump/pointer-reference categories. It must not write process memory, extract raw bytes/addresses/identities/package data, interact with the UI, or modify client/server behavior.
+Next: source-only design review for a pre-detour aggregate second-hop classifier. It may internally resolve the unique tail-jump wrapper and count only direct-call, tail-jump, and pointer-reference categories to that wrapper. It must report no address/raw content, install no new detour, and change no existing client/server behavior. Do not build or run it until a source contract proves the boundary.

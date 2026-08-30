@@ -207,10 +207,10 @@ Human attention needed:
 
 # CURRENT TODO
 
-## Read-only package-trust compatibility classification
+## Post-service-29 semantic-prerequisite source comparison
 
-Latest source audit: current official Sunrise installs package-integrity handling at Steam initialization, explicitly before base-package registration. The external trace lineage predates that component. This is an independently sourced client-local differential upstream of the missing character-signin entry, not evidence for a server response. See `docs/client-analysis/package-trust-comparator-audit.md`.
+The read-only package-trust compatibility classifier is complete. The historical external binary exposes all three current-comparator target classes, but the controlled external run produced the same black screen and no client service 10. This proves compatibility applicability only; it does not establish causality. See `docs/experiments/2026-08-30-package-trust-compatibility-classifier.md`.
 
-The component alters package-integrity acceptance and must not be ported, deployed, or activated from this audit. No client/server behavior changed. The last external result remains authenticated BAP -> nine no-reply service-29 notifications -> keepalives, with no service 10 or character-signin entry. The run was cleaned up and baseline/isolation verification passed.
+Do not port, deploy, activate, bypass, disable, or otherwise change package-integrity behavior. Do not change SignOn, ContentConfig, BAP, service 29, Queuez, package data, account state, or character-signin behavior based on this result.
 
-Next: add at most one bounded, read-only compatibility probe that resolves the three current-comparator target classes and reports aggregate booleans only. It must make no detour, memory/code write, return-value override, content/package change, or protocol/listener change. Do not launch until source tests, Windows CI, staging, and normal isolation preflight are verified.
+Next: source-only compare the known-good internal/default and external paths after the already observed service-29 boundary to locate one concrete semantic prerequisite for client service 10. Produce a narrow evidence record. A new runtime probe is permitted only if the comparison provides a uniquely identified target and a read-only aggregate-only observation criterion; otherwise stop with the source limit.

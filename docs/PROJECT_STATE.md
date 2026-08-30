@@ -116,7 +116,11 @@ Detailed experiment documents are indexed by `docs/EXPERIMENTS.md`. Local eviden
 
 ## Next Experiment
 
-Do not repeat the package-trust compatibility classifier: it is complete and did not move the visible/protocol frontier. Conduct a source-only comparison to identify one concrete, post-service-29 semantic prerequisite that differs between the known-good internal/default path and the external path. A new live probe is allowed only if that comparison supplies a unique target and a read-only, aggregate-only criterion. Do not add a service-29 reply, Queuez service 123, package content, account state, integrity override, or speculative response.
+Do not repeat the package-trust compatibility classifier: it is complete and did not move the visible/protocol frontier. A source comparison identified one concrete post-service-29 differential: the current reference family-zero Queuez source seed falls back to the checked runtime account identity when the live manager key is not yet observable; external trace returns without seeding in that condition. First add a separate aggregate-only observation for manager-key availability, runtime-account availability, and seed completion, or obtain explicit approval for a tightly scoped behavioral comparison of that fallback. Do not add a service-29 reply, Queuez service 123, package content, account state, integrity override, or speculative response.
+
+## 2026-08-30 post-service-29 family-zero source-seed audit
+
+**COMPLETE / CANDIDATE IDENTIFIED:** The current reference has one precise post-service-29 difference from external trace: its client-local family-zero Queuez seed can use the checked runtime account identity when the live manager key is not yet observable. The older external seed returns without populating the source list in that condition. The external compatibility run installed the family-zero hooks but did not log seed completion, while the black-screen/service-10 absence remained. This is a source-backed prerequisite candidate, not causal proof; it changes client-local source-list bytes and therefore is outside the read-only classifier lane. See `docs/client-analysis/post-service29-family0-source-seed-audit.md`.
 
 ## Things That Must Not Be Reopened Without New Evidence
 

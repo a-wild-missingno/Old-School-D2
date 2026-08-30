@@ -207,10 +207,10 @@ Human attention needed:
 
 # CURRENT TODO
 
-## Post-service-29 semantic-prerequisite source comparison
+## Family-zero seed state-affordance observation design
 
-The read-only package-trust compatibility classifier is complete. The historical external binary exposes all three current-comparator target classes, but the controlled external run produced the same black screen and no client service 10. This proves compatibility applicability only; it does not establish causality. See `docs/experiments/2026-08-30-package-trust-compatibility-classifier.md`.
+The post-service-29 source comparison is complete. The current reference's family-zero Queuez source seed uses the checked runtime account identity when its live manager-key capture is not yet available; external trace's older seed returns without seeding in that condition. The external compatibility run installed the hooks but did not emit the seed-completion event, while client service 10 remained absent. This is a source-backed prerequisite candidate, not causal proof. See `docs/client-analysis/post-service29-family0-source-seed-audit.md`.
 
-Do not port, deploy, activate, bypass, disable, or otherwise change package-integrity behavior. Do not change SignOn, ContentConfig, BAP, service 29, Queuez, package data, account state, or character-signin behavior based on this result.
+Do not port, deploy, activate, bypass, disable, or otherwise change package-integrity behavior. Do not change SignOn, ContentConfig, BAP, service 29, Queuez publication, package data, account state, or character-signin behavior based on this result.
 
-Next: source-only compare the known-good internal/default and external paths after the already observed service-29 boundary to locate one concrete semantic prerequisite for client service 10. Produce a narrow evidence record. A new runtime probe is permitted only if the comparison provides a uniquely identified target and a read-only aggregate-only observation criterion; otherwise stop with the source limit.
+Next: design and source-test at most one aggregate-only, read-only observation of the existing family-zero path. It may report only booleans for manager-key availability, runtime-account availability, and whether seed completion was already observed; it must not write the source list, alter a return value, add a protocol/listener change, or log identities/addresses/bytes. Do not build, deploy, or launch it until the design and source tests establish a unique no-write criterion. If the existing hook cannot supply that criterion without modifying its behavior, stop with that source limit.

@@ -207,10 +207,10 @@ Human attention needed:
 
 # CURRENT TODO
 
-## Family-zero sweep invocation source analysis
+## Family-zero sweep offline predecessor analysis (authorization required)
 
-The aggregate-only family-zero seed-affordance observer completed a controlled external run. Although the family-zero hooks installed successfully, the observer never emitted; because it is called on every existing family-zero sweep execution, the sweep itself did not run during the bounded external path. The same black screen and no client service 10 remained. See `docs/experiments/2026-08-30-family0-seed-affordance-observer.md`.
+The source-only family-zero sweep invocation audit is complete. The installed hook's aggregate observer proved the native sweep did not execute during the external run, but the authorized Sunrise source defines only the target signature and internal source-list getter. It supplies no caller, scheduler, transition predicate, or other predecessor for that native target. The corresponding subscription source is identical across current reference and retained validation lineages. See `docs/client-analysis/family0-sweep-invocation-source-limit.md`.
 
-Do not repeat the observer or port the current-reference seed fallback. Do not change package-integrity behavior, SignOn, ContentConfig, BAP, service 29, Queuez publication, package data, account state, or character-signin behavior.
+Do not repeat the observer or port the source-list fallback. Do not change package-integrity behavior, SignOn, ContentConfig, BAP, service 29, Queuez publication, package data, account state, or character-signin behavior.
 
-Next: perform source-only comparison of the family-zero sweep's invocation/eligibility condition in the known-good internal/default path and external trace. Locate at most one concrete predecessor or gate. A runtime probe is permitted only if it has a unique read-only aggregate-only criterion and cannot seed the source list, alter a return value, add a detour, or change protocol/listener behavior. If source lacks such a target, record the source limit and stop.
+Next: do not proceed automatically. Offline static control-flow analysis of the locally installed historical executable is a separate task that requires explicit user authorization. If authorized, locate only bounded static callers/predecessors for the uniquely matched native family-zero sweep; report match cardinality and aggregate control-flow categories only. Do not extract payloads, identities, package data, raw bytes, or unrelated executable content. Do not launch the game or make client/server changes.

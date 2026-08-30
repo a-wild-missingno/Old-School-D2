@@ -207,14 +207,10 @@ Human attention needed:
 
 # CURRENT TODO
 
-## Select the next character-signin hypothesis
+## Family-zero second-hop tail-jump source analysis
 
-Latest source audit: current public Sunrise master does not include `profile_setup_completed`; open upstream PR #75 adds it only through a WS-701 server path. Because the external client has not emitted service 10, that path is downstream of the frontier and no external account/profile adapter was added. See `docs/client-analysis/account-profile-bootflow-contract.md`.
+The authorized loaded-process analysis is complete. A standalone scanner could not match the target after its own detour rewrote the prologue. A CI-built pre-detour aggregate observer then found exactly one direct tail jump, zero direct calls, and zero absolute pointer references to the family-zero sweep. This identifies a unique tail-jump wrapper as the immediate predecessor category, but not its own caller or eligibility condition. See `docs/experiments/2026-08-30-family0-loaded-predecessor-analysis.md`.
 
-Latest probe: a Windows-CI-built trace-only classifier found `matches=1 direct_callers=0 indirect_references=1 reference_section=readonly reference_relocation=1 reference_table_code_slots=4plus rip_indirect_calls=0 rip_indirect_jumps=0` for the character-signin target. The Human/UI-gated external run again reached authenticated BAP, nine no-reply service-29 notifications, and keepalives without service 10. The target handler still did not enter.
+Do not repeat the old scanners, port the source-list fallback, hook the wrapper, emit addresses/bytes/identities/package data, or change package-integrity behavior, SignOn, ContentConfig, BAP, service 29, Queuez publication, package data, account state, or character-signin behavior.
 
-The reference is now confirmed table/vtable-like, but its table type, dispatch predicate, and causal role remain unknown. The run is complete: Destiny, listeners, capture, and trace deployment were cleaned up; isolation was reverified and the protected baseline hash was unchanged. See `docs/experiments/2026-08-23-character-signin-vtable-role.md`.
-
-The follow-up guarded table-slot probe installed successfully but emitted neither `table_dispatch=seen` nor `target_entry=seen` during the same isolated external path. It rules out the one verified slot as the missing route. Service 10 remained absent. The run was cleaned up and baseline/isolation verification passed. See `docs/experiments/2026-08-23-character-signin-table-dispatch.md`.
-
-Next: do not probe additional table entries by guesswork. Identify an upstream client-local precondition using a working/offline comparator and an independently bounded observation criterion before any new game run; do not add speculative server behavior.
+Next: source-only design review for a pre-detour aggregate second-hop classifier. It may internally resolve the unique tail-jump wrapper and count only direct-call, tail-jump, and pointer-reference categories to that wrapper. It must report no address/raw content, install no new detour, and change no existing client/server behavior. Do not build or run it until a source contract proves the boundary.

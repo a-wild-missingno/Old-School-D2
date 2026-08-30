@@ -24,10 +24,18 @@ The new source-regression tests first failed because the observer and its call s
 
 The complete external-trace source suite then passed: 22 tests.
 
-## Build boundary
+## Controlled observation
 
-Windows CI run `33320289289` was started from the committed trace source. At this record's creation it was still running; no artifact has been staged, no runtime has been modified, and no game observation has started.
+Windows CI run `33320289289` completed successfully. Its DLL was staged only in the dedicated `external-trace` runtime after ContentConfig, runtime-hash, and isolation preflight all passed. The operator completed the required title-screen interaction and reported the same black screen with no visible error.
 
-## Interpretation rule
+The trace again reached the known authenticated bootstrap/service-29 wait, but did not emit the new family-zero affordance event. Because that event is called on every execution of the already-installed family-zero sweep, the bounded run confirms that the family-zero sweep itself did not execute in this external path. It therefore cannot distinguish manager-key availability, runtime-account availability, or seed completion; the prior manager-key fallback candidate is upstream of an earlier execution gate.
 
-This probe can distinguish whether the external wait is consistent with a missing manager key despite a usable runtime account, and whether the old seed has completed. It cannot itself prove that the current-reference fallback would cause service 10 or character select. Do not port the fallback, send Queuez state, or modify account/package/integrity behavior based solely on this observer.
+No client service 10 was observed. No fallback, Queuez publication, account state, package data, integrity behavior, or server response was changed.
+
+## Cleanup
+
+The Destiny process, capture, HTTPS/BAP listener, and discovery listeners were stopped. The temporary DLL was restored after the post-stop file lock cleared. External-trace and protected validation-runtime hashes were re-recorded, and forwarding-disabled/public-HTTPS-blocked isolation passed.
+
+## New frontier
+
+Do not repeat this observer. The first newly confirmed local boundary is earlier than manager-key availability: the installed family-zero sweep is not invoked in the external path. The next step is source-only analysis of the family-zero sweep's invocation/eligibility condition in the known-good path versus external trace. A new runtime probe needs a unique, read-only target and must not seed the source list or modify Queuez behavior.

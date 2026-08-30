@@ -207,10 +207,10 @@ Human attention needed:
 
 # CURRENT TODO
 
-## Family-zero seed-affordance controlled observation
+## Family-zero sweep invocation source analysis
 
-The aggregate-only family-zero observer is implemented and source-tested in the dedicated external-trace tree. It reports only manager-key availability, runtime-account availability, and the existing seed-completion state immediately after the pre-existing seed call. It does not write the source list, alter a return value, add a detour, change protocol/listener behavior, or log identity/address/byte data. Dedicated source tests passed and Windows CI run `33320289289` is pending. See `docs/experiments/2026-08-30-family0-seed-affordance-observer.md`.
+The aggregate-only family-zero seed-affordance observer completed a controlled external run. Although the family-zero hooks installed successfully, the observer never emitted; because it is called on every existing family-zero sweep execution, the sweep itself did not run during the bounded external path. The same black screen and no client service 10 remained. See `docs/experiments/2026-08-30-family0-seed-affordance-observer.md`.
 
-Do not port the current-reference source-seed fallback. Do not change package-integrity behavior, SignOn, ContentConfig, BAP, service 29, Queuez publication, package data, account state, or character-signin behavior.
+Do not repeat the observer or port the current-reference seed fallback. Do not change package-integrity behavior, SignOn, ContentConfig, BAP, service 29, Queuez publication, package data, account state, or character-signin behavior.
 
-Next: after CI succeeds, verify the artifact's identity, stage it only in `external-trace`, run ContentConfig/Windows/isolation preflight and baseline hashes, then request one Human/UI-gated 60-second observation. Record the three aggregate booleans, service-10 presence/absence, and visible outcome. Restore the trace runtime and verify hashes/isolation before drawing conclusions.
+Next: perform source-only comparison of the family-zero sweep's invocation/eligibility condition in the known-good internal/default path and external trace. Locate at most one concrete predecessor or gate. A runtime probe is permitted only if it has a unique read-only aggregate-only criterion and cannot seed the source list, alter a return value, add a detour, or change protocol/listener behavior. If source lacks such a target, record the source limit and stop.
